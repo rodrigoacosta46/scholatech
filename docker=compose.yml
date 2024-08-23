@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  db:
+    container_name: nico_mariadb_scholatech26
+    image: mariadb:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+#      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: scholaTech26
+#      MYSQL_PASSWORD: 123456
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1

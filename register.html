@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {{if .}}
+        {{.}}
+    {{end}}
+    <form action="/registerauth" method="POST">
+        <label for="email">Correo Electrónico:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username">
+        <label for="password">Password:</label><br>
+        <input type="text" id="password" name="password">
+        <label for="gender">Género:</label>
+        <select id="gender" name="gender">
+            <option value="male">Hombre</option>
+            <option value="female">Mujer</option>
+        </select>
+        <label for="birthdate">Fecha de Nacimiento:</label>
+        <input type="date" id="birthdate" name="birthdate">
+        <input type="submit" value="submit">
+    </form>
+</body>
+</html>

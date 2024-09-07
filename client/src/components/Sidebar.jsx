@@ -1,11 +1,25 @@
+import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
 const Sidebar = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const xd = location.pathname == "/profile" ? true : false;
+  });
+
   return (
     <div className="flex flex-col w-64 min-h-dvh bg-green-950">
       <div className="h-full flex flex-col sm:gap-6">
         <span className="cursor-pointer w-fit after:content-['Log_Out'] after:underline after:absolute after:translate-x-0 lg:after:-translate-x-full after:opacity-0 hover:after:translate-x-0 hover:after:opacity-100 after:transition-all text-gray-400 hover:text-red-400">
           <i className="fa-solid fa-arrow-right-from-bracket rotate-180 "></i>
         </span>
-        <div className="w-full flex gap-2 p-2">
+        <div className={
+          "w-full flex gap-2 p-2 " + 
+          (
+            xd ? "-translate-x-full "
+          )
+          }>
           <img
             src="img/Gaben.png"
             alt="Page LOGO"
@@ -19,11 +33,11 @@ const Sidebar = () => {
           </div>
         </div>
         <div
-          className="scroll flex flex-col w-72 h-72 overflow-y-auto overflow-x-hidden"
+          className="scroll flex flex-col w-72 h-72 md:h-96 overflow-y-auto overflow-x-hidden z-50"
           style={{ direction: 'rtl' }}
         >
-          <div
-            className="group min-h-16 w-64 hover:w-full flex items-center self-end gap-[3px] text-slate-400 hover:text-white hover:bg-green-700 py-4 transition-all cursor-pointer"
+          <Link to="/profile"
+            className="group min-h-fit w-64 hover:w-full flex items-center self-end gap-[3px] text-slate-400 hover:text-white hover:bg-green-700 py-4 transition-all cursor-pointer"
             style={{ direction: 'ltr' }}
           >
             <div className="w-full text-center text-wrap transition-all px-2 relative">
@@ -31,9 +45,9 @@ const Sidebar = () => {
               Informacion general
               <div className="absolute transition-all duration-500 bg-white h-px w-72 end-full group-hover:end-4"></div>
             </div>
-          </div>
-          <div
-            className="group min-h-16 w-64 hover:w-full flex items-center self-end gap-[3px] text-slate-400 hover:text-white hover:bg-green-700 py-4 transition-all cursor-pointer"
+          </Link>
+          <Link to="/reminders"
+            className="group min-h-fit w-64 hover:w-full flex items-center self-end gap-[3px] text-slate-400 hover:text-white hover:bg-green-700 py-4 transition-all cursor-pointer"
             style={{ direction: 'ltr' }}
           >
             <div className="w-full text-center text-wrap transition-all px-2 relative">
@@ -41,19 +55,19 @@ const Sidebar = () => {
               Notificaciones
               <div className="absolute transition-all duration-500 bg-white h-px w-72 end-full group-hover:end-4"></div>
             </div>
-          </div>
-          <div
-            className="group min-h-16 w-64 hover:w-full flex items-center self-end gap-[3px] text-slate-400 hover:text-white hover:bg-green-700 py-4 transition-all cursor-pointer"
+          </Link>
+          <Link to="/doctors"
+            className="group min-h-fit w-64 hover:w-full flex items-center self-end gap-[3px] text-slate-400 hover:text-white hover:bg-green-700 py-4 transition-all cursor-pointer"
             style={{ direction: 'ltr' }}
           >
             <div className="w-full text-center text-wrap transition-all px-2 relative">
               <i className="fa-sharp-duotone fa-solid fa-heart-circle-exclamation fa-light pe-2"></i>
-              Mis turnos
+              Doctores
               <div className="absolute transition-all duration-500 bg-white h-px w-72 end-full group-hover:end-4"></div>
             </div>
-          </div>
-          <div
-            className="group min-h-16 w-64 hover:w-full flex items-center self-end gap-[3px] text-slate-400 hover:text-white hover:bg-green-700 py-4 transition-all cursor-pointer"
+          </Link>
+          <Link to="/story"
+            className="group min-h-fit w-64 hover:w-full flex items-center self-end gap-[3px] text-slate-400 hover:text-white hover:bg-green-700 py-4 transition-all cursor-pointer"
             style={{ direction: 'ltr' }}
           >
             <div className="w-full text-center text-wrap transition-all px-2 relative">
@@ -61,9 +75,9 @@ const Sidebar = () => {
               Historial
               <div className="absolute transition-all duration-500 bg-white h-px w-72 end-full group-hover:end-4"></div>
             </div>
-          </div>
-          <div
-            className="group min-h-16 w-64 hover:w-full flex items-center self-end gap-[3px] text-slate-400 hover:text-white hover:bg-green-700 py-4 transition-all cursor-pointer"
+          </Link>
+          <Link to="/schedule"
+            className="group min-h-fit w-64 hover:w-full flex items-center self-end gap-[3px] text-slate-400 hover:text-white hover:bg-green-700 py-4 transition-all cursor-pointer"
             style={{ direction: 'ltr' }}
           >
             <div className="w-full text-center text-wrap transition-all px-2 relative">
@@ -71,17 +85,17 @@ const Sidebar = () => {
               Calendario
               <div className="absolute transition-all duration-500 bg-white h-px w-72 end-full group-hover:end-4"></div>
             </div>
-          </div>
-          <div
-            className="group min-h-16 w-64 hover:w-full flex items-center self-end gap-[3px] text-slate-400 hover:text-white hover:bg-green-700 py-4 transition-all cursor-pointer"
+          </Link>
+          <Link to="/drugs"
+            className="group min-h-fit w-64 hover:w-full flex items-center self-end gap-[3px] text-slate-400 hover:text-white hover:bg-green-700 py-4 transition-all cursor-pointer"
             style={{ direction: 'ltr' }}
           >
             <div className="w-full text-center text-wrap transition-all px-2 relative">
               <i className="fa-sharp-duotone fa-solid fa-heart-circle-exclamation fa-light pe-2"></i>
-              Información de medicamentos
+              Información sobre medicamentos
               <div className="absolute transition-all duration-500 bg-white h-px w-72 end-full group-hover:end-4"></div>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
       <img

@@ -1,8 +1,6 @@
-import GuestLayout from '../components/GuestLayout';
 
 const Log = () => {
   return (
-    <GuestLayout>
       <form action="/loginauth" method="POST">
         <div className="w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm">
           <p className="text-4xl text-green-800 text-center py-12">Login</p>
@@ -46,7 +44,6 @@ const Log = () => {
           </div>
         </div>
       </form>
-    </GuestLayout>
   );
 };
 

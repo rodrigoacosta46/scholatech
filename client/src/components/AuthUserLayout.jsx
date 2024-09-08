@@ -1,11 +1,13 @@
+import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
 const AuthUserLayout = ({ children }) => {
+
   return (
-    <div className="min-w-fit min-h-dvh flex bg-white">
+    <div className="min-w-fit min-h-dvh flex bg-white overflow-hidden">
       <Sidebar />
-      <div className="w-full">
-        {children}
+      <div className="flex flex-col w-full h-dvh overflow-y-auto">
+        <Outlet/>
       </div>
     </div>
   );

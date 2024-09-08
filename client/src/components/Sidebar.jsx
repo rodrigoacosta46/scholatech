@@ -3,23 +3,18 @@ import { useState, useEffect } from 'react';
 
 const Sidebar = () => {
   const location = useLocation();
+  const [xd, setXd] = useState(""); 
 
   useEffect(() => {
-    const xd = location.pathname == "/profile" ? true : false;
-  });
+    setXd(location.pathname === "/profile" ? "translate-x-full opacity-0" : "");
+  }, [location.pathname]); 
 
   return (
-    <div className="flex flex-col w-64 min-h-dvh bg-green-950">
-      <div className="h-full flex flex-col sm:gap-6">
-        <span className="cursor-pointer w-fit after:content-['Log_Out'] after:underline after:absolute after:translate-x-0 lg:after:-translate-x-full after:opacity-0 hover:after:translate-x-0 hover:after:opacity-100 after:transition-all text-gray-400 hover:text-red-400">
-          <i className="fa-solid fa-arrow-right-from-bracket rotate-180 "></i>
-        </span>
-        <div className={
-          "w-full flex gap-2 p-2 " + 
-          (
-            xd ? "-translate-x-full "
-          )
-          }>
+    <div className="flex flex-col w-64 min-h-dvh bg-green-950 gap-7">
+      <span className="cursor-pointer w-fit after:content-['Log_Out'] after:underline after:absolute after:translate-x-0 lg:after:-translate-x-full after:opacity-0 hover:after:translate-x-0 hover:after:opacity-100 after:transition-all text-gray-400 hover:text-red-400">
+        <i className="fa-solid fa-arrow-right-from-bracket rotate-180 "></i>
+      </span>
+        <div className={"w-full relative top-8 bottom-8 flex justify-self-start gap-2 p-2 transition-all " + xd}>
           <img
             src="img/Gaben.png"
             alt="Page LOGO"
@@ -51,7 +46,7 @@ const Sidebar = () => {
             style={{ direction: 'ltr' }}
           >
             <div className="w-full text-center text-wrap transition-all px-2 relative">
-              <i className="fa-sharp-duotone fa-solid fa-heart-circle-exclamation fa-light pe-2"></i>
+            <i class="fa-solid fa-envelope pe-2"></i>
               Notificaciones
               <div className="absolute transition-all duration-500 bg-white h-px w-72 end-full group-hover:end-4"></div>
             </div>
@@ -97,13 +92,13 @@ const Sidebar = () => {
             </div>
           </Link>
         </div>
-      </div>
-      <img
+        <img
         src="img/logo.png"
         alt="Page LOGO"
-        className="w-36 md:w-56 my-2 mx-auto block justify-self-end"
+        className="w-36 md:w-48 mx-auto block"
       />
-    </div>
+      </div>
+      
   );
 };
 

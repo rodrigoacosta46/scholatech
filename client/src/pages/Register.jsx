@@ -1,8 +1,6 @@
-import GuestLayout from '../components/GuestLayout';
 
 const Register = () => {
   return (
-    <GuestLayout>
       <form action="/registerauth" method="POST">
         <div class="w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm my-4">
           <p class="text-4xl text-green-800 text-center py-12">Register</p>
@@ -63,7 +61,6 @@ const Register = () => {
           </div>
         </div>
       </form>
-    </GuestLayout>
   );
 };
 

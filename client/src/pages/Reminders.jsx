@@ -5,7 +5,7 @@ const Reminders = () => {
   return (
     <>
       <div className="text-2xl w-72 bg-slate-200 text-green-900 p-4 rounded-lg font-black m-2 shadow-[7px_7px] shadow-green-700">
-        <Title txt="Notificaciones"/>
+        <Title txt="Notificaciones" allowAnimations={true}/>
       </div>
 
     <div className="flex flex-col p-8 gap-28">

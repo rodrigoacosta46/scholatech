@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Title from '../components/Title';
 import Searchbar from '../components/Searchbar';
+import Card from '../components/Card';
 
 const Drugs = () => {
   const [modal, setModal] = useState(false);
@@ -15,18 +16,18 @@ const Drugs = () => {
     for(let i=0; i<19; i++) {
 
       items.push(
-        <div
+        <Card
           key={ "n-"+i }
           onClick={ modalSetState }
           style={{ animationDelay: (i * 0.1)+'s'}}
-          className={"opacity-0 animate-fadeIn bg-white p-4 flex flex-col shadow-[3px_3px] shadow-green-900 cursor-pointer"}
+          className="opacity-0 animate-fadeIn cursor-pointer"
         >
           <img src="img/logo.png" alt="" />
           <Title txt="Medicamentos" />
           <p className="text-slate-500 m-3 line-clamp-4">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere voluptatibus inventore architecto earum nesciunt commodi, illo quae praesentium cumque iure minus laborum asperiores vel assumenda, veritatis voluptates. Aperiam, omnis ipsa.
           </p>
-        </div>
+        </Card>
       );
     }
 
@@ -56,12 +57,12 @@ const Drugs = () => {
         </div> 
       }
       <div className="text-2xl w-fit bg-slate-200 text-green-900 p-4 rounded-lg font-black m-2 shadow-[7px_7px] shadow-green-700">
-        <Title txt="Información sobre medicamentos"/>
+        <Title txt="Información sobre medicamentos" allowAnimations={true}/>
       </div>
       <div className="w-full text-end">
         <Searchbar
           placeholder={"Buscar medicamento"}
-          className="w-72 m-4 ms-auto"
+          className="p-3 w-96 m-4 ms-auto"
         />
       </div>
       <div className="w-full grid grid-cols-2 lg:grid-cols-4 grid-flow-row gap-4 p-7">

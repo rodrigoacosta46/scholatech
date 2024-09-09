@@ -86,7 +86,7 @@ const Sidebar = () => {
             style={{ direction: 'ltr' }}
           >
             <div className="w-full text-center text-wrap transition-all px-2 relative">
-              <i className="fa-sharp-duotone fa-solid fa-heart-circle-exclamation fa-light pe-2"></i>
+              <i class="fa-solid fa-prescription-bottle-medical pe-2"></i>
               Información sobre medicamentos
               <div className="absolute transition-all duration-500 bg-white h-px w-72 end-full group-hover:end-4"></div>
             </div>

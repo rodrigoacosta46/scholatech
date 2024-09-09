@@ -4,7 +4,7 @@ import Sidebar from './Sidebar';
 const AuthUserLayout = ({ children }) => {
 
   return (
-    <div className="min-w-fit min-h-dvh flex bg-white overflow-hidden">
+    <div className="min-w-fit min-h-dvh flex bg-gray-300 overflow-hidden">
       <Sidebar />
       <div className="flex flex-col w-full h-dvh overflow-y-auto">
         <Outlet/>

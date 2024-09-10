@@ -39,7 +39,7 @@ const Log = () => {
             <input
               type="submit"
               id="submit"
-              className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer hover:text-whithover:bg-green-800 transition-all duration-75"
+              className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer hover:text-white hover:bg-green-800 transition-all duration-75"
             />
           </div>
         </div>

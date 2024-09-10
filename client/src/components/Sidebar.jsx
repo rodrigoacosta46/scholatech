@@ -43,7 +43,7 @@ const Sidebar = () => {
               to="/reminders"
               className="group w-64 p-3 transition-all hover:w-full hover:bg-green-700 text-white text-lg text-thin text-end"
             >
-              <i class="fa-solid fa-envelope pe-2"></i>
+              <i className="fa-solid fa-envelope pe-2"></i>
               Notificaciones
               <div className="bg-white h-px w-0 transition-all duration-500 group-hover:w-full"></div>
             </Link>
@@ -51,7 +51,7 @@ const Sidebar = () => {
               to="/doctors"
               className="group w-64 p-3 transition-all hover:w-full hover:bg-green-700 text-white text-lg text-thin text-end"
             >
-              <i class="fa-solid fa-user-doctor pe-2"></i>
+              <i className="fa-solid fa-user-doctor pe-2"></i>
               Doctores
               <div className="bg-white h-px w-0 transition-all duration-500 group-hover:w-full"></div>
             </Link>
@@ -59,7 +59,7 @@ const Sidebar = () => {
               to="/story"
               className="group w-64 p-3 transition-all hover:w-full hover:bg-green-700 text-white text-lg text-thin text-end"
             >
-              <i class="fa-solid fa-box-archive pe-2"></i>
+              <i className="fa-solid fa-box-archive pe-2"></i>
               Historial
               <div className="bg-white h-px w-0 transition-all duration-500 group-hover:w-full"></div>
             </Link>
@@ -67,7 +67,7 @@ const Sidebar = () => {
               to="/schedule"
               className="group w-64 p-3 transition-all hover:w-full hover:bg-green-700 text-white text-lg text-thin text-end"
             >
-              <i class="fa-regular fa-calendar-days pe-2"></i>
+              <i className="fa-regular fa-calendar-days pe-2"></i>
               Calendario
               <div className="bg-white h-px w-0 transition-all duration-500 group-hover:w-full"></div>
             </Link>
@@ -75,7 +75,7 @@ const Sidebar = () => {
               to="/drugs"
               className="group w-64 p-3 transition-all hover:w-full hover:bg-green-700 text-white text-lg text-thin text-end"
             >
-              <i class="fa-solid fa-prescription-bottle-medical pe-2"></i>
+              <i className="fa-solid fa-prescription-bottle-medical pe-2"></i>
               Información de medicamentos
               <div className="bg-white h-px w-0 transition-all duration-500 group-hover:w-full"></div>
             </Link>

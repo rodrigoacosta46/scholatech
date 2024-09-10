@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Title from '../components/Title';
 import Searchbar from '../components/Searchbar';
 import Card from '../components/Card';
+import Modal from '../components/Modal';
 
 const Drugs = () => {
   const [modal, setModal] = useState(false);
@@ -36,26 +37,19 @@ const Drugs = () => {
   
   return (
     <>
-      { 
-        modal && 
-        <div className="z-30 sticky top-0 grid place-content-center w-full min-h-full bg-black/30">
-          <div className="animate-fadeIn relative grid gap-3 grid-cols-1 lg:grid-cols-4 bg-white shadow-[5px_5px] shadow-green-900 max-w-xl p-4">
-            <div 
-              onClick={ modalSetState }
-              className="absolute cursor-pointer w-fit -top-3 end-0 px-3 py-1 bg-green-900 rounded-3xl text-white"
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </div>
-            <div className="col-span-2">
-              <img src="img/logo.png" alt="" className="h-full object-cover"/>
-            </div>
-            <div className='col-span-2 flex flex-col w-fit'>
-              <Title txt="Medicamento"/>
-              <p className="m-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis blanditiis ut modi aliquid? Impedit obcaecati, voluptates mollitia molestias distinctio blanditiis nesciunt accusamus aliquam laborum atque ex. Velit illo maiores nostrum.</p>
-            </div>
-          </div>
-        </div> 
-      }
+      <Modal 
+        state={ modal } 
+        setter={ modalSetState }
+      >
+        <div className="col-span-2">
+          <img src="img/logo.png" alt="" className="h-full object-cover"/>
+        </div>
+        <div className='col-span-2 flex flex-col w-fit'>
+          <Title txt="Medicamento"/>
+          <p className="m-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis blanditiis ut modi aliquid? Impedit obcaecati, voluptates mollitia molestias distinctio blanditiis nesciunt accusamus aliquam laborum atque ex. Velit illo maiores nostrum.</p>
+        </div>
+      </Modal>
+
       <div className="text-2xl w-fit bg-slate-200 text-green-900 p-4 rounded-lg font-black m-2 shadow-[7px_7px] shadow-green-700">
         <Title txt="Información sobre medicamentos" allowAnimations={true}/>
       </div>

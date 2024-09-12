@@ -3,9 +3,10 @@ import Title from "../components/Title";
 const Reminders = () => {
   return (
     <>
-      <div className="text-2xl w-72 bg-slate-200 text-green-900 p-4 rounded-lg font-black m-2 shadow-[7px_7px] shadow-green-700">
-        <Title txt="Notificaciones" allowAnimations={true} />
-      </div>
+      <Title 
+        txt="Notificaciones" 
+        allowAnimations={true} 
+      />
 
       <div className="flex flex-col p-8 gap-28">
         <div>

@@ -28,7 +28,6 @@ const Log = () => {
     }
   };
   return (
-    <GuestLayout>
       <form onSubmit={handleSubmit} method="POST">
         <div className="w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm">
           <p className="text-4xl text-green-800 text-center py-12">Login</p>
@@ -71,13 +70,12 @@ const Log = () => {
             <input
               type="submit"
               id="submit"
-              className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer hover:text-whithover:bg-green-800 transition-all duration-75"
+              className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer hover:text-white hover:bg-green-800 transition-all duration-75"
             />
           </div>
           {response && <div>Respuesta del servidor: {JSON.stringify(response)}</div>}
-        </div>        
+        </div>
       </form>
-    </GuestLayout>
   );
 };
 

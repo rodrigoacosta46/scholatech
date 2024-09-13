@@ -31,7 +31,6 @@ const Register = () => {
     }
   };
   return (
-    <GuestLayout>
       <form onSubmit={handleSubmit} method="POST">
         <div class="w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm my-4">
           <p class="text-4xl text-green-800 text-center py-12">Register</p>
@@ -99,7 +98,6 @@ const Register = () => {
           {response && <div>Respuesta del servidor: {JSON.stringify(response)}</div>}
         </div>
       </form>
-    </GuestLayout>
   );
 };
 

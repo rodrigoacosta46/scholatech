@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -20,9 +21,21 @@ var tp1 *template.Template
 
 var name = "john"
 
-type Sub struct {
+type RegisterRequest struct {
+	Username  string
+	Password  string
+	Email     string
+	Birthdate string
+	Gender    string
+}
+
+type LoginRequest struct {
 	Username string
 	Password string
+}
+type Response struct {
+	Message       string `json:"message"`
+	RedirectRoute string `json:"redirect_route,omitempty"`
 }
 
 var db *sql.DB
@@ -45,11 +58,23 @@ func main() {
 	importarDB()
 	tp1, _ = tp1.ParseGlob("*.html")
 	mux := http.NewServeMux()
-	mux.HandleFunc("/login", loginWebpage)
 	mux.HandleFunc("/loginauth", loginAuthHandler)
 	mux.HandleFunc("/registerauth", registerAuthHandler)
-	mux.HandleFunc("/register", registerWebpage)
-	http.ListenAndServe(":8080", mux)
+	http.ListenAndServe(":8000", enableCORS(mux))
+}
+
+func enableCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 func importarDB() {
@@ -86,20 +111,21 @@ func importarDB() {
 
 }
 
-func loginWebpage(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("El usuario esta logueandose")
-	tp1.ExecuteTemplate(w, "login.html", nil)
-}
-func registerWebpage(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("El usuario esta registrandose")
-	tp1.ExecuteTemplate(w, "register.html", nil)
-}
-
 func loginAuthHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	fmt.Println("*****loginAuthHandler running*****")
-	r.ParseForm()
-	username := r.FormValue("username")
-	password := r.FormValue("password")
+	var req LoginRequest
+	decoder := json.NewDecoder(r.Body)
+	defer r.Body.Close()
+	if err := decoder.Decode(&req); err != nil {
+		fmt.Printf("Error al decodficar JSON: %v\n", err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(Response{Message: "Solicitud JSON Invalida"})
+		return
+	}
+	username := req.Username
+	password := req.Password
 	fmt.Println("username:", username, "password:", password)
 	var hash string
 	stmt := "SELECT clave FROM usuarios WHERE nombre = ?"
@@ -108,35 +134,47 @@ func loginAuthHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("hash from db:", hash)
 	if err != nil {
 		fmt.Println("error selecting Hash in db by Username")
-		tp1.ExecuteTemplate(w, "login.html", "check username and password")
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(Response{Message: "El nombre de usuario o la contrasenia son incorrectos."})
 		return
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	// returns nil on succcess
 	if err == nil {
-		fmt.Fprint(w, "You have successfully logged in")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(Response{
+			Message:       "La autenticacion fue un exito",
+			RedirectRoute: "/LoginSuccess",
+		})
 		return
 	}
 	fmt.Println("incorrect password")
-	tp1.ExecuteTemplate(w, "login.html", "check username and password")
-}
+	w.WriteHeader(http.StatusUnauthorized)
+	json.NewEncoder(w).Encode(Response{Message: "El nombre de usuario o la contrasenia son incorrectos."})
 
-func formInputHandleFunc(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Processing Data")
-	var s Sub
-	s.Username = r.FormValue("usernamedatabase")
-	s.Password = r.FormValue("passworddatabase")
-	fmt.Println("Username", s.Username, "Sensitibe data", s.Password)
 }
 
 func registerAuthHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodPost {
 		http.Redirect(w, r, "/register", http.StatusSeeOther)
 		return
 	}
 	fmt.Println("***registerAuthhandler running")
-	r.ParseForm()
-	username := r.FormValue("username")
+	//bytedata, err := ioutil.ReadAll(r.Body)
+	//reqBodyString := string(bytedata)
+	//fmt.Println(reqBodyString)
+	var req RegisterRequest
+	decoder := json.NewDecoder(r.Body)
+	defer r.Body.Close()
+	//r.Body = ioutil.NopCloser(bytes.NewBuffer(bytedata))
+	if err := decoder.Decode(&req); err != nil {
+		fmt.Printf("Error al decodficar JSON: %v\n", err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(Response{Message: "Solicitud JSON Invalida"})
+		return
+	}
+	username := req.Username
 	var nameAlphanumeric bool = true
 	for _, char := range username {
 		if !(unicode.IsLetter(char) || unicode.IsNumber(char)) {
@@ -152,7 +190,7 @@ func registerAuthHandler(w http.ResponseWriter, r *http.Request) {
 		nameLength = true
 	}
 
-	password := r.FormValue("password")
+	password := req.Password //.FormValue("password")
 	fmt.Println("password:", password, "\npswdLength:", len(password))
 	var pswdLowercase, pswdUppercase, pswdNumber, pswdSpecial bool
 	for _, char := range password {
@@ -173,29 +211,33 @@ func registerAuthHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("El nombre de usuario y la contraseña cumplen con los requisitos.")
 	} else {
 		fmt.Println("El nombre de usuario o la contraseña no cumplen con los requisitos.")
-		tp1.ExecuteTemplate(w, "register.html", "Please check username and password criteria")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(Response{Message: "El nombre de usuario o la contraseña no cumplen con los requisitos."})
 		return
 	}
 
-	gender := r.FormValue("gender")
+	gender := req.Gender
 	//XNOR GATE
 	if (gender == "male") == (gender == "female") {
 		fmt.Println("El genero seleccionado es invalido ", gender)
-		tp1.ExecuteTemplate(w, "register.html", "Invalid Gender")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(Response{Message: "El genero seleccionado es invalido"})
 		return
 	}
-	birth_date_form := r.FormValue("birthdate")
+	birth_date_form := req.Birthdate
 	parsedDate, err := time.Parse("2006-01-02", birth_date_form)
 	if err != nil {
 		fmt.Println("Fecha de nacimiento invalida", err)
-		tp1.ExecuteTemplate(w, "register.html", "Invalid birthdate")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(Response{Message: "La fecha de nacimiento es invalida"})
 		return
 	}
-	email := r.FormValue("email")
+	email := req.Email
 	_, err_email := mail.ParseAddress(email)
 	if err_email != nil {
 		fmt.Println("Correo electronico invalido")
-		tp1.ExecuteTemplate(w, "register.html", "Invalid Email")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(Response{Message: "Correo electronico invalido"})
 		return
 	}
 	stmt := "SELECT id FROM usuarios WHERE nombre=?"
@@ -205,14 +247,16 @@ func registerAuthHandler(w http.ResponseWriter, r *http.Request) {
 	err = row.Scan(&uID)
 	if err != sql.ErrNoRows {
 		fmt.Println("Username already exsits, err:", err)
-		tp1.ExecuteTemplate(w, "register.html", "Username already taken")
+		w.WriteHeader(http.StatusConflict)
+		json.NewEncoder(w).Encode(Response{Message: "El nombre de usuario ya existe"})
 		return
 	}
 	var hash []byte
 	hash, err = bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		fmt.Println("bcrypt err:", err)
-		tp1.ExecuteTemplate(w, "register.html", "there was a problem registering account")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(Response{Message: "Ocurrio un error al registrar la cuenta"})
 		return
 	}
 	fmt.Println("hash", hash)
@@ -221,7 +265,8 @@ func registerAuthHandler(w http.ResponseWriter, r *http.Request) {
 	insertStmt, err = db.Prepare("INSERT INTO usuarios (nombre, correo, clave, genero, nacimiento, fecha_alta) VALUES (?, ?, ?, ?, ?, NOW());")
 	if err != nil {
 		fmt.Println("error preparing statement", err)
-		tp1.ExecuteTemplate(w, "register.html", "there was a problem registering account")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(Response{Message: "Ocurrio un error al registrar la cuenta"})
 		return
 	}
 	defer insertStmt.Close()
@@ -234,10 +279,15 @@ func registerAuthHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("err", err)
 	if err != nil {
 		fmt.Println("error inserting new user")
-		tp1.ExecuteTemplate(w, "register.html", "There was a problem registering account")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(Response{Message: "Ocurrio un error al registrar la cuenta"})
 	}
 	fmt.Println("EL REGISTRO FUE UN EXITO")
-
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(Response{
+		Message:       "La cuenta ha sido registrada con exito",
+		RedirectRoute: "/RegisterSucces",
+	})
 }
 
 func createHandler(w http.ResponseWriter, r *http.Request) {

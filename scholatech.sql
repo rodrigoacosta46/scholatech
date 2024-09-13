@@ -220,7 +220,7 @@ CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
   `correo` varchar(100) NOT NULL,
-  `clave` varchar(50) NOT NULL,
+  `clave` varchar(128) NOT NULL,
   `telefono` varchar(50) DEFAULT NULL,
   `direccion` varchar(100) DEFAULT NULL,
   `especialidad` varchar(100) DEFAULT NULL,

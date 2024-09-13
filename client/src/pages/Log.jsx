@@ -1,9 +1,35 @@
 import GuestLayout from '../components/GuestLayout';
+import { useState } from 'react';
+import axios from 'axios';
 
 const Log = () => {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
+  const [response, setResponse] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const result = await axios.post('http://localhost:8000/loginauth', formData);
+      setResponse(result.data); // Guarda la respuesta de la API
+    } catch (error) {
+      console.error('Error al autenticar', error);
+      setResponse(error.response?.data || 'Error en la solicitud');
+    }
+  };
   return (
     <GuestLayout>
-      <form action="/loginauth" method="POST">
+      <form onSubmit={handleSubmit} method="POST">
         <div className="w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm">
           <p className="text-4xl text-green-800 text-center py-12">Login</p>
           <div className="flex flex-col gap-2 relative">
@@ -13,6 +39,8 @@ const Log = () => {
                 name="username"
                 id="username"
                 className="peer w-full p-2 border border-gray-300 rounded-mfocus:outline-green-600"
+                onChange={handleChange}
+                value={formData.username}
               />
               <span className="peer-focus:bottom-14 relative bottom-[2.1rem] start-4 bg-white transition-all">
                 Username
@@ -24,6 +52,8 @@ const Log = () => {
                 name="password"
                 id="password"
                 className="peer w-full p-2 border border-gray-300 rounded-mfocus:outline-green-600"
+                onChange={handleChange}
+                value={formData.password}
               />
               <span className="peer-focus:bottom-14 relative bottom-[2.1rem] start-4 bg-white transition-all">
                 Password
@@ -44,7 +74,8 @@ const Log = () => {
               className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer hover:text-whithover:bg-green-800 transition-all duration-75"
             />
           </div>
-        </div>
+          {response && <div>Respuesta del servidor: {JSON.stringify(response)}</div>}
+        </div>        
       </form>
     </GuestLayout>
   );

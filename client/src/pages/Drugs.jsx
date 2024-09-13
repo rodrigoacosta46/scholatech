@@ -40,10 +40,8 @@ const Drugs = () => {
   return (
     <>
       <Modal state={modal} setter={modalSetState}>
-        <div className="col-span-2">
-          <img src="img/logo.png" alt="" className="max-h-96 object-cover mx-auto block" />
-        </div>
-        <div className="col-span-2 flex flex-col w-fit overflow-hidden">
+        <img src="img/logo.png" alt="" className="max-h-96 object-cover" />
+        <div className="flex flex-col w-fit overflow-hidden">
           <Title txt="Medicamento" className="" />
           <p className="m-2">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis
@@ -54,10 +52,7 @@ const Drugs = () => {
         </div>
       </Modal>
 
-      <Title
-        txt="Información sobre medicamentos"
-        allowAnimations={true}
-      />
+      <Title txt="Información sobre medicamentos" allowAnimations={true} />
 
       <div className="w-full text-end">
         <Searchbar
@@ -65,7 +60,7 @@ const Drugs = () => {
           className="p-3 w-96 m-4 ms-auto"
         />
       </div>
-      <div className="w-full grid grid-cols-2 lg:grid-cols-4 grid-flow-row gap-4 p-7">
+      <div className="grid place-content-evenly grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 p-4">
         {getItems()}
       </div>
     </>

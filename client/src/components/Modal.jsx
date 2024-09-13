@@ -14,7 +14,7 @@ const Modal = ({ state=false, setter, children }) => {
                     >
                       <i className="fa-solid fa-xmark"></i>
                     </div>
-                    <div className="animate-fadeIn relative grid gap-3 grid-cols-1 lg:grid-cols-4 overflow-hidden max-w-xl">            
+                    <div className="animate-fadeIn relative grid grid-cols-2 gap-3 overflow-hidden max-w-xl">            
                       { children }
                     </div>
                   </Card>

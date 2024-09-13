@@ -38,14 +38,12 @@ const Doctors = () => {
   return (
     <>
       <Modal state={modal} setter={modalSetState}>
-        <div className="col-span-2">
-          <img
-            src="img/Gaben.png"
-            alt=""
-            className="max-h-96 object-cover mx-auto block"
-          />
-        </div>
-        <div className="col-span-2 flex flex-col w-fit overflow-hidden">
+        <img
+          src="img/Gaben.png"
+          alt=""
+          className="max-h-96 object-cover mx-auto block"
+        />
+        <div className="flex flex-col w-fit overflow-hidden">
           <Title txt="Dr. Octavio" className=""/>
           <p className="m-2">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis
@@ -70,7 +68,7 @@ const Doctors = () => {
           <p className="border-b-2 border-green-900 text-2xl text-green-950 font-thin">
             Últimos turnos
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-4 gap-4">
+          <div className="grid place-content-evenly grid-cols-[repeat(auto-fit,minmax(250px,1fr))] p-4 gap-4">
             <Card
               key={"n-"}
               onClick={modalSetState}
@@ -121,7 +119,7 @@ const Doctors = () => {
               <option value="">Femenino</option>
             </select>
           </div>
-          <div className="grid grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-4 gap-4">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] p-4 gap-4">
             {docs}
           </div>
         </div>

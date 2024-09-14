@@ -54,7 +54,7 @@ const Story = () => {
           className="m-4"
           title={
             <>
-              <i class="fa-solid fa-check-to-slot text-green-800"></i>
+              <i className="fa-solid fa-check-to-slot text-green-800"></i>
               <div className="ps-2 text-slate-700">
                 Turno Dr.Otaro <span className="font-bold">20/03/29</span>
               </div>
@@ -86,20 +86,20 @@ const Story = () => {
               </div>
               <hr className="my-4" />
               <p className="text-2xl text-center">- Resultados -</p>
-              <div className="relative bg-gray-200 flex flex-wrap justify-evenly gap-3 p-12 my-2">
+              <div className="relative bg-gray-200 flex flex-wrap justify-evenly text-center gap-3 p-12 my-2">
                 <button className="absolute end-2 bottom-2 text-sm text-gray-500">
                   <i class="fa-solid fa-download pe-1"></i>
                   Descargar comprobante
                 </button>
                 <p className="font-bold">
-                  Diagnostico
+                  Diagnostico:
                   <span className="ms-2 font-normal">Torsión de músculo superior</span>
                 </p>
                 <p className="font-bold">
-                  Notas
+                  Notas:
                   <span className="ms-2 font-normal">Tomar cada medicación cada 12 días Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi, quibusdam adipisci omnis sunt cum magni eaque, itaque aliquid ipsam amet dolores recusandae suscipit dolorem quos laborum voluptate eos neque inventore.</span>
                 </p>
-                <p className="font-bold">
+                <div className="font-bold">
                   Medicación asignada:
                   <ul className="ms-2 font-normal underline list-disc">
                     <li>Medicación</li>
@@ -107,7 +107,7 @@ const Story = () => {
                     <li>Medicación</li>
                     <li>Medicación</li>
                   </ul>
-                </p>
+                </div>
               </div>
             </div>
           }

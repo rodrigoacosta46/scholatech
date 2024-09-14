@@ -5,6 +5,10 @@ import Card from "../components/Card";
 import Modal from "../components/Modal";
 
 const Drugs = () => {
+
+  // Por default, traer drogas más comunes
+  // Tiene que haber un apartado para drogas ya usadas por le paciente
+
   const [modal, setModal] = useState(false);
 
   const modalSetState = () => {

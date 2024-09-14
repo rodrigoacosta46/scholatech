@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 
 const Profile = () => {
+
+  /* 
+    El usuario tiene que poder guardar la cuenta de instagram, vincular instagram a la cuenta de la app
+  */
   return (
     <>
       <div className="max-h-60 bg-green-950 flex justify-center gap-2 p-6 opacity-0 animate-[slideIn_2s_ease-in-out_1_forwards]">

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Title from "../components/Title";
-import Searchbar from "../components/Searchbar";
-import Card from "../components/Card";
-import Modal from "../components/Modal";
+import Title from "../../components/Title";
+import Searchbar from "../../components/Searchbar";
+import Card from "../../components/Card";
+import Modal from "../../components/Modal";
 
 const Drugs = () => {
 

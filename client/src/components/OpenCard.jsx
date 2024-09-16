@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const OpenCard = ({ className, title, content }) => {
+const OpenCard = ({ className="", title, content }) => {
     const [open, setOpen] = useState(false); 
 
     return(

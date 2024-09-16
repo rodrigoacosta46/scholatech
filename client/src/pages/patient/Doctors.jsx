@@ -1,8 +1,9 @@
-import Card from "../components/Card";
-import Title from "../components/Title";
-import Searchbar from "../components/Searchbar";
-import Modal from "../components/Modal";
+import Card from "../../components/Card";
+import Title from "../../components/Title";
+import Searchbar from "../../components/Searchbar";
+import Modal from "../../components/Modal";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Doctors = () => {
   const [modal, setModal] = useState(false);
@@ -44,17 +45,20 @@ const Doctors = () => {
           className="max-h-96 object-cover mx-auto block"
         />
         <div className="flex flex-col w-fit overflow-hidden">
-          <Title txt="Dr. Octavio" className=""/>
+          <Title txt="Dr. Octavio" className="" />
           <p className="m-2">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis
             blanditiis ut modi aliquid? Impedit obcaecati, voluptates mollitia
             molestias distinctio blanditiis nesciunt accusamus aliquam laborum
             atque ex. Velit illo maiores nostrum.
           </p>
-          <button className="p-2 bg-slate-400 rounded-3xl text-slate-800 text-bold mt-auto block">
-            <i class="fa-solid fa-stethoscope pe-[.5rem]"></i>
+          <Link
+            className="p-2 bg-slate-400 rounded-3xl text-slate-800 text-bold text-center mt-auto"
+            to="/select/id"
+          >
+            <i className="fa-solid fa-stethoscope pe-[.5rem]"></i>
             Realizar consulta
-          </button>
+          </Link>
         </div>
       </Modal>
 

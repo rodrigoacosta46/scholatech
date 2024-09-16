@@ -1,5 +1,5 @@
-import OpenCard from "../components/OpenCard";
-import Title from "../components/Title";
+import OpenCard from "../../components/OpenCard";
+import Title from "../../components/Title";
 
 const Reminders = () => {
   return (

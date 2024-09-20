@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"html/template"
 	"net/http"
 	"net/mail"
 	"os"
@@ -13,14 +12,22 @@ import (
 	"unicode"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
+	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 )
 
-var tp1 *template.Template
+var jwtSecret []byte // = []byte("scholameds-jwtsecret")
 
-var name = "john"
+var cookieName string
 
+type Claims struct {
+	Username string
+	ID       string
+	jwt.RegisteredClaims
+}
 type RegisterRequest struct {
 	Username  string
 	Password  string
@@ -36,14 +43,48 @@ type LoginRequest struct {
 type Response struct {
 	Message       string `json:"message"`
 	RedirectRoute string `json:"redirect_route,omitempty"`
+	Authenticated string `json:"authenticated,omitempty"`
 }
 
 var db *sql.DB
 
-var store = sessions.NewCookieStore([]byte("super-secret-password"))
+var store *sessions.CookieStore //= sessions.NewCookieStore([]byte("scholameds-cookiesecret"))
+
+// Generates JWT Token for Web Session
+
+func GenerateJWT(username string, id string) (string, error) {
+	//JWT Duration
+	expirationTime := time.Now().Add(24 * time.Hour)
+
+	// Struct Generator
+	claims := &Claims{
+		ID:       id,
+		Username: username,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(expirationTime),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString(jwtSecret)
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
+
+}
 
 func main() {
+	errLoad := godotenv.Load()
+	if errLoad != nil {
+		fmt.Println("FATAL: Couldnt load enviorment file", errLoad)
+		return
+	}
+	store = sessions.NewCookieStore([]byte(os.Getenv("COOKIE_SECRET")))
+	jwtSecret = []byte(os.Getenv("JWT_SECRET"))
+	cookieName = os.Getenv("COOKIE_NAME")
 	var err error
+
 	db, err = sql.Open("mysql", "root@tcp(localhost:3306)/scholaTech26")
 	if err != nil {
 		fmt.Println("lets panic")
@@ -56,11 +97,25 @@ func main() {
 		panic(err.Error())
 	}
 	importarDB()
-	tp1, _ = tp1.ParseGlob("*.html")
-	mux := http.NewServeMux()
-	mux.HandleFunc("/loginauth", loginAuthHandler)
-	mux.HandleFunc("/registerauth", registerAuthHandler)
-	http.ListenAndServe(":8000", enableCORS(mux))
+	gorillaRouter()
+}
+
+func gorillaRouter() {
+	r := mux.NewRouter()
+	r.Use(enableCORS)
+	r.HandleFunc("/isAuthenticated", validateJWTHandler)
+	guestRoutes := r.NewRoute().Subrouter()
+	guestRoutes.Use(AntiJwtMiddleware)
+	guestRoutes.HandleFunc("/loginauth", loginAuthHandler)
+	guestRoutes.HandleFunc("/registerauth", registerAuthHandler)
+	guestRoutes.HandleFunc("/testingCreateHandler", func(w http.ResponseWriter, r *http.Request) {
+		createHandler(w, r, "testinguser")
+	})
+	protectedRoutes := r.NewRoute().Subrouter()
+	protectedRoutes.Use(jwtMiddleware)
+	protectedRoutes.HandleFunc("/logout", deleteHandler)
+	http.ListenAndServe(":8000", r)
+
 }
 
 func enableCORS(next http.Handler) http.Handler {
@@ -104,7 +159,7 @@ func importarDB() {
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
-		fmt.Println("Error al confirmar la transaccion: %v", err)
+		fmt.Printf("Error al confirmar la transaccion: %v", err)
 		return
 	}
 	fmt.Println("la db fue importada con exito")
@@ -141,10 +196,11 @@ func loginAuthHandler(w http.ResponseWriter, r *http.Request) {
 	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	// returns nil on succcess
 	if err == nil {
+		createHandler(w, r, username)
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(Response{
 			Message:       "La autenticacion fue un exito",
-			RedirectRoute: "/LoginSuccess",
+			RedirectRoute: "/profile",
 		})
 		return
 	}
@@ -281,40 +337,139 @@ func registerAuthHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("error inserting new user")
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(Response{Message: "Ocurrio un error al registrar la cuenta"})
+		return
 	}
 	fmt.Println("EL REGISTRO FUE UN EXITO")
+	fmt.Println("Creando session...")
+	createHandler(w, r, username)
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(Response{
 		Message:       "La cuenta ha sido registrada con exito",
-		RedirectRoute: "/RegisterSucces",
+		RedirectRoute: "/profile",
 	})
 }
 
-func createHandler(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "session-name")
+func createHandler(w http.ResponseWriter, r *http.Request, username string) {
+	fmt.Println("cookie name: ", cookieName)
+	session, err := store.Get(r, cookieName)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		fmt.Println("error gathering session", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(Response{Message: "Ocurrio un error al obtener la sesion"})
 		return
 	}
 	session.Options = &sessions.Options{
 		Path:     "/",
 		MaxAge:   86400 * 7,
 		HttpOnly: true,
+		Secure:   false,
+		SameSite: http.SameSiteLaxMode,
 	}
-	session.Values["name"] = "test"
+	token, err := GenerateJWT(username, "IDDD")
+	if err != nil {
+		fmt.Println("error generating new JWT")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(Response{Message: "Ocurrio un error al generar la sesion"})
+		return
+	}
+	fmt.Println("JWT Token")
+	session.Values["testValue"] = "test"
+	session.Values["jwt"] = token
+	fmt.Println("token: ", token)
 	fmt.Println("session", session)
 	err = session.Save(r, w)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-
+		fmt.Println("error while storing the session", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(Response{Message: "Ocurrio un error al guardar la sesion"})
+		return
 	}
 }
 
 func deleteHandler(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session-name")
+	session, _ := store.Get(r, cookieName)
+	session.Values["jwt"] = ""
 	session.Options.MaxAge = -1
 	fmt.Println("session:", session)
 	session.Save(r, w)
-	tp1.ExecuteTemplate(w, "delete.html", nil)
+	http.Redirect(w, r, "http://localhost:5173/login", 302)
+}
+
+func jwtMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("JWT Middleware. Path:", r.URL.Path)
+		if !SilentuncheckJWTHandler(w, r) {
+			fmt.Println("El usuario SI esta autenticado")
+			next.ServeHTTP(w, r)
+		} else {
+			fmt.Println("El usuario NO esta autenticado")
+			w.WriteHeader(http.StatusFound)
+			json.NewEncoder(w).Encode(Response{Message: "Usted debe autenticarse para poder continuar....", Authenticated: "false", RedirectRoute: "/login"})
+		}
+	})
 
 }
+
+func AntiJwtMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("Anti JWT Middleware. Path:", r.URL.Path)
+		if SilentuncheckJWTHandler(w, r) {
+			fmt.Println("El usuario NO esta autenticado")
+			next.ServeHTTP(w, r)
+		} else {
+			fmt.Println("El usuario SI esta autenticado")
+			w.WriteHeader(http.StatusFound)
+			json.NewEncoder(w).Encode(Response{Message: "Usted ya se encuentra autenticado en el sistema", Authenticated: "true", RedirectRoute: "/profile"})
+		}
+	})
+}
+
+func SilentuncheckJWTHandler(w http.ResponseWriter, r *http.Request) bool {
+	session, err := store.Get(r, cookieName)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		//json.NewEncoder(w).Encode(Response{Message: "Ocurrio un error al obtener la sesion"})
+		return false
+	}
+	if session.Values["jwt"] == nil {
+		return true
+	}
+	_, err = jwt.ParseWithClaims(session.Values["jwt"].(string), &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return jwtSecret, nil
+	})
+	return err != nil
+}
+
+func validateJWTHandler(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, cookieName)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(Response{Message: "Ocurrio un error al obtener la sesion", RedirectRoute: "/login", Authenticated: "false"})
+		return
+	}
+
+	tokenString, ok := session.Values["jwt"].(string)
+	if !ok {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(Response{Message: "Token JWT No encontrado", RedirectRoute: "/login", Authenticated: "false"})
+		return
+	}
+
+	claims := &Claims{}
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return jwtSecret, nil
+	})
+
+	if err != nil || !token.Valid {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(Response{Message: "Token JWT Invalido o Expirado", RedirectRoute: "/login", Authenticated: "true"})
+		return
+	}
+	messagePrint := fmt.Sprintf("El usuario %s se encuentra autenticado", claims.Username)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(Response{Message: messagePrint, RedirectRoute: "/profile", Authenticated: "true"})
+}
+
+//func ServeNewLocalStorage(w http.ResponseWriter, r *http.Request) {
+//
+//}

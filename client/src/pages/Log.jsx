@@ -20,10 +20,41 @@ const Log = () => {
     e.preventDefault();
 
     try {
-      const result = await axios.post('http://localhost:8000/loginauth', formData);
-      setResponse(result.data); // Guarda la respuesta de la API
+      const result = await axios.post(
+        'http://localhost:8000/loginauth', 
+        formData,
+        { withCredentials: true }
+      );
+      console.log("Resultados JSON")
+      console.log(result.data)
+      var response = result.data;
+      if ((response).hasOwnProperty("redirect_route")) {
+        console.log("REDIRECT ROUTE")
+        window.location.href = response.redirect_route;
+      }
+      else {
+        console.log("NO REDIRECT ROUTE")
+      }
+      if ((response).hasOwnProperty("message")) {
+        console.log("THERE IS A MESSAGE")
+      }
+      setResponse(response.message); // Guarda la respuesta de la API
+
     } catch (error) {
       console.error('Error al autenticar', error);
+      console.log("Resultados JSON")
+      console.log(error.response?.data)
+      var response = error.response?.data;
+      if ((response).hasOwnProperty("redirect_route")) {
+        console.log("REDIRECT ROUTE")
+        window.location.href = response.redirect_route;
+      }
+      else {
+        console.log("NO REDIRECT ROUTE")
+      }
+      if ((response).hasOwnProperty("message")) {
+        console.log("THERE IS A MESSAGE")
+      }
       setResponse(error.response?.data || 'Error en la solicitud');
     }
   };

@@ -37,11 +37,11 @@ const Log = () => {
                 type="text"
                 name="username"
                 id="username"
-                className="peer w-full p-2 border border-gray-300 rounded-mfocus:outline-green-600"
+                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-800"
                 onChange={handleChange}
                 value={formData.username}
               />
-              <span className="peer-focus:bottom-14 relative bottom-[2.1rem] start-4 bg-white transition-all">
+              <span className={(formData.username && "bottom-14 ") + "peer-focus:bottom-14 relative bottom-[2.1rem] start-4 bg-white transition-all"}>
                 Username
               </span>
             </label>
@@ -50,11 +50,11 @@ const Log = () => {
                 type="text"
                 name="password"
                 id="password"
-                className="peer w-full p-2 border border-gray-300 rounded-mfocus:outline-green-600"
+                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-800"
                 onChange={handleChange}
                 value={formData.password}
               />
-              <span className="peer-focus:bottom-14 relative bottom-[2.1rem] start-4 bg-white transition-all">
+              <span className={(formData.password && "bottom-14 ") + "peer-focus:bottom-14 relative bottom-[2.1rem] start-4 bg-white transition-all"}>
                 Password
               </span>
             </label>

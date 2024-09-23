@@ -12,7 +12,7 @@ export default {
         slideIn: {
           '0%': { opacity: '0%', width: '0px' },
           '100%': { opacity: '100%', width: '100%' }
-        }
+        },
       },
       
       animation: {

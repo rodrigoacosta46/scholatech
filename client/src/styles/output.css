@@ -582,8 +582,8 @@ video {
   top: -0.25rem;
 }
 
-.-top-3 {
-  top: -0.75rem;
+.bottom-14 {
+  bottom: 3.5rem;
 }
 
 .bottom-2 {
@@ -620,10 +620,6 @@ video {
 
 .top-0 {
   top: 0px;
-}
-
-.bottom-14 {
-  bottom: 3.5rem;
 }
 
 .z-30 {
@@ -1169,11 +1165,6 @@ video {
   background-color: rgb(252 165 165 / var(--tw-bg-opacity));
 }
 
-.bg-red-900 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(127 29 29 / var(--tw-bg-opacity));
-}
-
 .bg-slate-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(226 232 240 / var(--tw-bg-opacity));
@@ -1261,16 +1252,6 @@ video {
 
 .p-8 {
   padding: 2rem;
-}
-
-.px-3 {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-}
-
-.py-1 {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
 }
 
 .py-12 {
@@ -1552,22 +1533,6 @@ video {
   outline-offset: 2px;
 }
 
-.outline {
-  outline-style: solid;
-}
-
-.outline-dashed {
-  outline-style: dashed;
-}
-
-.outline-1 {
-  outline-width: 1px;
-}
-
-.outline-8 {
-  outline-width: 8px;
-}
-
 .transition-all {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -1753,32 +1718,12 @@ video {
   outline-style: solid;
 }
 
-.focus\:outline-dashed:focus {
-  outline-style: dashed;
-}
-
 .focus\:outline-1:focus {
   outline-width: 1px;
 }
 
-.focus\:outline-8:focus {
-  outline-width: 8px;
-}
-
-.focus\:outline-offset-1:focus {
-  outline-offset: 1px;
-}
-
-.focus\:outline-green-600:focus {
-  outline-color: #16a34a;
-}
-
 .focus\:outline-green-800:focus {
   outline-color: #166534;
-}
-
-.focus\:outline-green-900:focus {
-  outline-color: #14532d;
 }
 
 .active\:shadow-none:active {

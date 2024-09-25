@@ -1,4 +1,3 @@
-import GuestLayout from '../components/GuestLayout';
 import { useState } from 'react';
 import axios from 'axios';
 

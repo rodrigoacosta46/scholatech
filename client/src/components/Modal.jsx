@@ -1,6 +1,12 @@
-import Card from "./Card";
+import Card from './Card';
 
-const Modal = ({ state = false, setter, allowAnimations=true, children }) => {
+const Modal = ({
+  state = false,
+  setter,
+  allowAnimations = true,
+  scheme,
+  children,
+}) => {
   return (
     <>
       {state && (
@@ -13,8 +19,15 @@ const Modal = ({ state = false, setter, allowAnimations=true, children }) => {
               e.stopPropagation();
             }}
             className="relative"
+            scheme={scheme}
           >
-            <div className={allowAnimations && "animate-fadeIn" + " relative grid grid-cols-2 gap-3 overflow-hidden max-w-xl"}>
+            <div
+              className={
+                allowAnimations &&
+                'animate-fadeIn' +
+                  ' relative grid grid-cols-2 gap-3 overflow-hidden max-w-xl'
+              }
+            >
               {children}
             </div>
           </Card>

@@ -1,10 +1,17 @@
-import OpenCard from "../../components/OpenCard";
-import Title from "../../components/Title";
+import OpenCard from '../../components/OpenCard';
+import Title from '../../components/Title';
+import { userHook } from '../../hooks/userHook';
 
 const Reminders = () => {
+  const { userConfig } = userHook();
+
   return (
     <>
-      <Title txt="Notificaciones" allowAnimations={true} />
+      <Title
+        txt="Notificaciones"
+        allowAnimations={true}
+        scheme={userConfig.theme}
+      />
 
       <div className="flex flex-col p-8 gap-28">
         <div>
@@ -14,12 +21,17 @@ const Reminders = () => {
             title={
               <>
                 <i className="fa-solid fa-circle-info text-xl"></i>
-                <div className="ps-2">Tenes turno a las 13:00hs de este día.</div>
+                <div className="ps-2">
+                  Tenes turno a las 13:00hs de este día.
+                </div>
               </>
             }
             content={
               <div className="text-gray-500 m-3 ">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate voluptatem laborum ullam nulla, accusamus id delectus neque sapiente ipsum aspernatur totam porro illo corrupti in autem ab suscipit sunt praesentium!
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Voluptate voluptatem laborum ullam nulla, accusamus id delectus
+                neque sapiente ipsum aspernatur totam porro illo corrupti in
+                autem ab suscipit sunt praesentium!
               </div>
             }
           />
@@ -32,14 +44,17 @@ const Reminders = () => {
               <>
                 <i className="fa-solid fa-circle-check text-xl"></i>
                 <div className="ps-2">
-                  Se aceptó turno de{" "}
+                  Se aceptó turno de{' '}
                   <span className="text-green-700">Cardiología</span>
                 </div>
               </>
             }
             content={
               <div className="text-gray-500 m-3 ">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate voluptatem laborum ullam nulla, accusamus id delectus neque sapiente ipsum aspernatur totam porro illo corrupti in autem ab suscipit sunt praesentium!
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Voluptate voluptatem laborum ullam nulla, accusamus id delectus
+                neque sapiente ipsum aspernatur totam porro illo corrupti in
+                autem ab suscipit sunt praesentium!
               </div>
             }
           />
@@ -58,7 +73,10 @@ const Reminders = () => {
             }
             content={
               <div className="text-gray-500 m-3 ">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate voluptatem laborum ullam nulla, accusamus id delectus neque sapiente ipsum aspernatur totam porro illo corrupti in autem ab suscipit sunt praesentium!
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Voluptate voluptatem laborum ullam nulla, accusamus id delectus
+                neque sapiente ipsum aspernatur totam porro illo corrupti in
+                autem ab suscipit sunt praesentium!
               </div>
             }
           />

@@ -1,17 +1,25 @@
-import OpenCard from "../../components/OpenCard";
-import Title from "../../components/Title";
+import OpenCard from '../../components/OpenCard';
+import Title from '../../components/Title';
+import Section from '../../components/Section';
+import { userHook } from '../../hooks/userHook';
 
 const Story = () => {
+  const { userConfig } = userHook();
   return (
     <>
-      <Title txt="Historial médico" allowAnimations={true} />
+      <Title
+        txt="Historial médico"
+        allowAnimations={true}
+        scheme={userConfig.theme}
+      />
 
       <div className="flex flex-col gap-12 m-12">
         <div>
-          <p className="relative border-b-2 border-green-900 text-2xl text-green-950 font-thin">
-            Turnos Pendientes
-            <i className="fa-solid fa-clock absolute end-5"></i>
-          </p>
+          <Section
+            txt="Turnos Pendientes"
+            icon={<i className="fa-solid fa-clock absolute end-5"></i>}
+            scheme={userConfig.theme}
+          />
           <OpenCard
             className="m-4 text-center"
             title={
@@ -49,25 +57,26 @@ const Story = () => {
           />
         </div>
         <div>
-          <p className="relative border-b-2 border-green-900 text-2xl text-green-950 font-thin">
-            Turnos Asignados
-            <i className="fa-solid fa-clipboard-list absolute end-5"></i>
-          </p>
+          <Section
+            txt="Turnos Asignados"
+            icon={<i className="fa-solid fa-clipboard-list absolute end-5"></i>}
+            scheme={userConfig.theme}
+          />
           <OpenCard
             className="m-4 text-center"
             title={
               <>
                 <i class="fa-solid fa-clipboard-list text-xl text-gray-700"></i>
-                <div className="ps-2 text-slate-700">Turno con el especialista Eugene Gutierrez</div>
+                <div className="ps-2 text-slate-700">
+                  Turno con el especialista Eugene Gutierrez
+                </div>
               </>
             }
             content={
               <div className="mt-4 m-6 flex flex-wrap justify-evenly gap-3">
                 <p className="font-bold">
                   Doctor asignado:
-                  <span className="ms-2 font-normal">
-                    Eugene Gutierrez
-                  </span>
+                  <span className="ms-2 font-normal">Eugene Gutierrez</span>
                 </p>
                 <p className="font-bold">
                   Motivo:
@@ -75,9 +84,7 @@ const Story = () => {
                 </p>
                 <p className="font-bold">
                   Fecha asignada:
-                  <span className="ms-2 font-normal">
-                    03/10/24
-                  </span>
+                  <span className="ms-2 font-normal">03/10/24</span>
                 </p>
                 <p className="font-bold">
                   Fecha de pedido de consulta:
@@ -88,10 +95,11 @@ const Story = () => {
           />
         </div>
         <div>
-          <p className="relative border-b-2 border-green-900 text-2xl text-green-950 font-thin">
-            Turnos Pasados
-            <i className="fa-solid fa-box-archive absolute end-5"></i>
-          </p>
+          <Section
+            txt="Turnos Pasados"
+            icon={<i className="fa-solid fa-box-archive absolute end-5"></i>}
+            scheme={userConfig.theme}
+          />
           <OpenCard
             className="m-4 text-center"
             title={
@@ -107,9 +115,7 @@ const Story = () => {
                 <div className="flex flex-wrap justify-evenly gap-3">
                   <p className="font-bold">
                     Doctor asignado:
-                    <span className="ms-2 font-normal">
-                      Dr Otaro
-                    </span>
+                    <span className="ms-2 font-normal">Dr Otaro</span>
                   </p>
                   <p className="font-bold">
                     Motivo:
@@ -117,9 +123,7 @@ const Story = () => {
                   </p>
                   <p className="font-bold">
                     Fecha asignada:
-                    <span className="ms-2 font-normal">
-                      20/03/29  11:30:00
-                    </span>
+                    <span className="ms-2 font-normal">20/03/29 11:30:00</span>
                   </p>
                   <p className="font-bold">
                     Fecha de pedido de consulta:
@@ -135,11 +139,19 @@ const Story = () => {
                   </button>
                   <p className="font-bold">
                     Diagnostico:
-                    <span className="ms-2 font-normal">Torsión de músculo superior</span>
+                    <span className="ms-2 font-normal">
+                      Torsión de músculo superior
+                    </span>
                   </p>
                   <p className="font-bold">
                     Notas:
-                    <span className="ms-2 font-normal">Tomar cada medicación cada 12 días Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi, quibusdam adipisci omnis sunt cum magni eaque, itaque aliquid ipsam amet dolores recusandae suscipit dolorem quos laborum voluptate eos neque inventore.</span>
+                    <span className="ms-2 font-normal">
+                      Tomar cada medicación cada 12 días Lorem ipsum dolor sit,
+                      amet consectetur adipisicing elit. Sequi, quibusdam
+                      adipisci omnis sunt cum magni eaque, itaque aliquid ipsam
+                      amet dolores recusandae suscipit dolorem quos laborum
+                      voluptate eos neque inventore.
+                    </span>
                   </p>
                   <div className="font-bold">
                     Medicación asignada:

@@ -143,7 +143,7 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("EL REGISTRO FUE UN EXITO")
 	fmt.Println("Creando session...")
-	cookies.CreateHandler(w, r, string(userInsert.ID))
+	cookies.CreateHandler(w, r, userInsert.ID)
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(structs.Response{
 		Message:       "La cuenta ha sido registrada con exito",
@@ -184,7 +184,7 @@ func LoginAuthHandler(w http.ResponseWriter, r *http.Request) {
 		err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 		// returns nil on succcess
 		if err == nil {
-			cookies.CreateHandler(w, r, username)
+			cookies.CreateHandler(w, r, 1)
 			w.WriteHeader(http.StatusOK)
 			json.NewEncoder(w).Encode(structs.Response{
 				Message:       "La autenticacion fue un exito",

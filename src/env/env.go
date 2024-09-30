@@ -21,7 +21,7 @@ var Store *sessions.CookieStore //= sessions.NewCookieStore([]byte("scholameds-c
 
 // Generates JWT Token for Web Session
 
-func env() {
+func init() {
 	errLoad := godotenv.Load()
 	if errLoad != nil {
 		fmt.Println("FATAL: Couldnt load enviorment file", errLoad)

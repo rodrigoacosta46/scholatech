@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -12,7 +13,7 @@ import (
 	"github.com/nicolas-k-cmd/proj-redes/src/structs"
 )
 
-func CreateHandler(w http.ResponseWriter, r *http.Request, id string) {
+func CreateHandler(w http.ResponseWriter, r *http.Request, id int) {
 	fmt.Println("cookie name: ", env.CookieName)
 	session, err := env.Store.Get(r, env.CookieName)
 	if err != nil {
@@ -58,16 +59,17 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "http://localhost:5173/login", http.StatusFound)
 }
 
-func GenerateJWT(id string) (string, error) {
+func GenerateJWT(id int) (string, error) {
 	//JWT Duration
 	now := time.Now()
 	expirationTime := now.Add(24 * time.Hour)
-
+	parsedId := strconv.Itoa(id)
+	fmt.Println("PROVIDED ID ", parsedId)
 	// Struct Generator
 	claims := &env.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "scholameds-ketracelblanco",
-			Subject:   id,
+			Subject:   parsedId,
 			IssuedAt:  jwt.NewNumericDate(now),
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},

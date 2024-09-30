@@ -74,7 +74,23 @@ const config = {
   },
 };
 export const UserContextProvider = ({ children }) => {
+  var model;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'http://localhost:8000/sync', false); // Cambia 'false' a 'true' si deseas que sea asíncrono
+
+  xhr.onload = function() {
+  if (xhr.status >= 200 && xhr.status < 300) {
+    console.log('Respuesta:', xhr.responseText);
+    model = JSON.parse((JSON.parse(xhr.responseText)).message);
+  } else {
+    console.error('Error en la solicitud:', xhr.statusText);
+  }
+  };
+  xhr.withCredentials = true;
+  xhr.send();
+  console.log(model);
   let user = { name: 'Octavio Pizarro', role: 'admin' };
+  user.name = model.Username;
   const userInfo = {
     ...user,
     role: roles[user.role],

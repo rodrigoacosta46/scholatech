@@ -16,11 +16,11 @@ type User struct {
 	Telephone  *string    `gorm:"size:50"`
 	Address    *string    `gorm:"size:100"`
 	Speciality *string    `gorm:"size:100"`
-	Gender     string     `gorm:"type:enum('masculino','femenino','otros');not null"`
+	Gender     string     `gorm:"type:enum('male','female','another');not null"`
 	Birthdate  time.Time  `gorm:"type:date;not null"`
-	Created_at time.Time  `gorm:"type:datetime;not null"`
-	Updated_at *time.Time `gorm:"type:datetime"`
-	Deleted_at *time.Time `gorm:"type:datetime"`
+	CreatedAt  time.Time  `gorm:"type:datetime;not null"`
+	UpdatedAt  *time.Time `gorm:"type:datetime"`
+	DeletedAt  *time.Time `gorm:"type:datetime"`
 }
 
 type Turno struct {
@@ -76,10 +76,10 @@ type Rol struct {
 
 var Db *gorm.DB
 
-func Database() {
+func init() {
 	fmt.Println("BOOTING UP DATABASE SERVICE....")
 	var err error
-	Db, err = gorm.Open(mysql.Open("root@tcp(localhost:3306)/scholaTech26GORM"), &gorm.Config{})
+	Db, err = gorm.Open(mysql.Open("root@tcp(localhost:3306)/scholaTech26GORM?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
 	if err != nil {
 		fmt.Println("FATAL: No se pudo conectar a la base de datos")
 		panic(err)

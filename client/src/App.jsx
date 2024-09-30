@@ -4,16 +4,17 @@ import {
   RouterProvider,
   Route,
 } from "react-router-dom";
-import Profile from "./pages/Profile";
-import Log from "./pages/Log";
-import Register from "./pages/Register";
-import Drugs from "./pages/Drugs";
-import Reminders from "./pages/Reminders";
-import Story from "./pages/Story";
-import Schedule from "./pages/Schedule";
-import Doctors from "./pages/Doctors";
 import GuestLayout from "./components/GuestLayout";
 import AuthUserLayout from "./components/AuthUserLayout";
+import Profile from "./pages/patient/Profile";
+import Log from "./pages/Log";
+import Register from "./pages/Register";
+import Drugs from "./pages/patient/Drugs";
+import Reminders from "./pages/patient/Reminders";
+import Story from "./pages/patient/Story";
+import Schedule from "./pages/patient/Schedule";
+import Doctors from "./pages/patient/Doctors";
+import Select from "./pages/patient/Select";
 
 function App() {
   const router = createBrowserRouter(
@@ -31,6 +32,7 @@ function App() {
           <Route path="story" element={<Story />} />
           <Route path="reminders" element={<Reminders />} />
           <Route path="doctors" element={<Doctors />} />
+          <Route path="select/:uuid" element={<Select />} />
         </Route>
         <Route path="*" element={<h1>Not found</h1>} />
       </>

@@ -1,13 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import { userHook } from '../../hooks/userHook';
 
 const Profile = () => {
-
   /* 
     El usuario tiene que poder guardar la cuenta de instagram, vincular instagram a la cuenta de la app
   */
+  const { userInfo, userConfig } = userHook();
+
   return (
     <>
-      <div className="max-h-60 bg-green-950 flex justify-center gap-2 p-6 opacity-0 animate-[slideIn_2s_ease-in-out_1_forwards]">
+      <div
+        className={`max-h-60 bg-${userConfig.theme}-950 flex justify-center gap-2 p-6 opacity-0 animate-[slideIn_2s_ease-in-out_1_forwards]`}
+      >
         <img
           src="img/Gaben.png"
           alt="Page LOGO"
@@ -15,10 +19,10 @@ const Profile = () => {
         />
         <div className="flex flex-col opacity-0 animate-[fadeIn_4s_ease-in-out_1_forwards]">
           <div className="mx-auto text-4xl text-white text-wrap">
-            Hernandez Gutierrez Nunez
+            {userInfo.name}
             <div className="h-px bg-white w-0"></div>
           </div>
-          <p className="text-sm text-gray-500">Paciente</p>
+          <p className="text-sm text-gray-500">{userInfo.role}</p>
         </div>
       </div>
 
@@ -96,7 +100,7 @@ const Profile = () => {
                     <input
                       type="submit"
                       value="Guardar cambios"
-                      className="p-4 text-white bg-green-800 shadow-[5px_5px] shadow-slate-400 rounded-3xl cursor-pointer active:shadow-slate-300"
+                      className={`p-4 text-white bg-${userConfig.theme}-800 shadow-[5px_5px] shadow-slate-400 rounded-3xl cursor-pointer active:shadow-slate-300`}
                     />
                     <i className="fa-solid fa-pen-to-square relative -inset-4 text-xl text-black font-bold"></i>
                   </p>
@@ -105,15 +109,23 @@ const Profile = () => {
             </div>
           </div>
           <div>
-            <div className="relative p-5 rounded-3xl bg-slate-200 text-slate-400 font-thin shadow-[5px_5px] shadow-green-900">
-              <i className="fa-solid fa-comment absolute end-0 -top-1 text-3xl size-fit text-green-900"></i>
-              <p className="underline underline-offset-8 decoration-1 decoration-gray-400/80  text-green-900 text-2xl">
+            <div
+              className={`relative p-5 rounded-3xl bg-slate-200 text-slate-400 font-thin shadow-[5px_5px] shadow-${userConfig.theme}-900`}
+            >
+              <i
+                className={`fa-solid fa-comment absolute end-0 -top-1 text-3xl size-fit text-${userConfig.theme}-900`}
+              ></i>
+              <p
+                className={`underline underline-offset-8 decoration-1 decoration-gray-400/80  text-${userConfig.theme}-900 text-2xl`}
+              >
                 Última entrada
               </p>
             </div>
             <div className="m-4">
               <Link to="/reminders">
-                <div className="bg-slate-200 p-4 rounded-3xl text-lg cursor-pointer hover:shadow-[5px_5px] hover:shadow-green-950 hover:text-white hover:bg-green-800 transition-all">
+                <div
+                  className={`bg-slate-200 p-4 rounded-3xl text-lg cursor-pointer hover:shadow-[5px_5px] hover:shadow-${userConfig.theme}-950 hover:text-white hover:bg-${userConfig.theme}-800 transition-all`}
+                >
                   <i className="fa-solid fa-circle-info size-fit"></i>
                   <span className="line-clamp-3">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.

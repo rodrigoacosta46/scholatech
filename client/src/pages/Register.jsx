@@ -62,55 +62,55 @@ const Register = () => {
   };
   return (
       <form onSubmit={handleSubmit} method="POST">
-        <div class="w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm my-4">
-          <p class="text-4xl text-green-800 text-center py-12">Register</p>
-          <div class="flex flex-col gap-2 relative">
-            <label for="email" class="text-green-950 mb-2 select-none">
+        <div className="w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm my-4">
+          <p className="text-4xl text-green-800 text-center py-12">Register</p>
+          <div className="flex flex-col gap-2 relative">
+            <label for="email" className="text-green-950 mb-2 select-none">
               <input
                 type="email"
                 id="email"
                 name="email"
-                class="peer w-full p-2 border border-gray-300 rounded-focus:outline-green-600"
+                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-800"
                 required
                 onChange={handleChange}
                 value={formData.email}
               />
-              <span class="peer-focus:bottom-14 relative bottom-[2.1rem] start-4 bg-white transition-all">
+              <span className={(formData.email && "bottom-14 ") + "peer-focus:bottom-14 relative bottom-[2.1rem] start-4 bg-white transition-all"}>
                 Correo Electrónico
               </span>
             </label>
-            <label for="username" class="text-green-950 mb-2 select-none">
+            <label for="username" className="text-green-950 mb-2 select-none">
               <input
                 type="text"
                 id="username"
                 name="username"
-                class="peer w-full p-2 border border-gray-300 rounded-focus:outline-green-600"
+                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-800"
                 required
                 onChange={handleChange}
                 value={formData.username}
               />
-              <span class="peer-focus:bottom-14 relative bottom-[2.1rem] start-2 bg-white transition-all">
+              <span className={(formData.username && "bottom-14 ") + "peer-focus:bottom-14 relative bottom-[2.1rem] start-2 bg-white transition-all"}>
                 Username
               </span>
             </label>
 
-            <label for="password">
+            <label for="password" className="text-green-950 mb-2 select-none">
               <input
                 type="text"
                 id="password"
                 name="password"
-                class="peer w-full p-2 border border-gray-300 rounded-focus:outline-green-600"
+                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-800"
                 required
                 onChange={handleChange}
                 value={formData.password}
               />
-              <span class="peer-focus:bottom-14 relative bottom-[2.1rem] start-2 bg-white transition-all">
+              <span className={(formData.password && "bottom-14 ") + "peer-focus:bottom-14 relative bottom-[2.1rem] start-2 bg-white transition-all"}>
                 Password
               </span>
             </label>
             <label for="gender">
               Género:
-              <select id="gender" name="gender" onChange={handleChange} value={formData.gender} class="outline-none">
+              <select id="gender" name="gender" onChange={handleChange} value={formData.gender} className="outline-none">
                 <option value="male">Hombre</option>
                 <option value="female">Mujer</option>
               </select>
@@ -122,7 +122,7 @@ const Register = () => {
             <input
               type="submit"
               id="submit"
-              class="block w-full p-2 border border-gray-300 rounded-md cursor-pointer  hover:text-white hover:bg-green-800 transition-all duration-75"
+              className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer  hover:text-white hover:bg-green-800 transition-all duration-75"
             />
           </div>
           {response && <div>Respuesta del servidor: {JSON.stringify(response)}</div>}

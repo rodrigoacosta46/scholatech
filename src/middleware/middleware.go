@@ -123,7 +123,7 @@ func ValidateJWTHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil || !token.Valid {
 		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(structs.Response{Message: "Token JWT Invalido o Expirado", RedirectRoute: "/login", Authenticated: "true"})
+		json.NewEncoder(w).Encode(structs.Response{Message: "Token JWT Invalido o Expirado", RedirectRoute: "/logout", Authenticated: "false"})
 		return
 	}
 	messagePrint := fmt.Sprintf("El usuario %s se encuentra autenticado", claims.ID)

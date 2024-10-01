@@ -1,9 +1,16 @@
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { UserContextProvider } from '../hooks/userHook';
+import React, { useEffect } from 'react';
+import { AuthMethodHandler } from '../hooks/AuthValidator';
+
+
 
 const AuthUserLayout = ({ children }) => {
-
+  useEffect(() => {
+    const authHandler = new AuthMethodHandler(false);
+  }, []);
+  
   return (
     <UserContextProvider>
       <div className="min-w-fit min-h-dvh flex bg-gray-300 overflow-hidden">

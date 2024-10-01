@@ -1,7 +1,10 @@
 import Card from "../../components/Card";
 import Title from "../../components/Title";
+import { userHook } from "../../hooks/userHook";
 
 const Select = () => {
+  const { userConfig } = userHook();
+
   return (
     <>
       <div className="flex flex-col items-center m-4 gap-4">
@@ -9,7 +12,7 @@ const Select = () => {
           Formulario de Consulta
         </p>
         <div className="grid lg:grid-cols-2 rounded-xl shadow-[4px_4px] shadow-slate-400 bg-gradient-to-r from-slate-200 to-slate-300">
-          <Card>
+          <Card scheme={userConfig.theme}>
             <div className="group flex justify-center max-h-96 overflow-hidden cursor-pointer">
               <div>
                 <img
@@ -27,6 +30,7 @@ const Select = () => {
                     txt="Datos del especialista"
                     className=""
                     allowAnimations={true}
+                    scheme={userConfig.theme}
                   />
                 </div>
                 <p>

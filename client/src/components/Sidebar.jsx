@@ -8,7 +8,7 @@ const Sidebar = () => {
   const location = useLocation();
   const [userView, setUserView] = useState(false);
   const [modal, setModal] = useState(false);
-
+  
   const setModalState = () => {
     setModal(!modal);
   };
@@ -53,13 +53,13 @@ const Sidebar = () => {
         <div className="h-full flex flex-col justify-between gap-4">
           <div
             className={
-              'grid grid-flow-col grid-cols-2 gap-1 m-2 transition-all duration-500 ' +
+              'grid grid-flow-col grid-cols-2 gap-1 m-2 transition-all duration-1000 ' +
               userView
             }
           >
             <img src="img/Gaben.png" alt="" className="rounded-full" />
             <div>
-              <p className="text-xl text-white line-clamp-3">{userInfo.name}</p>
+              <p className="text-xl text-white line-clamp-3">{userInfo.nombre}</p>
               <p className="text-md text-gray-500">{userInfo.role}</p>
             </div>
           </div>

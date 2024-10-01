@@ -42,7 +42,7 @@ const Doctors = () => {
 
   return (
     <>
-      <Modal state={modal} setter={modalSetState}>
+      <Modal state={modal} setter={modalSetState} scheme={userConfig.theme}>
         <img
           src="img/Gaben.png"
           alt=""

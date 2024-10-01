@@ -15,6 +15,10 @@ import Story from "./pages/patient/Story";
 import Schedule from "./pages/patient/Schedule";
 import Doctors from "./pages/patient/Doctors";
 import Select from "./pages/patient/Select";
+import { UserContextProvider } from "./hooks/userHook";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { roles } from "./config/roles";
+import List from "./pages/List";
 
 function App() {
   const router = createBrowserRouter(
@@ -25,14 +29,19 @@ function App() {
           <Route index path="login" element={<Log />} />
           <Route path="register" element={<Register />} />
         </Route>
-        <Route element={<AuthUserLayout />}>
-          <Route path="profile" element={<Profile />} />
-          <Route path="drugs" element={<Drugs />} />
-          <Route path="schedule" element={<Schedule />} />
-          <Route path="story" element={<Story />} />
-          <Route path="reminders" element={<Reminders />} />
-          <Route path="doctors" element={<Doctors />} />
-          <Route path="select/:uuid" element={<Select />} />
+        <Route element={<UserContextProvider />}>
+          <Route element={<AuthUserLayout />}>
+            <Route path="profile" element={<Profile />} />
+            <Route path="drugs" element={<Drugs />} />
+            <Route path="schedule" element={<Schedule />} />
+            <Route path="story" element={<Story />} />
+            <Route path="reminders" element={<Reminders />} />
+            <Route path="doctors" element={<Doctors />} />
+            <Route path="select/:uuid" element={<Select />} />
+            <Route element={<ProtectedRoute bypassRole={roles.admin}/>}>
+              <Route path="list" element={<List />} />
+            </Route>
+          </Route>
         </Route>
         <Route path="*" element={<h1>Not found</h1>} />
       </>

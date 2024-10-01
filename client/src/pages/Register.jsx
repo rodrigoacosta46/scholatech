@@ -70,12 +70,12 @@ const Register = () => {
                 type="email"
                 id="email"
                 name="email"
-                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-800"
+                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-600"
                 required
                 onChange={handleChange}
                 value={formData.email}
               />
-              <span className={(formData.email && "bottom-14 ") + "peer-focus:bottom-14 relative bottom-[2.1rem] start-4 bg-white transition-all"}>
+              <span className={(formData.email ? "bottom-14" : "bottom-[2.1rem]") + " peer-focus:bottom-14 relative start-4 bg-white transition-all"}>
                 Correo Electrónico
               </span>
             </label>
@@ -84,12 +84,12 @@ const Register = () => {
                 type="text"
                 id="username"
                 name="username"
-                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-800"
+                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-600"
                 required
                 onChange={handleChange}
                 value={formData.username}
               />
-              <span className={(formData.username && "bottom-14 ") + "peer-focus:bottom-14 relative bottom-[2.1rem] start-2 bg-white transition-all"}>
+              <span className={(formData.username ? "bottom-14" : "bottom-[2.1rem]") + " peer-focus:bottom-14 relative start-2 bg-white transition-all"}>
                 Username
               </span>
             </label>
@@ -99,12 +99,12 @@ const Register = () => {
                 type="text"
                 id="password"
                 name="password"
-                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-800"
+                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-600"
                 required
                 onChange={handleChange}
                 value={formData.password}
               />
-              <span className={(formData.password && "bottom-14 ") + "peer-focus:bottom-14 relative bottom-[2.1rem] start-2 bg-white transition-all"}>
+              <span className={(formData.password ? "bottom-14" : "bottom-[2.1rem]") + " peer-focus:bottom-14 relative start-2 bg-white transition-all"}>
                 Password
               </span>
             </label>

@@ -1,7 +1,38 @@
 import { Link } from 'react-router-dom';
 import { userHook } from '../../hooks/userHook';
+import { parseAuthenticatedHelper } from '../../hooks/orderprocessor'
 
 const Profile = () => {
+  
+  (async() => {
+    class ProfileSyncHandler {
+      result
+      authenticated
+       constructor(Guest) {
+        this.Orchestrator()
+      }
+      async Orchestrator() {
+        try {
+          this.result = await axios.get("http://localhost:8000/sync", {withCredentials: true})
+          this.result = this.result.data
+          this.success()
+        } catch (error) {
+          console.log("It looks like its not authenticated")
+          this.result = error.response.data
+        } finally {
+          console.log(this.result)
+          if (!parseAuthenticatedHelper(this.result)) {
+            window.location.href = "http://localhost:8000/logout"
+          }
+          parseFatalHelper(this.result)
+        }
+      }
+      success() {
+        console.log("SUCCESS")
+      }
+    }
+  })();
+
   /* 
     El usuario tiene que poder guardar la cuenta de instagram, vincular instagram a la cuenta de la app
   */
@@ -41,7 +72,7 @@ const Profile = () => {
                     <input
                       type="text"
                       name=""
-                      id=""
+                      id="name"
                       placeholder="Hernandez Gutierrez Nunez"
                       className="text-center w-full bg-transparent border-b-2 border-gray-400/80 focus:border-gray-600 outline-none transition-all focus:text-slate-800"
                     />
@@ -51,7 +82,7 @@ const Profile = () => {
                     <input
                       type="email"
                       name=""
-                      id=""
+                      id="email"
                       placeholder="correo@gmail.com"
                       className="text-center w-full bg-transparent border-b-2 border-gray-400/80 focus:border-gray-600 outline-none transition-all focus:text-slate-800"
                     />
@@ -61,7 +92,7 @@ const Profile = () => {
                     <input
                       type="text"
                       name=""
-                      id=""
+                      id="telephone"
                       placeholder="+54 11 9 3023-2123"
                       className="text-center w-full bg-transparent border-b-2 border-gray-400/80 focus:border-gray-600 outline-none transition-all focus:text-slate-800"
                     />
@@ -71,7 +102,7 @@ const Profile = () => {
                     <input
                       type="date"
                       name=""
-                      id=""
+                      id="birthdate"
                       placeholder="+54 11 9 3023-2123"
                       className="text-center w-full bg-transparent border-b-2 border-gray-400/80 focus:border-gray-600 outline-none transition-all focus:text-slate-800"
                     />
@@ -81,7 +112,7 @@ const Profile = () => {
                     <input
                       type="text"
                       name=""
-                      id=""
+                      id="address"
                       placeholder="Av.Rivadavia 1093"
                       className="text-center w-full bg-transparent border-b-2 border-gray-400/80 focus:border-gray-600 outline-none transition-all focus:text-slate-800"
                     />
@@ -91,7 +122,7 @@ const Profile = () => {
                     <input
                       type="text"
                       name=""
-                      id=""
+                      id="password "
                       placeholder="pepeelgrande123"
                       className="text-center w-full bg-transparent border-b-2 border-gray-400/80 focus:border-gray-600 outline-none transition-all focus:text-slate-800"
                     />

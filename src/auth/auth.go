@@ -17,6 +17,24 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+/*
+HTTP ENDPOINT
+Must pass the Guest Routes Middleware Routes
+When the user fills out the register form and issues an HTTP Request for creation
+This endpoint will take into action if the CORS and Middleware Routes are satisfied.
+It requieres that the user Issues a valid RegisterRequest JSON HTTP Request.
+And that the Request method is always POST (Yep, were creating a resource, what else were you expecting?)
+
+Once the structure is aprsed,
+it will validate throught regex and other methods the data provided in the structure
+If anything fails, it will returns a 4XX code unless its a server error (5XX)
+If the data structure its ok, it will use GORM to search if the user exists.
+If it exists, it will throw an error.
+If not. The operation will continue upon the creation of the new resource.
+Prior the insertion in the database, a hash will be created, again, everything must be ok
+The data is succesfully inserted (I hope) and the servers returns an
+HTTP 201 Code, A success message and an order to redirect to an authenticated route
+*/
 func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodPost {
@@ -150,6 +168,10 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 		RedirectRoute: "/profile",
 	})
 }
+
+/*
+Same thing as the RegisterAuthHandler but for login
+*/
 
 func LoginAuthHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")

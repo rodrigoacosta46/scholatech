@@ -11,6 +11,10 @@ import (
 	"github.com/nicolas-k-cmd/proj-redes/src/structs"
 )
 
+/*
+This function retrieves the JWT from the encrypted cookie once
+it has already passed any security measures specified at the specific endpoint
+*/
 func GetCookiePostMiddleware(w http.ResponseWriter, r *http.Request) (*jwt.Token, *sessions.Session) {
 	session, err := env.Store.Get(r, env.CookieName)
 	if err != nil {
@@ -31,6 +35,9 @@ func GetCookiePostMiddleware(w http.ResponseWriter, r *http.Request) (*jwt.Token
 	return token, session
 }
 
+/*
+Validates if the user is authenticated.
+*/
 func JwtMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("JWT Middleware. Path:", r.URL.Path)
@@ -46,6 +53,10 @@ func JwtMiddleware(next http.Handler) http.Handler {
 
 }
 
+/*
+Validates if the user is NOT autheticated
+*/
+
 func AntiJwtMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Anti JWT Middleware. Path:", r.URL.Path)
@@ -59,6 +70,12 @@ func AntiJwtMiddleware(next http.Handler) http.Handler {
 		}
 	})
 }
+
+/*
+Checks if the JWT Is invalid.
+If invalid, it returns true.
+If an internal error ocurrs, it returns false
+*/
 
 func SilentuncheckJWTHandler(w http.ResponseWriter, r *http.Request) bool {
 	session, err := env.Store.Get(r, env.CookieName)
@@ -76,6 +93,14 @@ func SilentuncheckJWTHandler(w http.ResponseWriter, r *http.Request) bool {
 	return err != nil
 }
 
+/*
+This function decrypts the cookies, retrieves the JWT tocken and validates it with JWT SECRET.
+It also includes validation in case if the token is expired.
+
+Please take in note that this is not a middleware.
+This is in case an alarm is triggered that indicates that the user might not be authenticated.
+If authenticated is false, it destroys the cookie.
+*/
 func ValidateJWTHandler(w http.ResponseWriter, r *http.Request) {
 	session, err := env.Store.Get(r, env.CookieName)
 	if err != nil {
@@ -106,6 +131,12 @@ func ValidateJWTHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(structs.Response{Message: messagePrint, RedirectRoute: "/profile", Authenticated: "true"})
 }
 
+/*
+Frontend and backend are two separate application listening at diferrent ports
+Browsers realize that and apply CORS.
+Without this function, we couldnt do any AJAX request between frontend and backend.
+OPTIONS Is mandatory
+*/
 func EnableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")

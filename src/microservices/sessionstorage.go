@@ -10,6 +10,13 @@ import (
 	"gorm.io/gorm"
 )
 
+/*
+Once authentication middleware are passed.
+This function will retrieve from the database the information about the user and send it to the frontend
+This is useful for the React Hooks.
+The frontend must know information about the user for displaying purposes.
+*/
+
 func ServeSessionLocalStorage(w http.ResponseWriter, r *http.Request) {
 	jwtToken, _ := Middleware.GetCookiePostMiddleware(w, r)
 	id, err := (jwtToken.Claims.GetSubject())

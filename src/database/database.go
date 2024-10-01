@@ -8,6 +8,12 @@ import (
 	"gorm.io/gorm"
 )
 
+/*
+Database structures
+
+The ORM will automigrate and generate the tables acording to the structs and its data types.
+If a record is retrieved from the database, the corresponding structure will be used for it.
+*/
 type User struct {
 	ID         int        `gorm:"primaryKey"`
 	Username   string     `gorm:"size:50;not null"`
@@ -76,6 +82,11 @@ type Rol struct {
 
 var Db *gorm.DB
 
+/*
+This function runs automatically when importing the package
+and is responsible for the orchestration, execution and migration
+of the database. In case of failure, it will throw a panic error.
+*/
 func init() {
 	fmt.Println("BOOTING UP DATABASE SERVICE....")
 	var err error

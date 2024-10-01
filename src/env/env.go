@@ -9,18 +9,22 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var JwtSecret []byte // = []byte("scholameds-jwtsecret")
+var JwtSecret []byte
 
 var CookieName string
 
+// JWT Structure
 type Claims struct {
 	jwt.RegisteredClaims
 }
 
-var Store *sessions.CookieStore //= sessions.NewCookieStore([]byte("scholameds-cookiesecret"))
+// Cookie handler with the cookie secret
+var Store *sessions.CookieStore
 
-// Generates JWT Token for Web Session
-
+/*
+This package loads the application secrets including the JWT Secret and Cookie Secret.
+The cookie name and the cookie session handler
+*/
 func init() {
 	errLoad := godotenv.Load()
 	if errLoad != nil {

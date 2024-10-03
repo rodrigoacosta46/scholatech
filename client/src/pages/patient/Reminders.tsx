@@ -1,6 +1,7 @@
 import OpenCard from '../../components/OpenCard';
 import Title from '../../components/Title';
 import { userHook } from '../../hooks/userHook';
+import React, { useEffect } from 'react';
 
 const Reminders = () => {
   const { userConfig } = userHook();
@@ -65,7 +66,7 @@ const Reminders = () => {
             className="m-8"
             title={
               <>
-                <i class="fa-solid fa-box-archive text-xl"></i>
+                <i className="fa-solid fa-box-archive text-xl"></i>
                 <div className="ps-2">
                   Se ha añadido nueva entrada en tu historial de turnos
                 </div>

@@ -1,3 +1,5 @@
+import React from 'react';
+
 const Section = ({ txt, icon = '', scheme }) => {
   return (
     <p

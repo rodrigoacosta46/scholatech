@@ -2,6 +2,8 @@ import Title from '../../components/Title';
 import Calendar from '../../components/Calendar';
 import { userHook } from '../../hooks/userHook';
 import Section from '../../components/Section';
+import React, { useEffect } from 'react';
+
 
 const Schedule = () => {
   const { userConfig } = userHook();

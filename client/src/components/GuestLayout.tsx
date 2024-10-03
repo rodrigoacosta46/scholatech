@@ -6,7 +6,7 @@ import { AuthMethodHandler } from '../hooks/AuthValidator';
 import React from 'react';
 
 
-const GuestLayout = ({ children }) => {
+const GuestLayout = ({}) => {
   useEffect(() => {
     const authHandler = new AuthMethodHandler(true);
   }, []);

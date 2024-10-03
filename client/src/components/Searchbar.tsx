@@ -1,3 +1,5 @@
+import React from 'react';
+
 const Searchbar = ({ placeholder, className, ...props }) => {
     return (
       <div

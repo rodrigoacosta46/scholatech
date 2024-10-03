@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { userHook } from '../../hooks/userHook';
 import Section from '../../components/Section';
+import React from 'react';
 
 const Doctors = () => {
   const { userConfig } = userHook();
@@ -18,7 +19,7 @@ const Doctors = () => {
 
   function getItems() {
     //Reemplazar por fetch api
-    let items = [];
+    let items: React.JSX.Element[] = [];
 
     for (let i = 0; i < 10; i++) {
       items.push(
@@ -27,7 +28,7 @@ const Doctors = () => {
           onClick={modalSetState}
           style={{ animationDelay: i * 0.1 + 's' }}
           className="opacity-0 animate-fadeIn cursor-pointer overflow-hidden"
-          scheme={userConfig.theme}
+          scheme={userConfig!["theme"]}
         >
           <img src="img/Gaben.png" alt="" className="h-80 object-cover" />
           <p className="underline underline-offset-4 decoration-green-900 mt-4 text-center">
@@ -87,7 +88,7 @@ const Doctors = () => {
                 Dr. Octavio Pizarro
               </p>
               <div className="bg-gray-600/40 text-gray-400 absolute top-0 start-0 h-full w-full flex flex-col items-center justify-center">
-                <i class="fa-solid fa-clock text-6xl"></i>
+                <i className="fa-solid fa-clock text-6xl"></i>
                 Turno pendiente
               </div>
             </Card>
@@ -107,7 +108,7 @@ const Doctors = () => {
               id=""
               className="bg-green-800 text-white p-2 outline-none"
             >
-              <option value="" defaultValue>
+              <option value="" selected>
                 Especialidad
               </option>
               <option value="">Cardiología</option>
@@ -118,7 +119,7 @@ const Doctors = () => {
               id=""
               className="bg-green-800 text-white p-2 outline-none"
             >
-              <option value="" defaultValue>
+              <option value="" selected>
                 Género
               </option>
               <option value="">Masculino</option>

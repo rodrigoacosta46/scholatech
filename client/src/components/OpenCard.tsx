@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 const OpenCard = ({ className="", title, content }) => {
     const [open, setOpen] = useState(false); 
@@ -10,7 +10,7 @@ const OpenCard = ({ className="", title, content }) => {
                     className="absolute end-5 text-gray-400 text-thin"
                     onClick={() => { setOpen(!open) }}
                 >
-                    <i class="fa-solid fa-chevron-down"></i>
+                    <i className="fa-solid fa-chevron-down"></i>
                 </button>
                 { title }
             </div>

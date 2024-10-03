@@ -1,3 +1,4 @@
+import React from 'react';
 const Card = ({ className = '', scheme, children, ...props }) => {
   return (
     <div

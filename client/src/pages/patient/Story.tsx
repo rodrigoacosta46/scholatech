@@ -2,6 +2,8 @@ import OpenCard from '../../components/OpenCard';
 import Title from '../../components/Title';
 import Section from '../../components/Section';
 import { userHook } from '../../hooks/userHook';
+import React, { useEffect } from 'react';
+
 
 const Story = () => {
   const { userConfig } = userHook();
@@ -17,7 +19,7 @@ const Story = () => {
         <div>
           <Section
             txt="Turnos Pendientes"
-            icon={<i className="fa-solid fa-clock absolute end-5"></i>}
+            icon={(<i className="fa-solid fa-clock absolute end-5"></i>).toString()}
             scheme={userConfig.theme}
           />
           <OpenCard
@@ -59,14 +61,14 @@ const Story = () => {
         <div>
           <Section
             txt="Turnos Asignados"
-            icon={<i className="fa-solid fa-clipboard-list absolute end-5"></i>}
+            icon={(<i className="fa-solid fa-clipboard-list absolute end-5"></i>).toString() }
             scheme={userConfig.theme}
           />
           <OpenCard
             className="m-4 text-center"
             title={
               <>
-                <i class="fa-solid fa-clipboard-list text-xl text-gray-700"></i>
+                <i className="fa-solid fa-clipboard-list text-xl text-gray-700"></i>
                 <div className="ps-2 text-slate-700">
                   Turno con el especialista Eugene Gutierrez
                 </div>
@@ -97,7 +99,7 @@ const Story = () => {
         <div>
           <Section
             txt="Turnos Pasados"
-            icon={<i className="fa-solid fa-box-archive absolute end-5"></i>}
+            icon={(<i className="fa-solid fa-box-archive absolute end-5"></i>).toString()}
             scheme={userConfig.theme}
           />
           <OpenCard
@@ -134,7 +136,7 @@ const Story = () => {
                 <p className="text-2xl text-center">- Resultados -</p>
                 <div className="relative bg-gray-200 flex flex-wrap justify-evenly text-center gap-3 p-12 my-2">
                   <button className="absolute end-2 bottom-2 text-sm text-gray-500">
-                    <i class="fa-solid fa-download pe-1"></i>
+                    <i className="fa-solid fa-download pe-1"></i>
                     Descargar comprobante
                   </button>
                   <p className="font-bold">

@@ -1,9 +1,10 @@
-import { useState } from 'react';
 import Title from '../../components/Title';
 import Searchbar from '../../components/Searchbar';
 import Card from '../../components/Card';
 import Modal from '../../components/Modal';
 import { userHook } from '../../hooks/userHook';
+import React, { useState } from 'react';
+
 
 const Drugs = () => {
   // Por default, traer drogas más comunes
@@ -23,7 +24,7 @@ const Drugs = () => {
   };
 
   function getItems() {
-    let items = [];
+    let items: React.JSX.Element[] = [];
 
     for (let i = 0; i < 19; i++) {
       items.push(
@@ -34,7 +35,7 @@ const Drugs = () => {
           className="opacity-0 animate-fadeIn cursor-pointer relative "
           scheme={userConfig.theme}
         >
-          {userInfo.role == 'Admin' && (
+          {userInfo["role"] == 'Admin' && (
             <i
               onClick={deleteDrug}
               className="fa-solid fa-trash absolute end-1 hover:text-red-700 transition-all"
@@ -61,7 +62,7 @@ const Drugs = () => {
 
   return (
     <>
-      {userInfo.role == 'Admin' && (
+      {userInfo["role"] == 'Admin' && (
         <Modal
           state={adminModal}
           setter={() => {
@@ -133,9 +134,9 @@ const Drugs = () => {
           placeholder={'Buscar medicamento'}
           className="p-3 w-96 m-4 ms-auto"
         />
-        {userInfo.role == 'Admin' && (
+        {userInfo["role"] == 'Admin' && (
           <button
-            onClick={setAdminModal}
+            onClick={() => setAdminModal(!adminModal)}
             className="flex bg-slate-700 text-white py-2 px-4 rounded-3xl"
           >
             + Añadir droga

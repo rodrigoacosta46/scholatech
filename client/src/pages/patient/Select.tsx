@@ -1,6 +1,8 @@
 import Card from "../../components/Card";
 import Title from "../../components/Title";
 import { userHook } from "../../hooks/userHook";
+import React, { useEffect } from 'react';
+
 
 const Select = () => {
   const { userConfig } = userHook();

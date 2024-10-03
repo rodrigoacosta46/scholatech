@@ -1,4 +1,5 @@
 import Card from './Card';
+import React from 'react';
 
 const Modal = ({
   state = false,
@@ -23,8 +24,7 @@ const Modal = ({
           >
             <div
               className={
-                allowAnimations &&
-                'animate-fadeIn' +
+                (allowAnimations ? 'animate-fadeIn ' : '') +
                   ' relative grid grid-cols-2 gap-3 overflow-hidden max-w-xl'
               }
             >

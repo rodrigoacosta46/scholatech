@@ -2,9 +2,9 @@
 import { Link } from "react-router-dom";
 import { userHook } from "../../hooks/userHook";
 import { roles } from "../../config/roles";
-import { useEffect, useState } from "react";
 import Modal from "../../components/Modal";
 import Title from "../../components/Title";
+import React, { useEffect, useState } from 'react';
 
 const SaveUserName = ({ formData, theme, onSave }) => {
   const [username, setUserName] = useState(formData);
@@ -205,7 +205,7 @@ const SaveUserPassword = ({ theme, onSave }) => {
         <input
           type="password"
           name="current"
-          defaultValue={userpass.current}
+          defaultValue={userpass.current || ''}
           onChange={setNewPassword}
           placeholder="Contraseña actual"
           className="bg-gray-200 p-4 outline-none rounded-2xl  focus:text-slate-800"
@@ -213,7 +213,7 @@ const SaveUserPassword = ({ theme, onSave }) => {
         <input
           type="password"
           name="new"
-          defaultValue={userpass.new}
+          defaultValue={userpass.new || ''}
           onChange={setNewPassword}
           placeholder="Nueva contraseña"
           className="bg-gray-200 p-4 outline-none rounded-2xl  focus:text-slate-800"
@@ -221,7 +221,7 @@ const SaveUserPassword = ({ theme, onSave }) => {
         <input
           type="password"
           name="conf"
-          defaultValue={userpass.conf}
+          defaultValue={userpass.conf || ''}
           onChange={setNewPassword}
           placeholder="Confirmar nueva contraseña"
           className="bg-gray-200 p-4  rounded-2xl outline-none focus:text-slate-800"
@@ -343,7 +343,6 @@ const SaveUserDescription = ({ formData, theme, onSave }) => {
       />
       <div className="flex flex-col p-8">
         <textarea
-          type="text"
           onChange={setWordCounter}
           defaultValue={userdesc}
           placeholder="Descripción"
@@ -486,19 +485,21 @@ const SaveUserProfession = ({ formData, theme, onSave }) => {
       </button>
     </>
   );
-  /* 
+}
+
+const Profile = () => {  /* 
     El usuario tiene que poder guardar la cuenta de instagram, vincular instagram a la cuenta de la app
   */
   const { userInfo, userConfig } = userHook();
-  const [formStorage, setFormStorage] = useState({
-    nombre: userInfo.nombre,
-    correo: userInfo.correo,
-    genero: userInfo.genero,
-    nacimiento: userInfo.nacimiento,
-    clave: userInfo.clave,
-    descripcion: userInfo.descripcion || "",
-    direccion: userInfo.direccion || "",
-    especialidad: userInfo.especialidad || "",
+  const [formStorage, setFormStorage] = useState<any>({
+    nombre: userInfo["nombre"],
+    correo: userInfo["correo"],
+    genero: userInfo["genero"],
+    nacimiento: userInfo["nacimiento"],
+    clave: userInfo["clave"],
+    descripcion: userInfo["descripcion"] || "",
+    direccion: userInfo["direccion"] || "",
+    especialidad: userInfo["especialidad"] || "",
   });
   const [isGenderDisabled, setDisableState] = useState(true);
   const [inputModal, setModal] = useState(false);
@@ -551,10 +552,10 @@ const SaveUserProfession = ({ formData, theme, onSave }) => {
         />
         <div className="flex flex-col opacity-0 animate-[fadeIn_4s_ease-in-out_1_forwards]">
           <div className="mx-auto text-4xl text-white text-wrap">
-            {userInfo.nombre}
+            {userInfo["nombre"]}
             <div className="h-px bg-white w-0"></div>
           </div>
-          <p className="text-sm text-gray-500">{userInfo.role}</p>
+          <p className="text-sm text-gray-500">{userInfo["role"]}</p>
         </div>
       </div>
 
@@ -695,7 +696,7 @@ const SaveUserProfession = ({ formData, theme, onSave }) => {
                       className="hidden"
                     />
                   </div>
-                  {userInfo.role == roles.doctor && (
+                  {userInfo["role"] == roles["doctor"] && (
                     <>
                       Descripción:
                       <div
@@ -780,7 +781,7 @@ const SaveUserProfession = ({ formData, theme, onSave }) => {
                 </div>
               </form>
               <p className="text-sm mt-4">
-                Registrado el: {userInfo.fecha_alta}
+                Registrado el: {userInfo["fecha_alta"]}
               </p>
             </div>
           </div>

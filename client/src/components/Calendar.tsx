@@ -1,19 +1,36 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 
 const Calendar = ({ scheme }) => {
-  const [nav, setNav] = useState(1);
-  const [display, setDisplay] = useState({});
+  
+type DisplayItem = {
+  title: string;
+  content: any[];
+  styles: string;
+};
 
+type Display = {
+  before: DisplayItem;
+  current: DisplayItem;
+  after: DisplayItem;
+};
+
+  const [nav, setNav] = useState(1);
+  const [display, setDisplay] = useState<Display>({
+    before: { title: '', content: [], styles: '' },
+    current: { title: '', content: [], styles: '' },
+    after: { title: '', content: [], styles: '' },
+  });
   const date = new Date();
   const day = date.getDay();
   const month = date.getMonth();
   const year = date.getFullYear();
 
-  useEffect(() => {
-    let years = [];
-    let months = [];
-    let days = [];
-    let selectedDate = date;
+  useEffect(()  => {
+    let years: number[] = [];
+    let months: string[] = [];
+    let days: { num: number | string }[][] = [];
+    let selectedDate: Date = date;
 
     for (let i = 0; i < 3; i++) {
       let flag = i - 1; // Mes anterior, actual y próximo

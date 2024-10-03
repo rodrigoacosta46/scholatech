@@ -19,6 +19,7 @@ import { UserContextProvider } from "./hooks/userHook";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { roles } from "./config/roles";
 import List from "./pages/List";
+import React from "react";
 
 function App() {
   const router = createBrowserRouter(
@@ -44,7 +45,7 @@ function App() {
           </Route>
         </Route>
         <Route path="*" element={<h1>Not found</h1>} />
-      </>
+      </> 
     )
   );
   return <RouterProvider router={router} />;

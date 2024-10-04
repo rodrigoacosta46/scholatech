@@ -27,57 +27,80 @@ type User struct {
 	CreatedAt  time.Time  `gorm:"type:datetime;not null"`
 	UpdatedAt  *time.Time `gorm:"type:datetime"`
 	DeletedAt  *time.Time `gorm:"type:datetime"`
+	Rol        Rol        `gorm:"foreignKey:UsuarioID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"` // Relación hasOne
 }
 
 type Turno struct {
-	ID         int       `gorm:"primaryKey"`
-	DoctorID   int       `gorm:"not null"`
-	PacienteID int       `gorm:"not null"`
-	Fecha      time.Time `gorm:"type:date;not null"`
-	Hora       time.Time `gorm:"type:time;not null"`
-	Motivo     string    `gorm:"size:50;not null"`
-	Notas      string    `gorm:"type:text;not null"`
+	ID         int        `gorm:"primaryKey"`
+	DoctorID   int        `gorm:"not null"`
+	PacienteID int        `gorm:"not null"`
+	Fecha      time.Time  `gorm:"type:date;not null"`
+	Hora       time.Time  `gorm:"type:time;not null"`
+	Motivo     string     `gorm:"size:50;not null"`
+	Notas      string     `gorm:"type:text;not null"`
+	CreatedAt  time.Time  `gorm:"type:datetime;not null"`
+	UpdatedAt  *time.Time `gorm:"type:datetime"`
+	DeletedAt  *time.Time `gorm:"type:datetime"`
 }
 
 type Historial struct {
-	ID          int    `gorm:"primaryKey"`
-	TurnoID     int    `gorm:"not null"`
-	Diagnostico string `gorm:"type:text;not null"`
-	Tratamiento string `gorm:"type:text;not null"`
-	Notas       string `gorm:"type:text;not null"`
+	ID          int        `gorm:"primaryKey"`
+	TurnoID     int        `gorm:"not null"`
+	Diagnostico string     `gorm:"type:text;not null"`
+	Tratamiento string     `gorm:"type:text;not null"`
+	Notas       string     `gorm:"type:text;not null"`
+	CreatedAt   time.Time  `gorm:"type:datetime;not null"`
+	UpdatedAt   *time.Time `gorm:"type:datetime"`
+	DeletedAt   *time.Time `gorm:"type:datetime"`
 }
 
 type Medicamento struct {
-	ID          int    `gorm:"primaryKey"`
-	Nombre      string `gorm:"size:100;not null"`
-	Descripcion string `gorm:"type:text;not null"`
-	Imagen      string `gorm:"type:text;not null"`
+	ID          int        `gorm:"primaryKey"`
+	Nombre      string     `gorm:"size:100;not null"`
+	Descripcion string     `gorm:"type:text;not null"`
+	Imagen      string     `gorm:"type:text;not null"`
+	CreatedAt   time.Time  `gorm:"type:datetime;not null"`
+	UpdatedAt   *time.Time `gorm:"type:datetime"`
+	DeletedAt   *time.Time `gorm:"type:datetime"`
 }
 
 type Notificacion struct {
-	ID         int       `gorm:"primaryKey"`
-	UsuarioID  int       `gorm:"not null"`
-	Mensaje    string    `gorm:"type:text;not null"`
-	FechaEnvio time.Time `gorm:"type:datetime;not null"`
-	Estado     string    `gorm:"type:enum('pendiente','leido','enviado');not null"`
+	ID         int        `gorm:"primaryKey"`
+	UsuarioID  int        `gorm:"not null"`
+	Mensaje    string     `gorm:"type:text;not null"`
+	FechaEnvio time.Time  `gorm:"type:datetime;not null"`
+	Estado     string     `gorm:"type:enum('pendiente','leido','enviado');not null"`
+	CreatedAt  time.Time  `gorm:"type:datetime;not null"`
+	UpdatedAt  *time.Time `gorm:"type:datetime"`
+	DeletedAt  *time.Time `gorm:"type:datetime"`
 }
 
 type Perfil struct {
-	ID          int     `gorm:"primaryKey"`
-	Nombre      string  `gorm:"size:50;not null"`
-	Descripcion *string `gorm:"size:50"`
+	ID          int        `gorm:"primaryKey"`
+	Name        string     `gorm:"size:50;not null"`
+	Description *string    `gorm:"size:50"`
+	CreatedAt   time.Time  `gorm:"type:datetime;not null"`
+	UpdatedAt   *time.Time `gorm:"type:datetime"`
+	DeletedAt   *time.Time `gorm:"type:datetime"`
 }
 
 type Receta struct {
-	ID            int `gorm:"primaryKey"`
-	HistorialID   int `gorm:"not null"`
-	MedicamentoID int `gorm:"not null"`
+	ID            int        `gorm:"primaryKey"`
+	HistorialID   int        `gorm:"not null"`
+	MedicamentoID int        `gorm:"not null"`
+	CreatedAt     time.Time  `gorm:"type:datetime;not null"`
+	UpdatedAt     *time.Time `gorm:"type:datetime"`
+	DeletedAt     *time.Time `gorm:"type:datetime"`
 }
 
 type Rol struct {
-	ID        int `gorm:"primaryKey"`
-	UsuarioID int `gorm:"not null"`
-	PerfilID  int `gorm:"not null"`
+	ID        int        `gorm:"primaryKey"`
+	UsuarioID int        `gorm:"not null"`
+	PerfilID  int        `gorm:"not null"`
+	Perfil    Perfil     `gorm:"foreignKey:PerfilID"` // Define HasOne relationship
+	CreatedAt time.Time  `gorm:"type:datetime;not null"`
+	UpdatedAt *time.Time `gorm:"type:datetime"`
+	DeletedAt *time.Time `gorm:"type:datetime"`
 }
 
 var Db *gorm.DB

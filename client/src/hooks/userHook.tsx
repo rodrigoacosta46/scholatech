@@ -9,51 +9,117 @@ interface userConfig {
 }
 
 interface UserContextType {
-  userInfo: object;
+  userInfo: UserInterface;
   userConfig: userConfig;
 }  
+
+
+export interface ProfileInterface {
+  ID: number,
+  Name: string,
+  Description: string,
+  CreatedAt: string,
+  UpdatedAt: string,
+  DeletedAt: string
+}
+export interface RoleInterface {
+  ID: number,
+  UsuarioID: number,
+  PerfilID: number,
+  Perfil: ProfileInterface,
+  CreatedAt:  string,
+  UpdatedAt: string,
+  DeletedAt:  string,
+}
+export interface UserInterface {
+    ID: number,
+    Username: string,
+    Email: string,
+    Password: string,
+    Telephone: string,
+    Address: string,
+    Speciality: string,
+    Gender: string,
+    Birthdate: string,
+    CreatedAt:  string,
+    UpdatedAt: string,
+    DeletedAt:  string,
+    Role: RoleInterface
+}
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserContextProvider = ({}) => {
-  const [userInfo, setUserInfo] = useState<object>({});
+  const [userInfo, setUserInfo] = useState<UserInterface>({
+    ID: 0,
+    Username: "Cargando...",
+    Email: "Cargando...",
+    Password: "",
+    Telephone: "Cargando...",
+    Address: "Cargando...",
+    Speciality: "Cargando...",
+    Gender: "Cargando...",
+    Birthdate: "Cargando...",
+    CreatedAt:  "Cargando...",
+    UpdatedAt: "Cargando...",
+    DeletedAt:  "Cargando...",
+    Role: {
+      ID: 0,
+      UsuarioID: 0,
+      PerfilID: 0,
+      Perfil: {
+        ID: 0,
+        Name: "Cargando perfil...",
+        Description: "Cargando perfil...",
+        CreatedAt: "Cargando perfil...",
+        UpdatedAt: "Cargando perfil...",
+        DeletedAt: "Cargando perfil..."
+      },
+      CreatedAt: "Cargando perfil...",
+      UpdatedAt: "Cargando perfil...",
+      DeletedAt: "Cargando perfil...",
+    }
+});
   const [userConfig, setUserConfig] = useState<userConfig>({
     theme: "a",
     nav: "a'"
   });
 
   useEffect(() => {
-    var model;
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8000/sync', false); // Cambia 'false' a 'true' si deseas que sea asíncrono
+    let model: UserInterface | undefined = undefined;
+    const xhr = new XMLHttpRequest();
   
+    xhr.open('GET', 'http://localhost:8000/sync', false);
+    
     xhr.onload = function() {
-    if (xhr.status >= 200 && xhr.status < 300) {
-      console.log('Respuesta:', xhr.responseText);
-      model = JSON.parse((JSON.parse(xhr.responseText)).message);
-    } else {
-      console.error('Error en la solicitud:', xhr.statusText);
-    }
+      if (xhr.status >= 200 && xhr.status < 300) {
+        console.log('Respuesta:', xhr.responseText);
+  
+        try {
+          const response = JSON.parse(xhr.responseText);
+          model = JSON.parse(response.message);
+        } catch (error) {
+          console.error('Error al parsear la respuesta:', error);
+        }
+      } else {
+        console.error('Error en la solicitud:', xhr.statusText);
+      }
+  
+      if (model !== undefined) {
+        setUserInfo({
+          ...model,
+        });
+  
+        let key = Object.keys(roles).find((k) => roles[k] === 'Admin');
+        setUserConfig({
+          theme: config.theme[key],
+          nav: config.nav[key],
+        });
+      }
     };
+  
     xhr.withCredentials = true;
     xhr.send();
-    console.log(model);
-
-    var user = {name: '', role: 'Admin'}
-    user = model;
-    console.log(user);
-    if (user != undefined) {
-      console.log('asdasd');
-      setUserInfo({
-        ...user,
-        role: user.role,
-      });
-      let key = Object.keys(roles).find((k) => roles[k] === 'Admin');
-      setUserConfig({
-        theme: config.theme[key],
-        nav: config.nav[key],
-      });
-    }
   }, []);
 
   console.log(userInfo, userConfig);
@@ -78,8 +144,6 @@ export const UserContextProvider = ({}) => {
   );
 };
 
-//export const userHook = () => useContext(context);
-//export const userHook = () => useContext(context);
 export const userHook = () => {
   const context = useContext(UserContext);
   if (!context) {

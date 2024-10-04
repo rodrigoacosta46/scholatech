@@ -65,7 +65,7 @@ const Sidebar = () => {
           >
             <img src="img/Gaben.png" alt="" className="rounded-full" />
             <div>
-              <p className="text-xl text-white line-clamp-3">{userInfo["nombre"]}</p>
+              <p className="text-xl text-white line-clamp-3">{userInfo["Username"]}</p>
               <p className="text-md text-gray-500">{userInfo["role"]}</p>
             </div>
           </div>

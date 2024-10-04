@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { userHook } from "../../hooks/userHook";
+import { UserInterface, userHook } from "../../hooks/userHook";
 import { roles } from "../../config/roles";
 import Modal from "../../components/Modal";
 import Title from "../../components/Title";
@@ -21,7 +21,7 @@ const SaveUserName = ({ formData, theme, onSave }) => {
   };
 
   const saveChanges = () => {
-    onSave("nombre", username);
+    onSave("Username", username);
   };
 
   return (
@@ -491,15 +491,23 @@ const Profile = () => {  /*
     El usuario tiene que poder guardar la cuenta de instagram, vincular instagram a la cuenta de la app
   */
   const { userInfo, userConfig } = userHook();
-  const [formStorage, setFormStorage] = useState<any>({
-    nombre: userInfo["nombre"],
-    correo: userInfo["correo"],
-    genero: userInfo["genero"],
-    nacimiento: userInfo["nacimiento"],
-    clave: userInfo["clave"],
-    descripcion: userInfo["descripcion"] || "",
-    direccion: userInfo["direccion"] || "",
-    especialidad: userInfo["especialidad"] || "",
+  const [formStorage, setFormStorage] = useState<UserInterface>({
+    ID: userInfo["ID"],
+    Username: userInfo["Username"],
+    Email: userInfo["Email"],
+    Gender: userInfo["Gender"],
+    Birthdate: userInfo["Birthdate"],
+    Password: userInfo["Password"],
+    //description: userInfo["descripcion"] || "",
+    Telephone: userInfo["Telephone"],
+    Address: userInfo["Address"] || "",
+    Speciality: userInfo["Speciality"] || "",
+    CreatedAt: userInfo["CreatedAt"],
+    UpdatedAt: userInfo["UpdatedAt"],
+    DeletedAt: userInfo["DeletedAt"],
+    Role: {
+      ...userInfo["Role"]
+    }
   });
   const [isGenderDisabled, setDisableState] = useState(true);
   const [inputModal, setModal] = useState(false);
@@ -552,7 +560,7 @@ const Profile = () => {  /*
         />
         <div className="flex flex-col opacity-0 animate-[fadeIn_4s_ease-in-out_1_forwards]">
           <div className="mx-auto text-4xl text-white text-wrap">
-            {userInfo["nombre"]}
+            {userInfo["Username"]}
             <div className="h-px bg-white w-0"></div>
           </div>
           <p className="text-sm text-gray-500">{userInfo["role"]}</p>
@@ -573,13 +581,13 @@ const Profile = () => {  /*
               </div>
               <form action="">
                 <div className="w-full grid grid-cols-3 gap-4 items-center text-slate-600 py-6 px-2">
-                  Nombre:
+                  Username:
                   <div
                     className="col-span-2 relative"
                     onClick={() => {
                       setModalState(
                         <SaveUserName
-                          formData={formStorage.nombre}
+                          formData={formStorage["Username"]}
                           theme={userConfig.theme}
                           onSave={handleFieldSave}
                         />
@@ -590,7 +598,7 @@ const Profile = () => {  /*
                     <input
                       type="text"
                       name="username"
-                      value={formStorage.nombre}
+                      value={formStorage["Username"]}
                       disabled={true}
                       className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                     />
@@ -601,7 +609,7 @@ const Profile = () => {  /*
                     onClick={() => {
                       setModalState(
                         <SaveUserMail
-                          formData={formStorage.correo}
+                          formData={formStorage["Email"]}
                           theme={userConfig.theme}
                           onSave={handleFieldSave}
                         />
@@ -612,7 +620,7 @@ const Profile = () => {  /*
                     <input
                       type="email"
                       name="email"
-                      value={formStorage.correo}
+                      value={formStorage["Email"]}
                       disabled={true}
                       className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                     />
@@ -633,7 +641,7 @@ const Profile = () => {  /*
                     <input
                       type="password"
                       name="password"
-                      value={formStorage.clave}
+                      value={formStorage['Password']}
                       disabled={true}
                       className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                     />
@@ -650,7 +658,7 @@ const Profile = () => {  /*
                       onChange={(e) => {
                         handleFieldSave("genero", e.target.value);
                       }}
-                      defaultValue={formStorage.genero}
+                      defaultValue={formStorage["Gender"]}
                       className="transition-all outline-none bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700"
                     >
                       <option value="masculino">Masculino</option>
@@ -664,7 +672,7 @@ const Profile = () => {  /*
                     onClick={() => {
                       setModalState(
                         <SaveUserBirthDate
-                          formData={formStorage.nacimiento}
+                          formData={formStorage['Birthdate']}
                           theme={userConfig.theme}
                           onSave={handleFieldSave}
                         />
@@ -675,7 +683,7 @@ const Profile = () => {  /*
                     <input
                       type="date"
                       name="birthdate"
-                      value={formStorage.nacimiento}
+                      value={formStorage['Birthdate']}
                       disabled={true}
                       className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                     />
@@ -726,7 +734,7 @@ const Profile = () => {  /*
                         onClick={() => {
                           setModalState(
                             <SaveUserAddress
-                              formData={formStorage.direccion}
+                              formData={formStorage['Address']}
                               theme={userConfig.theme}
                               onSave={handleFieldSave}
                             />
@@ -737,7 +745,7 @@ const Profile = () => {  /*
                         <input
                           type="text"
                           name="address"
-                          value={formStorage.direccion}
+                          value={formStorage['Address']}
                           disabled={true}
                           className="bg-gray-300 px-4 py-2 w-full rounded-2xl outline-none text-slate-700 text-ellipsis pointer-events-none"
                         />
@@ -748,7 +756,7 @@ const Profile = () => {  /*
                         onClick={() => {
                           setModalState(
                             <SaveUserProfession
-                              formData={formStorage.especialidad}
+                              formData={formStorage['Speciality']}
                               theme={userConfig.theme}
                               onSave={handleFieldSave}
                             />
@@ -759,7 +767,7 @@ const Profile = () => {  /*
                         <input
                           type="text"
                           name="department"
-                          value={formStorage.especialidad}
+                          value={formStorage["Speciality"]}
                           disabled={true}
                           className="bg-gray-300 px-4 py-2 rounded-2xl outline-none text-slate-700 text-ellipsis pointer-events-none"
                         />

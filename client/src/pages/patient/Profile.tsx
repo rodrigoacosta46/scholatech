@@ -491,6 +491,11 @@ const Profile = () => {  /*
     El usuario tiene que poder guardar la cuenta de instagram, vincular instagram a la cuenta de la app
   */
   const { userInfo, userConfig } = userHook();
+
+  if (!userInfo || !userConfig) {
+    return <div>Cargando...</div>;
+  }
+
   const [formStorage, setFormStorage] = useState<UserInterface>({
     ID: userInfo["ID"],
     Username: userInfo["Username"],
@@ -505,8 +510,8 @@ const Profile = () => {  /*
     CreatedAt: userInfo["CreatedAt"],
     UpdatedAt: userInfo["UpdatedAt"],
     DeletedAt: userInfo["DeletedAt"],
-    Role: {
-      ...userInfo["Role"]
+    Perfil: {
+      ...userInfo["Perfil"]
     }
   });
   const [isGenderDisabled, setDisableState] = useState(true);
@@ -704,7 +709,7 @@ const Profile = () => {  /*
                       className="hidden"
                     />
                   </div>
-                  {userInfo["role"] == roles["doctor"] && (
+                  {userInfo.Perfil.Name == roles["doctor"] && (
                     <>
                       Descripción:
                       <div
@@ -712,7 +717,8 @@ const Profile = () => {  /*
                         onClick={() => {
                           setModalState(
                             <SaveUserDescription
-                              formData={formStorage.descripcion}
+                              //formData={formStorage.descripcion}
+                              formData={formStorage.Username}
                               theme={userConfig.theme}
                               onSave={handleFieldSave}
                             />
@@ -723,7 +729,8 @@ const Profile = () => {  /*
                         <input
                           type="text"
                           name="description"
-                          value={formStorage.descripcion}
+                          value={formStorage.Username}
+                          //value={formStorage.descripcion}
                           disabled={true}
                           className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                         />

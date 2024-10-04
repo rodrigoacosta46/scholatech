@@ -35,7 +35,7 @@ const Drugs = () => {
           className="opacity-0 animate-fadeIn cursor-pointer relative "
           scheme={userConfig.theme}
         >
-          {userInfo["role"] == 'Admin' && (
+          {userInfo.Perfil.Name == 'Admin' && (
             <i
               onClick={deleteDrug}
               className="fa-solid fa-trash absolute end-1 hover:text-red-700 transition-all"
@@ -62,7 +62,7 @@ const Drugs = () => {
 
   return (
     <>
-      {userInfo["role"] == 'Admin' && (
+      {userInfo.Perfil.Name == 'Admin' && (
         <Modal
           state={adminModal}
           setter={() => {
@@ -134,7 +134,7 @@ const Drugs = () => {
           placeholder={'Buscar medicamento'}
           className="p-3 w-96 m-4 ms-auto"
         />
-        {userInfo["role"] == 'Admin' && (
+        {userInfo.Perfil.Name == 'Admin' && (
           <button
             onClick={() => setAdminModal(!adminModal)}
             className="flex bg-slate-700 text-white py-2 px-4 rounded-3xl"

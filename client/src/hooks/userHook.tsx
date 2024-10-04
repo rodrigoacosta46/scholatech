@@ -13,7 +13,6 @@ interface UserContextType {
   userConfig: userConfig;
 }  
 
-
 export interface ProfileInterface {
   ID: number,
   Name: string,
@@ -22,6 +21,8 @@ export interface ProfileInterface {
   UpdatedAt: string,
   DeletedAt: string
 }
+
+/*
 export interface RoleInterface {
   ID: number,
   UsuarioID: number,
@@ -31,6 +32,7 @@ export interface RoleInterface {
   UpdatedAt: string,
   DeletedAt:  string,
 }
+*/
 export interface UserInterface {
     ID: number,
     Username: string,
@@ -44,12 +46,14 @@ export interface UserInterface {
     CreatedAt:  string,
     UpdatedAt: string,
     DeletedAt:  string,
-    Role: RoleInterface
+    Perfil: ProfileInterface
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserContextProvider = ({}) => {
+  const [loading, setLoading] = useState(true); // Estado de carga
+
   const [userInfo, setUserInfo] = useState<UserInterface>({
     ID: 0,
     Username: "Cargando...",
@@ -63,23 +67,16 @@ export const UserContextProvider = ({}) => {
     CreatedAt:  "Cargando...",
     UpdatedAt: "Cargando...",
     DeletedAt:  "Cargando...",
-    Role: {
+    Perfil: {
       ID: 0,
-      UsuarioID: 0,
-      PerfilID: 0,
-      Perfil: {
-        ID: 0,
-        Name: "Cargando perfil...",
-        Description: "Cargando perfil...",
-        CreatedAt: "Cargando perfil...",
-        UpdatedAt: "Cargando perfil...",
-        DeletedAt: "Cargando perfil..."
-      },
+      Name: "Cargando perfil...",
+      Description: "Cargando perfil...",
       CreatedAt: "Cargando perfil...",
       UpdatedAt: "Cargando perfil...",
-      DeletedAt: "Cargando perfil...",
-    }
-});
+      DeletedAt: "Cargando perfil..."
+    },
+  });
+
   const [userConfig, setUserConfig] = useState<userConfig>({
     theme: "a",
     nav: "a'"
@@ -116,11 +113,16 @@ export const UserContextProvider = ({}) => {
           nav: config.nav[key],
         });
       }
+      setLoading(false);
     };
   
     xhr.withCredentials = true;
     xhr.send();
   }, []);
+
+  if (loading) {
+    return <div>Cargando...</div>; 
+  }
 
   console.log(userInfo, userConfig);
   return (

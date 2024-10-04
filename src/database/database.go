@@ -27,7 +27,8 @@ type User struct {
 	CreatedAt  time.Time  `gorm:"type:datetime;not null"`
 	UpdatedAt  *time.Time `gorm:"type:datetime"`
 	DeletedAt  *time.Time `gorm:"type:datetime"`
-	Rol        Rol        `gorm:"foreignKey:UsuarioID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"` // Relación hasOne
+	PerfilID   int        `gorm:"not null"`
+	Perfil     Perfil     `gorm:"foreignKey:ID;"` // Relación hasOne
 }
 
 type Turno struct {
@@ -93,15 +94,18 @@ type Receta struct {
 	DeletedAt     *time.Time `gorm:"type:datetime"`
 }
 
+/*
 type Rol struct {
 	ID        int        `gorm:"primaryKey"`
 	UsuarioID int        `gorm:"not null"`
+	Usuario   User       `gorm:"foreignKey:UsuarioID;"` // Relación hasOne
 	PerfilID  int        `gorm:"not null"`
 	Perfil    Perfil     `gorm:"foreignKey:PerfilID"` // Define HasOne relationship
 	CreatedAt time.Time  `gorm:"type:datetime;not null"`
 	UpdatedAt *time.Time `gorm:"type:datetime"`
 	DeletedAt *time.Time `gorm:"type:datetime"`
 }
+*/
 
 var Db *gorm.DB
 
@@ -118,9 +122,26 @@ func init() {
 		fmt.Println("FATAL: No se pudo conectar a la base de datos")
 		panic(err)
 	}
-	err = Db.AutoMigrate(&User{}, &Turno{}, &Historial{}, &Medicamento{}, &Notificacion{}, &Perfil{}, &Receta{}, &Rol{})
+	err = Db.AutoMigrate(&User{}, &Turno{}, &Historial{}, &Medicamento{}, &Notificacion{}, &Perfil{}, &Receta{})
 	if err != nil {
 		fmt.Println("A FATAL ERROR OCURRED WHILE MIGRATING DATABASE")
 		panic(err)
+	}
+	perfiles := []Perfil{
+		{ID: 1, Name: "paciente"},
+		{ID: 2, Name: "doctor"},
+		{ID: 3, Name: "administrador"},
+	}
+	err = Db.Find(&perfiles).Error
+	if err == gorm.ErrRecordNotFound {
+		fmt.Println("Looks like the profile records are not inserted")
+		if errorInsert := Db.Create(&perfiles).Error; errorInsert != nil {
+			if errorInsert == gorm.ErrDuplicatedKey {
+				fmt.Println("We didnt add the profiles because they already exists")
+			} else {
+				fmt.Println("Couldnt add new entries to the profiles, it may be that the entries already exists?")
+				panic(errorInsert)
+			}
+		}
 	}
 }

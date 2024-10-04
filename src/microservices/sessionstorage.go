@@ -25,11 +25,11 @@ func ServeSessionLocalStorage(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode((structs.Response{Message: "Error al obtener el ID del sujeto", RedirectRoute: "/logout", Authenticated: "false"}))
 	}
 	var user database.User
-	//result := database.Db.Omit("password").First(&user, id)
-	result := database.Db.
-		Preload("Rol.Perfil").
-		Omit("Password").
-		First(&user, id)
+	result := database.Db.Omit("Password").First(&user, id)
+	/*result := database.Db.
+	Preload("Rol.Perfil").
+	Omit("Password").
+	First(&user, id)*/
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
 			w.WriteHeader(http.StatusNotFound)

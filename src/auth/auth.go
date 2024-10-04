@@ -151,6 +151,7 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 		Password:  string(hash),
 		Gender:    gender,
 		Birthdate: parsedDate,
+		PerfilID:  1,
 	}
 	resultDb := database.Db.Create(&userInsert)
 	if resultDb.Error != nil {

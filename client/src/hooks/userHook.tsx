@@ -39,6 +39,7 @@ export interface UserInterface {
     Email: string,
     Password: string,
     Telephone: string,
+    Description: string,
     Address: string,
     Speciality: string,
     Gender: string,
@@ -61,6 +62,7 @@ export const UserContextProvider = ({}) => {
     Password: "",
     Telephone: "Cargando...",
     Address: "Cargando...",
+    Description: "Cargando...",
     Speciality: "Cargando...",
     Gender: "Cargando...",
     Birthdate: "Cargando...",
@@ -105,9 +107,10 @@ export const UserContextProvider = ({}) => {
       if (model !== undefined) {
         setUserInfo({
           ...model,
+          Password: "*****"
         });
   
-        let key = Object.keys(roles).find((k) => roles[k] === 'Admin');
+        let key = Object.keys(roles).find((k) => roles[k] === 'Doctor');
         setUserConfig({
           theme: config.theme[key],
           nav: config.nav[key],
@@ -120,9 +123,6 @@ export const UserContextProvider = ({}) => {
     xhr.send();
   }, []);
 
-  if (loading) {
-    return <div>Cargando...</div>; 
-  }
 
   console.log(userInfo, userConfig);
   return (
@@ -132,14 +132,14 @@ export const UserContextProvider = ({}) => {
           <div
             className={
               "fixed top-0 left-0 w-full min-h-dvh bg-gray-300 z-50 transition-all duration-1000 " +
-              (userInfo && userConfig && "opacity-0 invisible")
+              (!loading && "opacity-0 invisible")
             }
           >
             <div className="fixed w-full h-full flex items-center justify-center">
               <img src="img/logo.png" className="animate-fadeIn" />
             </div>
           </div>
-          {userInfo && userConfig && <Outlet />}
+          {!loading && <Outlet />}
         </div>
       }
     </UserContext.Provider>

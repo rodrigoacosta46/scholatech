@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import React, { useEffect } from 'react';
-
+import { Link } from 'react-router-dom';
 
 const Log = () => {
   const [formData, setFormData] = useState({
@@ -46,6 +46,7 @@ const Log = () => {
       console.log("Resultados JSON")
       console.log(error.response?.data)
       var response = error.response?.data;
+
       if ((response).hasOwnProperty("redirect_route")) {
         console.log("REDIRECT ROUTE")
         window.location.href = response.redirect_route;
@@ -61,7 +62,7 @@ const Log = () => {
   };
   return (
       <form onSubmit={handleSubmit} method="POST">
-        <div className="w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm">
+        <div className="w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm animate-slideIn">
           <p className="text-4xl text-green-800 text-center py-12">Login</p>
           <div className="flex flex-col gap-2 relative">
             <label htmlFor="username" className="text-green-950 mb-2 select-none">
@@ -105,7 +106,10 @@ const Log = () => {
               className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer hover:text-white hover:bg-green-800 transition-all duration-75"
             />
           </div>
-          {response && <div>Respuesta del servidor: {JSON.stringify(response)}</div>}
+          {response && <div className='text-yellow-400 text-center mt-8'>{response["message"]}</div>}
+          <Link to="/register" className='text-sm text-start text-green-700 underline mt-8'>
+            <p className="mt-8">¿No tienes cuenta?¡Registrate!</p>
+          </Link>
         </div>
       </form>
   );

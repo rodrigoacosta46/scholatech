@@ -2,6 +2,7 @@ import GuestLayout from '../components/GuestLayout';
 import { useState } from 'react';
 import axios from 'axios';
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 
 const Register = () => {
@@ -9,8 +10,10 @@ const Register = () => {
     username: '',
     email: '',
     password: '',
+    telephone: '',
+    gender: 'male',
+    registerAs: 'Paciente',
     birthdate: '',
-    gender: 'male'
   });
   const [response, setResponse] = useState(null);
 
@@ -64,7 +67,7 @@ const Register = () => {
   };
   return (
       <form onSubmit={handleSubmit} method="POST">
-        <div className="w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm my-4">
+        <div className="w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm my-4 animate-slideIn">
           <p className="text-4xl text-green-800 text-center py-12">Register</p>
           <div className="flex flex-col gap-2 relative">
             <label htmlFor="email" className="text-green-950 mb-2 select-none">
@@ -127,7 +130,10 @@ const Register = () => {
               className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer  hover:text-white hover:bg-green-800 transition-all duration-75"
             />
           </div>
-          {response && <div>Respuesta del servidor: {JSON.stringify(response)}</div>}
+          {response && <div>{response["message"]}</div>}
+          <Link to="/login" className='text-sm text-start text-green-700 underline mt-8'>
+            <p className='mt-8'>¿Ya tienes cuenta?¡Inicia sesión!</p>
+          </Link>
         </div>
       </form>
   );

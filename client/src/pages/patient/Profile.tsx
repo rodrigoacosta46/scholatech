@@ -84,7 +84,7 @@ const SaveUserMail = ({ formData, theme, onSave }) => {
   };
 
   const saveChanges = () => {
-    onSave("correo", useremail);
+    onSave("Email", useremail);
   };
 
   return (
@@ -183,7 +183,7 @@ const SaveUserPassword = ({ theme, onSave }) => {
       });
     }
 
-    onSave("clave", userpass.new);
+    onSave("Password", userpass.new);
   };
 
   return (
@@ -258,7 +258,7 @@ const SaveUserBirthDate = ({ formData, theme, onSave }) => {
   ).getTime();
 
   const saveChanges = () => {
-    onSave("nacimiento", birtdate);
+    onSave("Birthdate", birtdate);
   };
 
   return (
@@ -323,7 +323,7 @@ const SaveUserDescription = ({ formData, theme, onSave }) => {
   };
 
   const saveChanges = () => {
-    onSave("descripcion", userdesc);
+    onSave("Description", userdesc);
   };
 
   return (
@@ -389,7 +389,7 @@ const SaveUserAddress = ({ formData, theme, onSave }) => {
   };
 
   const saveChanges = () => {
-    onSave("direccion", userdir);
+    onSave("Address", userdir);
   };
 
   return (
@@ -445,7 +445,7 @@ const SaveUserProfession = ({ formData, theme, onSave }) => {
   };
 
   const saveChanges = () => {
-    onSave("especialidad", userprof);
+    onSave("Speciality", userprof);
   };
 
   return (
@@ -492,10 +492,6 @@ const Profile = () => {  /*
   */
   const { userInfo, userConfig } = userHook();
 
-  if (!userInfo || !userConfig) {
-    return <div>Cargando...</div>;
-  }
-
   const [formStorage, setFormStorage] = useState<UserInterface>({
     ID: userInfo["ID"],
     Username: userInfo["Username"],
@@ -503,9 +499,9 @@ const Profile = () => {  /*
     Gender: userInfo["Gender"],
     Birthdate: userInfo["Birthdate"],
     Password: userInfo["Password"],
-    //description: userInfo["descripcion"] || "",
     Telephone: userInfo["Telephone"],
     Address: userInfo["Address"] || "",
+    Description: "Loremincreible" /*|| "" */,     //Solo si el usuario es Doctor
     Speciality: userInfo["Speciality"] || "",
     CreatedAt: userInfo["CreatedAt"],
     UpdatedAt: userInfo["UpdatedAt"],
@@ -514,6 +510,7 @@ const Profile = () => {  /*
       ...userInfo["Perfil"]
     }
   });
+
   const [isGenderDisabled, setDisableState] = useState(true);
   const [inputModal, setModal] = useState(false);
   const [currentField, setCurrentField] = useState(null);
@@ -552,7 +549,7 @@ const Profile = () => {  /*
         allowAnimations={false}
         scheme={userConfig.theme}
       >
-        {currentField != null && currentField}
+        <div className="col-span-2">{currentField != null && currentField}</div>
       </Modal>
 
       <div
@@ -568,7 +565,7 @@ const Profile = () => {  /*
             {userInfo["Username"]}
             <div className="h-px bg-white w-0"></div>
           </div>
-          <p className="text-sm text-gray-500">{userInfo["role"]}</p>
+          <p className="text-sm text-gray-500">{userInfo["Perfil"].Name}</p>
         </div>
       </div>
 
@@ -585,7 +582,7 @@ const Profile = () => {  /*
                 <span className="underline hidden text-sm group-hover:inline">Descartar cambios</span>
               </div>
               <form action="">
-                <div className="w-full grid grid-cols-3 gap-4 items-center text-slate-600 py-6 px-2">
+                <div className="w-full grid grid-cols-3 gap-4 items-center text-slate-600 pt-6 px-2">
                   Username:
                   <div
                     className="col-span-2 relative"
@@ -661,7 +658,7 @@ const Profile = () => {  /*
                       name="gender"
                       disabled={isGenderDisabled}
                       onChange={(e) => {
-                        handleFieldSave("genero", e.target.value);
+                        handleFieldSave("Gender", e.target.value);
                       }}
                       defaultValue={formStorage["Gender"]}
                       className="transition-all outline-none bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700"
@@ -718,7 +715,7 @@ const Profile = () => {  /*
                           setModalState(
                             <SaveUserDescription
                               //formData={formStorage.descripcion}
-                              formData={formStorage.Username}
+                              formData={formStorage['Description']}
                               theme={userConfig.theme}
                               onSave={handleFieldSave}
                             />
@@ -729,7 +726,7 @@ const Profile = () => {  /*
                         <input
                           type="text"
                           name="description"
-                          value={formStorage.Username}
+                          value={formStorage['Description']}
                           //value={formStorage.descripcion}
                           disabled={true}
                           className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
@@ -774,7 +771,7 @@ const Profile = () => {  /*
                         <input
                           type="text"
                           name="department"
-                          value={formStorage["Speciality"]}
+                          value={formStorage['Speciality']}
                           disabled={true}
                           className="bg-gray-300 px-4 py-2 rounded-2xl outline-none text-slate-700 text-ellipsis pointer-events-none"
                         />
@@ -796,7 +793,8 @@ const Profile = () => {  /*
                 </div>
               </form>
               <p className="text-sm mt-4">
-                Registrado el: {userInfo["fecha_alta"]}
+                Registrado el: {userInfo["CreatedAt"]} <br/>
+                Actualizado el: {userInfo["UpdatedAt"]}
               </p>
             </div>
           </div>

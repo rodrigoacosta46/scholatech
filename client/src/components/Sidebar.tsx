@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import Modal from './Modal';
 import { userHook } from '../hooks/userHook';
@@ -6,26 +6,24 @@ import { userHook } from '../hooks/userHook';
 const Sidebar = () => {
   const { userInfo, userConfig } = userHook();
   const location = useLocation();
-  const [userView, setUserView] = useState(false);
+  const [userView, setUserView] = useState("");
   const [modal, setModal] = useState(false);
-  
+
   const setModalState = () => {
     setModal(!modal);
   }
 
-/*
+
   useEffect(() => {
     setUserView(
       String((window.location.pathname === '/profile') ? 'translate-x-full opacity-0' : '')
     );
   }, [location.pathname]);
-  */
+ 
+  const logout = () => {
+    window.location.href = 'http://localhost:8000/logout';
+  };
 
-  useEffect(() => {
-    setUserView(window.location.pathname === '/profile');
-  }, [location.pathname]);
-
-  const logout = () => {};
   return (
     <>
       <Modal
@@ -48,7 +46,7 @@ const Sidebar = () => {
       </Modal>
 
       <div
-        className={`w-64 min-h-full flex flex-col bg-${userConfig.theme}-950`}
+        className={`w-64 min-h-full flex flex-col bg-${userConfig.theme}-950 text-lg`}
       >
         <button
           onClick={setModalState}

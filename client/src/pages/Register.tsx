@@ -82,9 +82,9 @@ const Register = () => {
 
   return (
     <form onSubmit={handleSubmit} method="POST" autoComplete="off">
-      <div className="min-w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm my-4 overflow-hidden animate-slideIn">
+      <div className="bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm my-4 overflow-hidden animate-slideIn">
         <p className="text-4xl text-green-800 text-center py-12">Register</p>
-        <div className="flex flex-col gap-4 relative">
+        <div className="flex flex-col gap-4 relative w-80">
           <label htmlFor="email" className="text-green-950 mb-2 select-none relative">
             <input
               type="email"
@@ -117,7 +117,7 @@ const Register = () => {
               onChange={handleChange}
               onInvalid={handleValidity}
               value={formData.username}
-              pattern="([A-ZÑÁÉÍÓÚÜ]+[a-zñáéíóúü]+\s?){2,}"
+              pattern="([A-ZÑÁÉÍÓÚÜ]+[a-zñáéíóúü\.\-']+\s?){2,50}"
             />
             <span
               className={

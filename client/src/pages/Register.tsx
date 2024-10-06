@@ -1,27 +1,43 @@
-import GuestLayout from '../components/GuestLayout';
-import { useState } from 'react';
-import axios from 'axios';
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-
+import GuestLayout from "../components/GuestLayout";
+import { useState } from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    telephone: '',
-    gender: 'male',
-    registerAs: 'Paciente',
-    birthdate: '',
+    username: "",
+    email: "",
+    password: "",
+    gender: "male",
+    registerAs: "Paciente",
+    birthdate: "",
   });
+
+  const inputErrorMessages = {
+    username: "Nombre real completo, con mayusculas en el inicio. Ejemplo: Osvaldo Motrices",
+    email: "Formato incorrecto, ejemplo: micorreo@gmail.com",
+    password:
+      "Debe contener mayúsculas, minúsculas, números y caracteres especiales. Longitud no menor a 8 letras",
+    birthdate: "Debes ser mayor de 18 años",
+  };
   const [response, setResponse] = useState(null);
+  const [visualizeInput, setInputView] = useState(false);
+
+  const handleValidity = (e) => {
+    let el = e.target;
+    const { name } =el;
+    el.setCustomValidity(inputErrorMessages[name]);
+  }
 
   const handleChange = (e) => {
+    e.target.setCustomValidity("");
     const { name, value } = e.target;
+    if (!e.target.reportValidity())
+      e.target.setCustomValidity(inputErrorMessages[name]);
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
   const handleSubmit = async (e) => {
@@ -29,113 +45,180 @@ const Register = () => {
 
     try {
       const result = await axios.post(
-        'http://localhost:8000/registerauth', 
-        formData, 
+        "http://localhost:8000/registerauth",
+        formData,
         { withCredentials: true }
       );
-      console.log("Resultados JSON")
-      console.log(result.data)
+      console.log("Resultados JSON");
+      console.log(result.data);
       var response = result.data;
-      if ((response).hasOwnProperty("redirect_route")) {
-        console.log("REDIRECT ROUTE")
+      if (response.hasOwnProperty("redirect_route")) {
+        console.log("REDIRECT ROUTE");
         window.location.href = response.redirect_route;
+      } else {
+        console.log("NO REDIRECT ROUTE");
       }
-      else {
-        console.log("NO REDIRECT ROUTE")
-      }
-      if ((response).hasOwnProperty("message")) {
-        console.log("THERE IS A MESSAGE")
+      if (response.hasOwnProperty("message")) {
+        console.log("THERE IS A MESSAGE");
       }
       setResponse(result.data); // Guarda la respuesta de la API
     } catch (error) {
-      console.error('Error al registrar', error);
-      console.log("Resultados JSON")
-      console.log(error.response?.data)
+      console.error("Error al registrar", error);
+      console.log("Resultados JSON");
+      console.log(error.response?.data);
       var response = error.response?.data;
-      if ((response).hasOwnProperty("redirect_route")) {
-        console.log("REDIRECT ROUTE")
+      if (response.hasOwnProperty("redirect_route")) {
+        console.log("REDIRECT ROUTE");
         window.location.href = response.redirect_route;
+      } else {
+        console.log("NO REDIRECT ROUTE");
       }
-      else {
-        console.log("NO REDIRECT ROUTE")
+      if (response.hasOwnProperty("message")) {
+        console.log("THERE IS A MESSAGE");
       }
-      if ((response).hasOwnProperty("message")) {
-        console.log("THERE IS A MESSAGE")
-      }
-      setResponse(error.response?.data || 'Error en la solicitud');
+      setResponse(error.response?.data || "Error en la solicitud");
     }
   };
-  return (
-      <form onSubmit={handleSubmit} method="POST">
-        <div className="w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm my-4 animate-slideIn">
-          <p className="text-4xl text-green-800 text-center py-12">Register</p>
-          <div className="flex flex-col gap-2 relative">
-            <label htmlFor="email" className="text-green-950 mb-2 select-none">
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-600"
-                required
-                onChange={handleChange}
-                value={formData.email}
-              />
-              <span className={(formData.email ? "bottom-14" : "bottom-[2.1rem]") + " peer-focus:bottom-14 relative start-4 bg-white transition-all"}>
-                Correo Electrónico
-              </span>
-            </label>
-            <label htmlFor="username" className="text-green-950 mb-2 select-none">
-              <input
-                type="text"
-                id="username"
-                name="username"
-                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-600"
-                required
-                onChange={handleChange}
-                value={formData.username}
-              />
-              <span className={(formData.username ? "bottom-14" : "bottom-[2.1rem]") + " peer-focus:bottom-14 relative start-2 bg-white transition-all"}>
-                Username
-              </span>
-            </label>
 
-            <label htmlFor="password" className="text-green-950 mb-2 select-none">
-              <input
-                type="text"
-                id="password"
-                name="password"
-                className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-600"
-                required
-                onChange={handleChange}
-                value={formData.password}
-              />
-              <span className={(formData.password ? "bottom-14" : "bottom-[2.1rem]") + " peer-focus:bottom-14 relative start-2 bg-white transition-all"}>
-                Password
-              </span>
-            </label>
-            <label htmlFor="gender">
-              Género:
-              <select id="gender" name="gender" onChange={handleChange} value={formData.gender} className="outline-none">
-                <option value="male">Hombre</option>
-                <option value="female">Mujer</option>
-              </select>
-            </label>
-            <label htmlFor="birthdate">
-              Fecha de Nacimiento:
-              <input type="date" id="birthdate" onChange={handleChange} value={formData["birthdate"]} name="birthdate" />
-            </label>
+  return (
+    <form onSubmit={handleSubmit} method="POST" autoComplete="off">
+      <div className="min-w-96 bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm my-4 overflow-hidden animate-slideIn">
+        <p className="text-4xl text-green-800 text-center py-12">Register</p>
+        <div className="flex flex-col gap-4 relative">
+          <label htmlFor="email" className="text-green-950 mb-2 select-none relative">
             <input
-              type="submit"
-              id="submit"
-              className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer  hover:text-white hover:bg-green-800 transition-all duration-75"
+              type="email"
+              id="email"
+              name="email"
+              className="peer w-full p-2 outline-none border border-gray-300 focus:placeholder-shown:border-green-600 invalid:text-red-900 invalid:[&:not(:placeholder-shown)]:border-red-400"
+              required
+              placeholder=" "
+              onChange={handleChange}
+              onInvalid={handleValidity}
+              value={formData.email}
             />
-          </div>
-          {response && <div>{response["message"]}</div>}
-          <Link to="/login" className='text-sm text-start text-green-700 underline mt-8'>
-            <p className='mt-8'>¿Ya tienes cuenta?¡Inicia sesión!</p>
-          </Link>
+            <span
+              className={
+                (formData.email ? "bottom-8" : "bottom-2") +
+                " peer-focus:bottom-8 peer-[&:not(:placeholder-shown):invalid]:text-red-500 absolute start-2 bg-white transition-all"
+              }
+            >
+              Correo Electrónico
+            </span>
+          </label>
+          <label htmlFor="username" className="text-green-950 mb-2 select-none relative">
+            <input
+              type="text"
+              id="username"
+              name="username"
+              className="peer w-full p-2 outline-none border border-gray-300 focus:placeholder-shown:border-green-600 invalid:text-red-900 invalid:[&:not(:placeholder-shown)]:border-red-400"
+              required
+              placeholder=" "
+              onChange={handleChange}
+              onInvalid={handleValidity}
+              value={formData.username}
+              pattern="([A-ZÑÁÉÍÓÚÜ]+[a-zñáéíóúü]+\s?){2,}"
+            />
+            <span
+              className={
+                (formData.username ? "bottom-8" : "bottom-2") +
+                " peer-focus:bottom-8 peer-[&:not(:placeholder-shown):invalid]:text-red-500 absolute start-2 bg-white transition-all"
+              }
+            >
+              Username
+            </span>
+          </label>
+          <label htmlFor="password" className="text-green-950 mb-2 select-none relative">
+            <input
+              type={visualizeInput ? "text" : "password"}
+              id="password"
+              name="password"
+              className="peer w-full p-2 outline-none border border-gray-300 focus:placeholder-shown:border-green-600 invalid:text-red-900 invalid:[&:not(:placeholder-shown)]:border-red-400"
+              required
+              onChange={handleChange}
+              onInvalid={handleValidity}
+              value={formData.password}
+              placeholder=" "
+              pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@\?#~_\-+&])[a-zA-Z0-9!@\?#~_\-+&]{8,}"
+            />
+            <span
+              className={
+                (formData.password ? "bottom-8" : "bottom-2") +
+                " peer-focus:bottom-8 peer-[&:not(:placeholder-shown):invalid]:text-red-500 peer-checked:bottom-8 absolute start-2 bg-white transition-all"
+              }
+            >
+              Password
+            </span>
+            <button onClick={()=>{ setInputView(!visualizeInput); }} className="absolute end-2 bottom-2 peer-[&:not(:placeholder-shown):invalid]:text-red-500">
+              <i className={`fa-solid ${!visualizeInput ? "fa-eye" : "fa-eye-slash"}`}></i>
+            </button>
+          </label>
+          <label htmlFor="gender" className="flex justify-between">
+            Género:
+            <select
+              id="gender"
+              name="gender"
+              onChange={handleChange}
+              value={formData.gender}
+              className="outline-none"
+            >
+              <option value="male">Hombre</option>
+              <option value="female">Mujer</option>
+            </select>
+          </label>
+          <label htmlFor="birthdate" className="flex justify-between">
+            Fecha de Nacimiento:
+            <input
+              type="date"
+              id="birthdate"
+              onChange={handleChange}
+              onInvalid={handleValidity}
+              value={formData["birthdate"]}
+              name="birthdate"
+              max={
+                new Date().getFullYear() -
+                18 +
+                "-" +
+                new Date().toLocaleString("default", { month: "2-digit" }) +
+                "-" +
+                new Date().toLocaleDateString("default", { day: "2-digit" })
+              }
+              className="outline-none"
+              required
+            />
+          </label>
+          <label htmlFor="type" className="flex justify-between">
+            Registrarse como:
+            <select
+              id="type"
+              name="registerAs"
+              onChange={handleChange}
+              value={formData.registerAs}
+              className="outline-none"
+            >
+              <option value="Paciente">Paciente</option>
+              <option value="Doctor">Doctor</option>
+            </select>
+          </label>
+          <input
+            type="submit"
+            id="submit"
+            className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer  hover:text-white hover:bg-green-800 transition-all duration-75"
+          />
         </div>
-      </form>
+        {response && (
+          <div className="w-80 mx-auto text-yellow-300 font-medium text-center mt-8">
+            {response["message"]}
+          </div>
+        )}
+        <Link
+          to="/login"
+          className="text-sm text-start text-green-700 underline mt-8"
+        >
+          <p className="mt-8">¿Ya tienes cuenta?¡Inicia sesión!</p>
+        </Link>
+      </div>
+    </form>
   );
 };
 

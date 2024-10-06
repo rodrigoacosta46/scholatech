@@ -792,9 +792,9 @@ const Profile = () => {  /*
                   </div>
                 </div>
               </form>
-              <p className="text-sm mt-4">
-                Registrado el: {userInfo["CreatedAt"]} <br/>
-                Actualizado el: {userInfo["UpdatedAt"]}
+              <p className="flex flex-col gap-1 text-sm mt-7">
+                Registrado el: {userInfo["CreatedAt"]} 
+                <p className="italic">Última actualización el: {userInfo["UpdatedAt"]}</p>
               </p>
             </div>
           </div>

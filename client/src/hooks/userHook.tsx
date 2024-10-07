@@ -107,10 +107,11 @@ export const UserContextProvider = ({}) => {
       if (model !== undefined) {
         setUserInfo({
           ...model,
-          Password: "*****"
+          Password: "*****",
+          Birthdate: `${model.Birthdate.split("T")[0]}`,
         });
   
-        let key = Object.keys(roles).find((k) => roles[k] === 'Doctor');
+        let key = Object.keys(roles).find((k) => roles[k] === model?.Perfil.Name);
         setUserConfig({
           theme: config.theme[key],
           nav: config.nav[key],

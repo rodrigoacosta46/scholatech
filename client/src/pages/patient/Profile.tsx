@@ -9,11 +9,11 @@ import React, { useEffect, useState } from 'react';
 const SaveUserName = ({ formData, theme, onSave }) => {
   const [username, setUserName] = useState(formData);
   const [isValid, setValidState] = useState(false);
-  const reg = /^.{1,50}$/;
+  const reg = /^(?!.*([A-ZÑÁÉÍÓÚÜ]{1}[a-zñáéíóúü\.\-']+){2,})([A-ZÑÁÉÍÓÚÜ]{1}[a-zñáéíóúü\.\-']+\s?){2,10}$/;
 
   const inputFormat = (value) => {
     setValidState(false);
-    if (reg.test(value) && value != formData) {
+    if (reg.test(value) && value != formData && value.length < 50) {
       console.log("que");
       setValidState(true);
       setUserName(value);
@@ -52,6 +52,7 @@ const SaveUserName = ({ formData, theme, onSave }) => {
         <p className="italic text-sm mt-4 w-96 text-center">
           Importante: El nombre de usuario debe ser su nombre real y no más de
           50 caracteres.
+          Ejemplo: <span className="font-bold">Nicolas Krulewietki</span>
         </p>
       </div>
       <button
@@ -70,7 +71,7 @@ const SaveUserName = ({ formData, theme, onSave }) => {
 const SaveUserMail = ({ formData, theme, onSave }) => {
   const [useremail, setUserEmail] = useState(formData);
   const [isValid, setValidState] = useState(true);
-  const reg = /^[a-zA-Z]+@[a-zA-Z]+\.com$/;
+  const reg = /^\S+@\S+\.\S+$/;
 
   const inputFormat = (e) => {
     let input = e.target.value;
@@ -151,7 +152,7 @@ const SaveUserPassword = ({ theme, onSave }) => {
   };
 
   const passwordFormat = () => {
-    let reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{9,}$/;
+    let reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@\?#~_\-+&])[a-zA-Z0-9!@\?#~_\-+&]{8,}$/;
     return reg.test(userpass.new);
   };
 
@@ -501,7 +502,7 @@ const Profile = () => {  /*
     Password: userInfo["Password"],
     Telephone: userInfo["Telephone"],
     Address: userInfo["Address"] || "",
-    Description: "Loremincreible" /*|| "" */,     //Solo si el usuario es Doctor
+    Description: userInfo["Description"] /*|| "" */,     //Solo si el usuario es Doctor
     Speciality: userInfo["Speciality"] || "",
     CreatedAt: userInfo["CreatedAt"],
     UpdatedAt: userInfo["UpdatedAt"],
@@ -510,7 +511,7 @@ const Profile = () => {  /*
       ...userInfo["Perfil"]
     }
   });
-
+  
   const [isGenderDisabled, setDisableState] = useState(true);
   const [inputModal, setModal] = useState(false);
   const [currentField, setCurrentField] = useState(null);
@@ -663,9 +664,8 @@ const Profile = () => {  /*
                       defaultValue={formStorage["Gender"]}
                       className="transition-all outline-none bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700"
                     >
-                      <option value="masculino">Masculino</option>
-                      <option value="femenino">Femenino</option>
-                      <option value="otros">Otros...</option>
+                      <option value="male">Masculino</option>
+                      <option value="female">Femenino</option>
                     </select>
                   </div>
                   Fecha de nacimiento:

@@ -64,7 +64,7 @@ const Sidebar = () => {
             <img src="img/Gaben.png" alt="" className="rounded-full" />
             <div>
               <p className="text-xl text-white line-clamp-3">{userInfo["Username"]}</p>
-              <p className="text-md text-gray-500">{userInfo["role"]}</p>
+              <p className="text-md text-gray-500">{userInfo["Perfil"].Name}</p>
             </div>
           </div>
           <div className="scroll w-72 overflow-y-auto h-0 grow z-30">

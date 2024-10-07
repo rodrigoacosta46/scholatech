@@ -8,6 +8,7 @@ import (
 	"net/mail"
 	"regexp"
 	"time"
+    "strconv"
 
 	"github.com/nicolas-k-cmd/proj-redes/src/cookies"
 	"github.com/nicolas-k-cmd/proj-redes/src/database"
@@ -56,13 +57,14 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	username := req.Username
-	var nameAlphanumeric bool = true
-	regex := regexp.MustCompile(`^[a-zA-Z0-9]+$`)
+	var nameFormat bool = true
+	
+	regex := regexp.MustCompile(`^([A-ZÑÁÉÍÓÚÜ][a-zñáéíóúü\.\-']+)(\s[A-ZÑÁÉÍÓÚÜ][a-zñáéíóúü\.\-']+){1,}$`)
 	if regex.MatchString(username) {
-		fmt.Println("Es alfanumerico")
+		fmt.Println("Nombre cumple con formato")
 	} else {
-		fmt.Println("No es alfanumerico")
-		nameAlphanumeric = false
+		fmt.Println("Nombre no cumple con formato")
+		nameFormat = false
 	}
 
 	var nameLength bool
@@ -84,7 +86,7 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("numbers:", pswdNumber)
 	fmt.Println("special charsxw:", pswdSpecial)
 
-	if nameAlphanumeric && nameLength && pswdLowercase && pswdUppercase && pswdNumber && pswdSpecial {
+	if nameFormat && nameLength && pswdLowercase && pswdUppercase && pswdNumber && pswdSpecial {
 		fmt.Println("El nombre de usuario y la contraseña cumplen con los requisitos.")
 	} else {
 		fmt.Println("El nombre de usuario o la contraseña no cumplen con los requisitos.")
@@ -101,6 +103,17 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(structs.Response{Message: "El genero seleccionado es invalido"})
 		return
 	}
+
+	strRole := req.Role
+	role, err := strconv.Atoi(strRole)
+
+	if (((role == 1) == (role == 2)) || (err != nil)) {
+		fmt.Println("El perfil seleccionado es invalido ", role)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(structs.Response{Message: "El perfil seleccionado es invalido"})
+		return
+	}
+
 	birth_date_form := req.Birthdate
 	parsedDate, err := time.Parse("2006-01-02", birth_date_form)
 	if err != nil {
@@ -151,8 +164,9 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 		Password:  string(hash),
 		Gender:    gender,
 		Birthdate: parsedDate,
-		PerfilID:  1,
+		PerfilID:  role,
 	}
+
 	resultDb := database.Db.Create(&userInsert)
 	if resultDb.Error != nil {
 		fmt.Printf("Error al insertar usuario %v", resultDb.Error)

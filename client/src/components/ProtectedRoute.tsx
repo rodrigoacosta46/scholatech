@@ -7,7 +7,7 @@ const ProtectedRoute = ({ bypassRole, }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(userInfo!["role"] != bypassRole){
+        if(userInfo["Perfil"].Name != bypassRole){
             console.log("Usuario no permitido")
             navigate("/404");
             return

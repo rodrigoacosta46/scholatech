@@ -28,7 +28,7 @@ type User struct {
 	UpdatedAt  *time.Time `gorm:"type:datetime"`
 	DeletedAt  *time.Time `gorm:"type:datetime"`
 	PerfilID   int        `gorm:"not null"`
-	Perfil     Perfil     `gorm:"foreignKey:ID;"` // Relación hasOne
+	Perfil     Perfil     `gorm:"foreignKey:PerfilID;"` // Relación hasOne
 }
 
 type Turno struct {
@@ -127,10 +127,32 @@ func init() {
 		fmt.Println("A FATAL ERROR OCURRED WHILE MIGRATING DATABASE")
 		panic(err)
 	}
+	
+	var count int64
+    Db.Model(&Perfil{}).Count(&count)
+
+    if count == 0 {
+        fmt.Println("Looks like the profile records are not inserted")
+        perfiles := []Perfil{
+            {ID: 1, Name: "Paciente"},
+            {ID: 2, Name: "Doctor"},
+            {ID: 3, Name: "Admin"},
+        }
+        // Intentar insertar los perfiles
+        if errorInsert := Db.Create(&perfiles).Error; errorInsert != nil {
+            fmt.Printf("Couldn't add new entries to the profiles: %v\n", errorInsert)
+            panic(errorInsert)
+        } else {
+            fmt.Println("Profile records inserted successfully")
+        }
+    } else {
+        fmt.Println("Profile records already exist")
+    }
+	/*
 	perfiles := []Perfil{
-		{ID: 1, Name: "paciente"},
-		{ID: 2, Name: "doctor"},
-		{ID: 3, Name: "administrador"},
+		{ID: 1, Name: "Paciente"},
+		{ID: 2, Name: "Doctor"},
+		{ID: 3, Name: "Admin"},
 	}
 	err = Db.Find(&perfiles).Error
 	if err == gorm.ErrRecordNotFound {
@@ -144,4 +166,5 @@ func init() {
 			}
 		}
 	}
+	*/
 }

@@ -13,7 +13,7 @@ const Select = () => {
         <p className="text-green-900 text-3xl underline underline-offset-8 decoration-1 font-thin">
           Formulario de Consulta
         </p>
-        <div className="grid lg:grid-cols-2 rounded-xl shadow-[4px_4px] shadow-slate-400 bg-gradient-to-r from-slate-200 to-slate-300">
+        <div className="grid lg:grid-cols-2 rounded-xl  bg-slate-200">
           <Card scheme={userConfig.theme}>
             <div className="group flex justify-center max-h-96 overflow-hidden cursor-pointer">
               <div>
@@ -58,7 +58,7 @@ const Select = () => {
               <input
                 type="text"
                 placeholder="Dolor estomacal..."
-                className="peer bg-gray-200 outline-none w-full shadow-[2px_1px] shadow-slate-500"
+                className="peer bg-gray-200 outline-none w-full shadow-[2px_1px] shadow-slate-400"
               />
               <p className="text-lg mt-4 text-slate-700">Detalles:</p>
               <textarea
@@ -67,12 +67,12 @@ const Select = () => {
                 placeholder="Escriba detalles de su consulta (opcional)"
                 rows={5}
                 cols={30}
-                className="w-full resize-none outline-none bg-gray-200 shadow-[2px_2px] shadow-slate-500"
+                className="w-full resize-none outline-none bg-gray-200 shadow-[2px_2px] shadow-slate-400"
               ></textarea>
               <input
                 type="submit"
                 value="Solicitar consulta"
-                className="p-4 my-4 text-slate-700 cursor-pointer underline decoration-1 bg-gradient-to-r from-slate-300 to-slate-400 block w-full shadow-[2px_2px] shadow-slate-700 active:shadow-none"
+                className="transition-all duration-500 p-4 my-4 text-slate-700 cursor-pointer bg-slate-300 block w-full shadow-[2px_2px] shadow-slate-400 active:shadow-none"
               />
             </div>
           </form>

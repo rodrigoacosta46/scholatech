@@ -10,7 +10,7 @@ const Register = () => {
     email: "",
     password: "",
     gender: "male",
-    registerAs: "Paciente",
+    role: "1",
     birthdate: "",
   });
 
@@ -117,7 +117,7 @@ const Register = () => {
               onChange={handleChange}
               onInvalid={handleValidity}
               value={formData.username}
-              pattern="([A-ZÑÁÉÍÓÚÜ]+[a-zñáéíóúü\.\-']+\s?){2,50}"
+              pattern="(?!.*([A-ZÑÁÉÍÓÚÜ]{1}[a-zñáéíóúü\.\-']+){2,})([A-ZÑÁÉÍÓÚÜ]{1}[a-zñáéíóúü\.\-']+\s?){2,10}"
             />
             <span
               className={
@@ -191,13 +191,13 @@ const Register = () => {
             Registrarse como:
             <select
               id="type"
-              name="registerAs"
+              name="role"
               onChange={handleChange}
-              value={formData.registerAs}
+              value={formData.role}
               className="outline-none"
             >
-              <option value="Paciente">Paciente</option>
-              <option value="Doctor">Doctor</option>
+              <option value="1">Paciente</option>
+              <option value="2">Doctor</option>
             </select>
           </label>
           <input

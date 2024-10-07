@@ -107,8 +107,9 @@ const Doctors = () => {
               name=""
               id=""
               className="bg-green-800 text-white p-2 outline-none"
+              defaultValue="none"
             >
-              <option value="" selected>
+              <option value="none">
                 Especialidad
               </option>
               <option value="">Cardiología</option>
@@ -118,8 +119,9 @@ const Doctors = () => {
               name=""
               id=""
               className="bg-green-800 text-white p-2 outline-none"
+              defaultValue="none"
             >
-              <option value="" selected>
+              <option value="none">
                 Género
               </option>
               <option value="">Masculino</option>

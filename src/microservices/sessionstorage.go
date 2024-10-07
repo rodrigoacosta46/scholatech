@@ -25,7 +25,7 @@ func ServeSessionLocalStorage(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode((structs.Response{Message: "Error al obtener el ID del sujeto", RedirectRoute: "/logout", Authenticated: "false"}))
 	}
 	var user database.User
-	result := database.Db.Omit("Password").First(&user, id)
+	result := database.Db.Omit("Password").Preload("Perfil").First(&user, id)
 	/*result := database.Db.
 	Preload("Rol.Perfil").
 	Omit("Password").

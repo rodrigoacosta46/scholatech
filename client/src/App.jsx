@@ -22,6 +22,7 @@ import List from "./pages/List";
 import React from "react";
 
 function App() {
+  console.log(import.meta.env.VITE_SVPATH);
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>

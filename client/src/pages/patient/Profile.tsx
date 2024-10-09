@@ -500,6 +500,7 @@ const Profile = () => {  /*
     Gender: userInfo["Gender"],
     Birthdate: userInfo["Birthdate"],
     Password: userInfo["Password"],
+    Picture: userInfo["Picture"],
     Telephone: userInfo["Telephone"],
     Address: userInfo["Address"] || "",
     Description: userInfo["Description"] /*|| "" */,     //Solo si el usuario es Doctor

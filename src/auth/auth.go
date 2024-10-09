@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/mail"
 	"regexp"
+	"strconv"
 	"time"
-    "strconv"
 
 	"github.com/nicolas-k-cmd/proj-redes/src/cookies"
 	"github.com/nicolas-k-cmd/proj-redes/src/database"
@@ -58,7 +58,7 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	username := req.Username
 	var nameFormat bool = true
-	
+
 	regex := regexp.MustCompile(`^([A-ZÑÁÉÍÓÚÜ][a-zñáéíóúü\.\-']+)(\s[A-ZÑÁÉÍÓÚÜ][a-zñáéíóúü\.\-']+){1,}$`)
 	if regex.MatchString(username) {
 		fmt.Println("Nombre cumple con formato")
@@ -104,10 +104,18 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	imgPath := "img/profiles/default/"
+	var picture string
+	if gender == "male" {
+		picture = imgPath + "male.png"
+	} else {
+		picture = imgPath + "fem.png"
+	}
+
 	strRole := req.Role
 	role, err := strconv.Atoi(strRole)
 
-	if (((role == 1) == (role == 2)) || (err != nil)) {
+	if ((role == 1) == (role == 2)) || (err != nil) {
 		fmt.Println("El perfil seleccionado es invalido ", role)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(structs.Response{Message: "El perfil seleccionado es invalido"})
@@ -165,6 +173,7 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 		Gender:    gender,
 		Birthdate: parsedDate,
 		PerfilID:  role,
+		Picture:   picture,
 	}
 
 	resultDb := database.Db.Create(&userInsert)

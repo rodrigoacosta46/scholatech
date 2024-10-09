@@ -146,13 +146,13 @@ const Drugs = () => {
       />
 
       <div className="flex flex-wrap w-full text-end items-center justify-center gap-2 p-4">
-        <div className={`flex justify-self-start bg-${userConfig.theme}-600 text-white gap-4 rounded-full p-2 text-2xl`}>
+        <div className={`flex justify-between bg-white text-${userConfig.theme}-600 gap-4 rounded-full p-2 text-2xl min-w-36 shadow-[2px_2px] shadow-${userConfig.theme}-800`}>
           <button onClick={()=>page != 1 && setPage(page-1)}>
-            <i className="fa-solid fa-circle-left transition-all duration-300 hover:scale-110"></i>
+            <i className="fa-solid fa-circle-left"></i>
           </button>
-          <p className="transition-all hover:scale-110" key={Math.random()}>{page}</p>
+          <p key={Math.random()}>{page}</p>
           <button onClick={()=>page != Math.ceil(displayedDrugs.total/10) && setPage(page+1)}>
-            <i className="fa-solid fa-circle-right transition-all duration-300 hover:scale-110"></i>
+            <i className="fa-solid fa-circle-right"></i>
           </button>
         </div>
         <Searchbar

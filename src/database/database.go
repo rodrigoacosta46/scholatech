@@ -27,6 +27,7 @@ type User struct {
 	Speciality *string    `gorm:"size:100"`
 	Gender     string     `gorm:"type:enum('male','female','another');not null"`
 	Birthdate  time.Time  `gorm:"type:date;not null"`
+	Picture    string     `gorm:"size:100;not null;"`
 	CreatedAt  time.Time  `gorm:"type:datetime;not null"`
 	UpdatedAt  *time.Time `gorm:"type:datetime"`
 	DeletedAt  *time.Time `gorm:"type:datetime"`

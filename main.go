@@ -35,6 +35,7 @@ func gorillaRouter() {
 	protectedRoutes.HandleFunc("/sync", microservices.ServeSessionLocalStorage)
 	//	Services
 	protectedRoutes.HandleFunc("/getDrugs", microservices.ServeDrugs)
+	protectedRoutes.HandleFunc("/getImage", microservices.ServeImages)
 	fmt.Println("Database is ready for running")
 	http.ListenAndServe(":8000", r)
 }

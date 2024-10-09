@@ -33,6 +33,8 @@ func gorillaRouter() {
 	protectedRoutes.Use(Middleware.JwtMiddleware)
 	//protectedRoutes.HandleFunc("/logout", cookies.DeleteHandler)
 	protectedRoutes.HandleFunc("/sync", microservices.ServeSessionLocalStorage)
+	//	Services
+	protectedRoutes.HandleFunc("/getDrugs", microservices.ServeDrugs)
 	fmt.Println("Database is ready for running")
 	http.ListenAndServe(":8000", r)
 }

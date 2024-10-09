@@ -14,7 +14,7 @@ type RegisterRequest struct {
 	Email     string
 	Birthdate string
 	Gender    string
-	Role 	  string 
+	Role      string
 }
 
 type LoginRequest struct {

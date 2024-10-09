@@ -1,0 +1,453 @@
+[
+    {
+      "ID": 1,
+      "Nombre": "Paracetamol",
+      "Descripcion": "Analgésico y antipirético utilizado para reducir la fiebre y el dolor.",
+      "Imagen": "img/drugs/1",
+      "CreatedAt": "2024-01-01T10:00:00Z",
+      "UpdatedAt": "2024-03-01T12:00:00Z",
+      "DeletedAt": null
+    },
+    {
+      "ID": 2,
+      "Nombre": "Ibuprofeno",
+      "Descripcion": "Antiinflamatorio no esteroideo que se utiliza para tratar dolores leves a moderados.",
+      "Imagen": "img/drugs/2",
+      "CreatedAt": "2024-02-10T09:30:00Z",
+      "UpdatedAt": "2024-03-10T15:00:00Z",
+      "DeletedAt": null
+    },
+    {
+      "ID": 3,
+      "Nombre": "Amoxicilina",
+      "Descripcion": "Antibiótico de amplio espectro utilizado para tratar diversas infecciones bacterianas.",
+      "Imagen": "img/drugs/3",
+      "CreatedAt": "2024-02-15T11:20:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 4,
+      "Nombre": "Loratadina",
+      "Descripcion": "Antihistamínico utilizado para tratar alergias y síntomas de la fiebre del heno.",
+      "Imagen": "img/drugs/4",
+      "CreatedAt": "2024-03-01T13:45:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 5,
+      "Nombre": "Metformina",
+      "Descripcion": "Medicamento utilizado para el tratamiento de la diabetes tipo 2.",
+      "Imagen": "img/drugs/5",
+      "CreatedAt": "2024-04-01T16:30:00Z",
+      "UpdatedAt": "2024-05-01T10:15:00Z",
+      "DeletedAt": null
+    },
+    {
+      "ID": 6,
+      "Nombre": "Omeprazol",
+      "Descripcion": "Inhibidor de la bomba de protones utilizado para tratar la acidez estomacal y el reflujo gástrico.",
+      "Imagen": "img/drugs/6",
+      "CreatedAt": "2024-05-15T08:30:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 7,
+      "Nombre": "Simvastatina",
+      "Descripcion": "Medicamento utilizado para reducir los niveles de colesterol y prevenir enfermedades cardiovasculares.",
+      "Imagen": "img/drugs/7",
+      "CreatedAt": "2024-06-01T12:45:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 8,
+      "Nombre": "Aspirina",
+      "Descripcion": "Antiinflamatorio no esteroideo utilizado para el dolor, fiebre e inflamación.",
+      "Imagen": "img/drugs/8",
+      "CreatedAt": "2024-06-10T09:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 9,
+      "Nombre": "Diazepam",
+      "Descripcion": "Benzodiazepina utilizada para tratar la ansiedad, los espasmos musculares y las convulsiones.",
+      "Imagen": "img/drugs/9",
+      "CreatedAt": "2024-07-05T14:30:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 10,
+      "Nombre": "Lisinopril",
+      "Descripcion": "Inhibidor de la ECA utilizado para tratar la hipertensión y la insuficiencia cardíaca.",
+      "Imagen": "img/drugs/10",
+      "CreatedAt": "2024-07-20T11:15:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 11,
+      "Nombre": "Clonazepam",
+      "Descripcion": "Medicamento ansiolítico utilizado para tratar trastornos de pánico y convulsiones.",
+      "Imagen": "img/drugs/11",
+      "CreatedAt": "2024-08-01T10:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 12,
+      "Nombre": "Levotiroxina",
+      "Descripcion": "Hormona sintética utilizada para tratar el hipotiroidismo.",
+      "Imagen": "img/drugs/12",
+      "CreatedAt": "2024-08-15T12:45:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 13,
+      "Nombre": "Ciprofloxacina",
+      "Descripcion": "Antibiótico utilizado para tratar diversas infecciones bacterianas.",
+      "Imagen": "img/drugs/13",
+      "CreatedAt": "2024-09-01T09:30:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 14,
+      "Nombre": "Diclofenaco",
+      "Descripcion": "Antiinflamatorio no esteroideo para tratar el dolor e inflamación asociados con la artritis.",
+      "Imagen": "img/drugs/14",
+      "CreatedAt": "2024-09-20T10:15:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 15,
+      "Nombre": "Captopril",
+      "Descripcion": "Inhibidor de la ECA utilizado en el tratamiento de la hipertensión y la insuficiencia cardíaca.",
+      "Imagen": "img/drugs/15",
+      "CreatedAt": "2024-09-30T14:45:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 16,
+      "Nombre": "Atorvastatina",
+      "Descripcion": "Utilizada para reducir los niveles de colesterol y prevenir enfermedades cardíacas.",
+      "Imagen": "img/drugs/16",
+      "CreatedAt": "2024-10-01T16:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 17,
+      "Nombre": "Metronidazol",
+      "Descripcion": "Antibiótico utilizado para tratar infecciones bacterianas y protozoarias.",
+      "Imagen": "img/drugs/17",
+      "CreatedAt": "2024-10-05T10:30:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 18,
+      "Nombre": "Sertralina",
+      "Descripcion": "Antidepresivo de la clase ISRS utilizado para tratar la depresión y la ansiedad.",
+      "Imagen": "img/drugs/18",
+      "CreatedAt": "2024-10-08T14:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 19,
+      "Nombre": "Fluoxetina",
+      "Descripcion": "Antidepresivo de la clase ISRS utilizado para tratar la depresión y el trastorno obsesivo-compulsivo.",
+      "Imagen": "img/drugs/19",
+      "CreatedAt": "2024-10-15T08:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 20,
+      "Nombre": "Atenolol",
+      "Descripcion": "Betabloqueador utilizado para tratar la hipertensión y la angina de pecho.",
+      "Imagen": "img/drugs/20",
+      "CreatedAt": "2024-10-20T09:30:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 21,
+      "Nombre": "Furosemida",
+      "Descripcion": "Diurético utilizado para tratar la retención de líquidos y la hipertensión.",
+      "Imagen": "img/drugs/21",
+      "CreatedAt": "2024-10-25T11:45:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 22,
+      "Nombre": "Losartán",
+      "Descripcion": "Antihipertensivo utilizado para tratar la hipertensión y proteger los riñones en personas con diabetes.",
+      "Imagen": "img/drugs/22",
+      "CreatedAt": "2024-10-30T15:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 23,
+      "Nombre": "Salbutamol",
+      "Descripcion": "Broncodilatador utilizado para tratar el asma y otras afecciones respiratorias.",
+      "Imagen": "img/drugs/23",
+      "CreatedAt": "2024-11-01T08:30:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 24,
+      "Nombre": "Enalapril",
+      "Descripcion": "Inhibidor de la ECA utilizado para tratar la hipertensión y la insuficiencia cardíaca.",
+      "Imagen": "img/drugs/24",
+      "CreatedAt": "2024-11-10T09:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 25,
+      "Nombre": "Bromazepam",
+      "Descripcion": "Ansiolítico de la familia de las benzodiazepinas utilizado para el tratamiento de la ansiedad.",
+      "Imagen": "img/drugs/25",
+      "CreatedAt": "2024-11-15T10:15:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 26,
+      "Nombre": "Prednisona",
+      "Descripcion": "Corticosteroide utilizado para tratar inflamaciones graves y enfermedades autoinmunes.",
+      "Imagen": "img/drugs/26",
+      "CreatedAt": "2024-11-20T14:30:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 27,
+      "Nombre": "Esomeprazol",
+      "Descripcion": "Inhibidor de la bomba de protones utilizado para tratar el reflujo gástrico.",
+      "Imagen": "img/drugs/27",
+      "CreatedAt": "2024-12-01T08:45:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 28,
+      "Nombre": "Ranitidina",
+      "Descripcion": "Medicamento utilizado para reducir la producción de ácido en el estómago.",
+      "Imagen": "img/drugs/28",
+      "CreatedAt": "2024-12-05T10:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 29,
+      "Nombre": "Amlodipino",
+      "Descripcion": "Bloqueador de los canales de calcio utilizado para tratar la hipertensión y la angina de pecho.",
+      "Imagen": "img/drugs/29",
+      "CreatedAt": "2024-12-10T12:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 30,
+      "Nombre": "Claritromicina",
+      "Descripcion": "Antibiótico utilizado para tratar infecciones bacterianas, como la neumonía.",
+      "Imagen": "img/drugs/30",
+      "CreatedAt": "2024-12-15T09:30:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 31,
+      "Nombre": "Hidrocortisona",
+      "Descripcion": "Corticosteroide utilizado para tratar inflamaciones y afecciones alérgicas.",
+      "Imagen": "img/drugs/31",
+      "CreatedAt": "2025-01-01T11:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 32,
+      "Nombre": "Clopidogrel",
+      "Descripcion": "Anticoagulante utilizado para prevenir coágulos sanguíneos en personas con enfermedades cardíacas.",
+      "Imagen": "img/drugs/32",
+      "CreatedAt": "2025-01-05T10:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 33,
+      "Nombre": "Propranolol",
+      "Descripcion": "Betabloqueador utilizado para tratar la hipertensión, arritmias y ansiedad.",
+      "Imagen": "img/drugs/33",
+      "CreatedAt": "2025-01-10T09:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 34,
+      "Nombre": "Sitagliptina",
+      "Descripcion": "Medicamento utilizado para controlar los niveles de glucosa en sangre en pacientes con diabetes tipo 2.",
+      "Imagen": "img/drugs/34",
+      "CreatedAt": "2025-01-15T08:45:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 35,
+      "Nombre": "Escitalopram",
+      "Descripcion": "Antidepresivo utilizado para tratar el trastorno de depresión mayor y la ansiedad generalizada.",
+      "Imagen": "img/drugs/35",
+      "CreatedAt": "2025-01-20T11:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 36,
+      "Nombre": "Ketorolaco",
+      "Descripcion": "Analgésico utilizado para tratar el dolor moderado a severo.",
+      "Imagen": "img/drugs/36",
+      "CreatedAt": "2025-01-25T12:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 37,
+      "Nombre": "Risperidona",
+      "Descripcion": "Antipsicótico utilizado para tratar la esquizofrenia y el trastorno bipolar.",
+      "Imagen": "img/drugs/37",
+      "CreatedAt": "2025-01-30T13:30:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 38,
+      "Nombre": "Tamsulosina",
+      "Descripcion": "Medicamento utilizado para tratar los síntomas de la hiperplasia prostática benigna.",
+      "Imagen": "img/drugs/38",
+      "CreatedAt": "2025-02-01T10:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 39,
+      "Nombre": "Dexametasona",
+      "Descripcion": "Corticosteroide utilizado para reducir la inflamación y suprimir el sistema inmunológico.",
+      "Imagen": "img/drugs/39",
+      "CreatedAt": "2025-02-05T11:45:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 40,
+      "Nombre": "Venlafaxina",
+      "Descripcion": "Antidepresivo de tipo inhibidor de la recaptación de serotonina y noradrenalina (IRSN).",
+      "Imagen": "img/drugs/40",
+      "CreatedAt": "2025-02-10T08:30:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 41,
+      "Nombre": "Bisoprolol",
+      "Descripcion": "Betabloqueador utilizado para tratar la hipertensión y la insuficiencia cardíaca.",
+      "Imagen": "img/drugs/41",
+      "CreatedAt": "2025-02-15T12:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 42,
+      "Nombre": "Insulina Glargina",
+      "Descripcion": "Insulina de acción prolongada utilizada para tratar la diabetes tipo 1 y tipo 2.",
+      "Imagen": "img/drugs/42",
+      "CreatedAt": "2025-02-20T09:15:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 43,
+      "Nombre": "Fentanilo",
+      "Descripcion": "Opioide sintético utilizado para tratar el dolor severo, especialmente en el cáncer.",
+      "Imagen": "img/drugs/43",
+      "CreatedAt": "2025-02-25T13:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 44,
+      "Nombre": "Gliclazida",
+      "Descripcion": "Medicamento utilizado para controlar el azúcar en sangre en personas con diabetes tipo 2.",
+      "Imagen": "img/drugs/44",
+      "CreatedAt": "2025-03-01T11:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 45,
+      "Nombre": "Valsartán",
+      "Descripcion": "Medicamento utilizado para tratar la hipertensión y la insuficiencia cardíaca.",
+      "Imagen": "img/drugs/45",
+      "CreatedAt": "2025-03-05T10:30:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 46,
+      "Nombre": "Oxicodona",
+      "Descripcion": "Opioide utilizado para el alivio del dolor severo.",
+      "Imagen": "img/drugs/46",
+      "CreatedAt": "2025-03-10T12:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 47,
+      "Nombre": "Liraglutida",
+      "Descripcion": "Medicamento utilizado para tratar la diabetes tipo 2 y, en algunos casos, la obesidad.",
+      "Imagen": "img/drugs/47",
+      "CreatedAt": "2025-03-15T09:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 48,
+      "Nombre": "Gabapentina",
+      "Descripcion": "Medicamento utilizado para tratar el dolor neuropático y la epilepsia.",
+      "Imagen": "img/drugs/48",
+      "CreatedAt": "2025-03-20T08:45:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 49,
+      "Nombre": "Levetiracetam",
+      "Descripcion": "Antiepiléptico utilizado para tratar las crisis epilépticas.",
+      "Imagen": "img/drugs/49",
+      "CreatedAt": "2025-03-25T14:00:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    },
+    {
+      "ID": 50,
+      "Nombre": "Montelukast",
+      "Descripcion": "Medicamento utilizado para prevenir los ataques de asma y aliviar los síntomas de alergias.",
+      "Imagen": "img/drugs/50",
+      "CreatedAt": "2025-04-01T09:15:00Z",
+      "UpdatedAt": null,
+      "DeletedAt": null
+    }
+  ]
+  

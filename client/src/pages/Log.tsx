@@ -62,7 +62,7 @@ const Log = () => {
   };
   return (
       <form onSubmit={handleSubmit} method="POST">
-        <div className="w-96 bg-white p-8  my-4 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm overflow-hidden animate-slideIn">
+        <div className={"w-96 bg-white p-8 my-4 border-b-2 border-e-2 shadow-lg rounded-sm overflow-hidden animate-slideIn transition-all duration-1000 " + (response ? "border-yellow-400" : "border-green-800")}>
           <p className="text-4xl text-green-800 text-center py-12">Login</p>
           <div className="flex flex-col gap-2 relative">
             <label htmlFor="username" className="text-green-950 mb-2 select-none">
@@ -106,7 +106,7 @@ const Log = () => {
               className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer hover:text-white hover:bg-green-800 transition-all duration-75"
             />
           </div>
-          {response && <div className='w-80 mx-auto text-yellow-400 text-center mt-8'>{response["message"]}</div>}
+          {response && <div className='w-80 mx-auto bg-yellow-400 text-white text-center animate-fadeIn p-4 mt-8'>{response["message"]}</div>}
           <Link to="/register" className='text-sm text-start text-green-700 underline mt-8'>
             <p className="mt-8">¿No tienes cuenta?¡Registrate!</p>
           </Link>

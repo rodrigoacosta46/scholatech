@@ -1,7 +1,10 @@
 package database
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
+	"os"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -60,7 +63,7 @@ type Medicamento struct {
 	Nombre      string     `gorm:"size:100;not null"`
 	Descripcion string     `gorm:"type:text;not null"`
 	Imagen      string     `gorm:"type:text;not null"`
-	CreatedAt   time.Time  `gorm:"type:datetime;not null"`
+	CreatedAt   time.Time  `gorm:"type:datetime;not null;default:CURRENT_TIMESTAMP"`
 	UpdatedAt   *time.Time `gorm:"type:datetime"`
 	DeletedAt   *time.Time `gorm:"type:datetime"`
 }
@@ -127,44 +130,81 @@ func init() {
 		fmt.Println("A FATAL ERROR OCURRED WHILE MIGRATING DATABASE")
 		panic(err)
 	}
-	
-	var count int64
-    Db.Model(&Perfil{}).Count(&count)
 
-    if count == 0 {
-        fmt.Println("Looks like the profile records are not inserted")
-        perfiles := []Perfil{
-            {ID: 1, Name: "Paciente"},
-            {ID: 2, Name: "Doctor"},
-            {ID: 3, Name: "Admin"},
-        }
-        // Intentar insertar los perfiles
-        if errorInsert := Db.Create(&perfiles).Error; errorInsert != nil {
-            fmt.Printf("Couldn't add new entries to the profiles: %v\n", errorInsert)
-            panic(errorInsert)
-        } else {
-            fmt.Println("Profile records inserted successfully")
-        }
-    } else {
-        fmt.Println("Profile records already exist")
-    }
-	/*
-	perfiles := []Perfil{
-		{ID: 1, Name: "Paciente"},
-		{ID: 2, Name: "Doctor"},
-		{ID: 3, Name: "Admin"},
-	}
-	err = Db.Find(&perfiles).Error
-	if err == gorm.ErrRecordNotFound {
+	var count int64
+	Db.Model(&Perfil{}).Count(&count)
+
+	if count == 0 {
 		fmt.Println("Looks like the profile records are not inserted")
+		perfiles := []Perfil{
+			{ID: 1, Name: "Paciente"},
+			{ID: 2, Name: "Doctor"},
+			{ID: 3, Name: "Admin"},
+		}
+		// Intentar insertar los perfiles
 		if errorInsert := Db.Create(&perfiles).Error; errorInsert != nil {
-			if errorInsert == gorm.ErrDuplicatedKey {
-				fmt.Println("We didnt add the profiles because they already exists")
-			} else {
-				fmt.Println("Couldnt add new entries to the profiles, it may be that the entries already exists?")
-				panic(errorInsert)
+			fmt.Printf("Couldn't add new entries to the profiles: %v\n", errorInsert)
+			panic(errorInsert)
+		} else {
+			fmt.Println("Profile records inserted successfully")
+		}
+	} else {
+		fmt.Println("Profile records already exist")
+	}
+
+	Db.Model(&Medicamento{}).Count(&count)
+
+	if count == 0 {
+		fmt.Println("Looks like the drug records are not inserted")
+		path := "./config/drugs.json"
+		file, err := os.Open(path)
+
+		if err != nil {
+			fmt.Println("FATAL: Could not open json drugs file")
+			panic(err)
+		}
+
+		defer file.Close()
+
+		data, err := io.ReadAll(file)
+		if err != nil {
+			fmt.Println("FATAL: Could not read json drugs file")
+			panic(err)
+		}
+
+		var drugs []Medicamento
+
+		if err := json.Unmarshal(data, &drugs); err != nil {
+			fmt.Println("FATAL: Failed to format json")
+			panic(err)
+		}
+		if errorInsert := Db.Omit("CreatedAt", "UpdatedAt", "DeletedAt").Create(&drugs).Error; errorInsert != nil {
+			fmt.Printf("Couldn't add new entries to drugs: %v\n", errorInsert)
+			panic(errorInsert)
+		} else {
+			fmt.Println("Drug records inserted successfully")
+		}
+	} else {
+		fmt.Println("Drug records already exist")
+	}
+
+	/*
+		perfiles := []Perfil{
+			{ID: 1, Name: "Paciente"},
+			{ID: 2, Name: "Doctor"},
+			{ID: 3, Name: "Admin"},
+		}
+		err = Db.Find(&perfiles).Error
+		if err == gorm.ErrRecordNotFound {
+			fmt.Println("Looks like the profile records are not inserted")
+			if errorInsert := Db.Create(&perfiles).Error; errorInsert != nil {
+				if errorInsert == gorm.ErrDuplicatedKey {
+					fmt.Println("We didnt add the profiles because they already exists")
+				} else {
+					fmt.Println("Couldnt add new entries to the profiles, it may be that the entries already exists?")
+					panic(errorInsert)
+				}
 			}
 		}
-	}
 	*/
 }

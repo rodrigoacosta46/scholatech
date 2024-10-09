@@ -584,7 +584,7 @@ const Profile = () => {  /*
               </div>
               <form action="">
                 <div className="w-full grid grid-cols-3 gap-4 items-center text-slate-600 pt-6 px-2">
-                  Username:
+                  Nombre:
                   <div
                     className="col-span-2 relative"
                     onClick={() => {

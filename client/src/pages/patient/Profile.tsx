@@ -919,8 +919,9 @@ const Profile = () => {
                   </span>
                 </div>
               </Link>
-              <div className={`overflow-hidden rounded-3xl transition-shadow duration-500 ${errView.visible && "shadow-[5px_5px] shadow-yellow-300"}`}>
-                <div className={`bg-yellow-400 text-white p-4 transition-all duration-500 ${errView.visible ? "translate-x-0 visible" : "translate-x-full invisible"}`}>
+              <div className="overflow-hidden relative rounded-3xl p-1">
+                <div className={`absolute bg-yellow-300 rounded-3xl w-full h-full inset-3 transition-opacity duration-500 ${errView.visible ? "opacity-100" : "opacity-0"}`}/>
+                <div className={`bg-yellow-400 text-white p-4 transition-all duration-1000 rounded-3xl ${errView.visible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}`}>
                   <p className="border-b-[1px] w-full font-medium text-xl mb-3">
                     Error
                     <i className="fa-solid fa-circle-info size-fit float-end"></i>

@@ -13,7 +13,6 @@ const Sidebar = () => {
     setModal(!modal);
   }
 
-  console.log(import.meta.env.VITE_SVPATH)
   useEffect(() => {
     setUserView(
       String((window.location.pathname === '/profile') ? 'translate-x-full opacity-0' : '')
@@ -61,7 +60,7 @@ const Sidebar = () => {
               userView
             }
           >
-            <img src={ userInfo.Picture} alt="" className="rounded-full" />
+            <img src={`http://localhost:8000/getImage/profiles/${userInfo.ID}/${userInfo.ID}`} alt="" className="size-36 object-cover rounded-full" />
             <div>
               <p className="text-xl text-white line-clamp-3">{userInfo["Username"]}</p>
               <p className="text-md text-gray-500">{userInfo["Perfil"].Name}</p>

@@ -18,21 +18,21 @@ The ORM will automigrate and generate the tables acording to the structs and its
 If a record is retrieved from the database, the corresponding structure will be used for it.
 */
 type User struct {
-	ID         int        `gorm:"primaryKey"`
-	Username   string     `gorm:"size:50;not null"`
-	Email      string     `gorm:"size:100;not null"`
-	Password   string     `gorm:"size:128;not null"`
-	Telephone  *string    `gorm:"size:50"`
-	Address    *string    `gorm:"size:100"`
-	Speciality *string    `gorm:"size:100"`
-	Gender     string     `gorm:"type:enum('male','female','another');not null"`
-	Birthdate  time.Time  `gorm:"type:date;not null"`
-	Picture    string     `gorm:"size:100;not null;"`
-	CreatedAt  time.Time  `gorm:"type:datetime;not null"`
-	UpdatedAt  *time.Time `gorm:"type:datetime"`
-	DeletedAt  *time.Time `gorm:"type:datetime"`
-	PerfilID   int        `gorm:"not null"`
-	Perfil     Perfil     `gorm:"foreignKey:PerfilID;"` // Relación hasOne
+	ID          int        `gorm:"primaryKey"`
+	Username    string     `gorm:"size:50;not null"`
+	Email       string     `gorm:"size:100;not null"`
+	Password    string     `gorm:"size:128;not null"`
+	Description *string    `gorm:"size:400"`
+	Telephone   *string    `gorm:"size:50"`
+	Address     *string    `gorm:"size:100"`
+	Speciality  *string    `gorm:"size:100"`
+	Gender      string     `gorm:"type:enum('male','female','another');not null"`
+	Birthdate   time.Time  `gorm:"type:date;not null"`
+	CreatedAt   time.Time  `gorm:"type:datetime;not null"`
+	UpdatedAt   *time.Time `gorm:"type:datetime"`
+	DeletedAt   *time.Time `gorm:"type:datetime"`
+	PerfilID    int        `gorm:"not null"`
+	Perfil      Perfil     `gorm:"foreignKey:PerfilID;"` // Relación hasOne
 }
 
 type Turno struct {
@@ -63,7 +63,6 @@ type Medicamento struct {
 	ID          int        `gorm:"primaryKey"`
 	Nombre      string     `gorm:"size:100;not null"`
 	Descripcion string     `gorm:"type:text;not null"`
-	Imagen      string     `gorm:"type:text;not null"`
 	CreatedAt   time.Time  `gorm:"type:datetime;not null;default:CURRENT_TIMESTAMP"`
 	UpdatedAt   *time.Time `gorm:"type:datetime"`
 	DeletedAt   *time.Time `gorm:"type:datetime"`

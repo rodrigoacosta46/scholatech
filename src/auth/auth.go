@@ -104,14 +104,6 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	imgPath := "img/profiles/default/"
-	var picture string
-	if gender == "male" {
-		picture = imgPath + "male.png"
-	} else {
-		picture = imgPath + "fem.png"
-	}
-
 	strRole := req.Role
 	role, err := strconv.Atoi(strRole)
 
@@ -173,7 +165,6 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 		Gender:    gender,
 		Birthdate: parsedDate,
 		PerfilID:  role,
-		Picture:   picture,
 	}
 
 	resultDb := database.Db.Create(&userInsert)

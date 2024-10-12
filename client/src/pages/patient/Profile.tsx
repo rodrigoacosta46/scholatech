@@ -1,20 +1,20 @@
-
 import { Link } from "react-router-dom";
 import { UserInterface, userHook } from "../../hooks/userHook";
 import { roles } from "../../config/roles";
 import Modal from "../../components/Modal";
 import Title from "../../components/Title";
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from "react";
+import axios from "axios";
 
 const SaveUserName = ({ formData, theme, onSave }) => {
   const [username, setUserName] = useState(formData);
   const [isValid, setValidState] = useState(false);
-  const reg = /^(?!.*([A-ZÑÁÉÍÓÚÜ]{1}[a-zñáéíóúü\.\-']+){2,})([A-ZÑÁÉÍÓÚÜ]{1}[a-zñáéíóúü\.\-']+\s?){2,10}$/;
+  const reg =
+    /^(?!.*([A-ZÑÁÉÍÓÚÜ]{1}[a-zñáéíóúü\.\-']+){2,})([A-ZÑÁÉÍÓÚÜ]{1}[a-zñáéíóúü\.\-']+\s?){2,10}$/;
 
   const inputFormat = (value) => {
     setValidState(false);
     if (reg.test(value) && value != formData && value.length < 50) {
-      console.log("que");
       setValidState(true);
       setUserName(value);
     }
@@ -51,8 +51,8 @@ const SaveUserName = ({ formData, theme, onSave }) => {
         />
         <p className="italic text-sm mt-4 w-96 text-center">
           Importante: El nombre de usuario debe ser su nombre real y no más de
-          50 caracteres.
-          Ejemplo: <span className="font-bold">Nicolas Krulewietki</span>
+          50 caracteres. Ejemplo:{" "}
+          <span className="font-bold">Nicolas Krulewietki</span>
         </p>
       </div>
       <button
@@ -134,7 +134,7 @@ const SaveUserMail = ({ formData, theme, onSave }) => {
 
 const SaveUserPassword = ({ theme, onSave }) => {
   const [userpass, setNewPass] = useState({
-    current: null,
+    current: "",
     new: "",
     conf: "",
   });
@@ -152,21 +152,15 @@ const SaveUserPassword = ({ theme, onSave }) => {
   };
 
   const passwordFormat = () => {
-    let reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@\?#~_\-+&])[a-zA-Z0-9!@\?#~_\-+&]{8,}$/;
+    let reg =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@\?#~_\-+&])[a-zA-Z0-9!@\?#~_\-+&]{8,}$/;
     return reg.test(userpass.new);
   };
 
-  const checkInputs = () => {
+  const checkInputs = async() => {
     let st = true;
     let msg = "";
-
-    //  XHR ACA
-    const claveLlamadaDelServidor = "pedro";
-    if (userpass.current != claveLlamadaDelServidor) {
-      st = false;
-      msg += "La contraseña actual es incorrecta.";
-    }
-
+  
     if (!passwordFormat()) {
       st = false;
       msg += "La contraseña nueva no cumple con el formato.";
@@ -184,7 +178,7 @@ const SaveUserPassword = ({ theme, onSave }) => {
       });
     }
 
-    onSave("Password", userpass.new);
+    onSave("Password", {CurrentPassword: userpass.current, NewPassword: userpass.new});
   };
 
   return (
@@ -206,7 +200,7 @@ const SaveUserPassword = ({ theme, onSave }) => {
         <input
           type="password"
           name="current"
-          defaultValue={userpass.current || ''}
+          defaultValue={userpass.current || ""}
           onChange={setNewPassword}
           placeholder="Contraseña actual"
           className="bg-gray-200 p-4 outline-none rounded-2xl  focus:text-slate-800"
@@ -214,7 +208,7 @@ const SaveUserPassword = ({ theme, onSave }) => {
         <input
           type="password"
           name="new"
-          defaultValue={userpass.new || ''}
+          defaultValue={userpass.new || ""}
           onChange={setNewPassword}
           placeholder="Nueva contraseña"
           className="bg-gray-200 p-4 outline-none rounded-2xl  focus:text-slate-800"
@@ -222,7 +216,7 @@ const SaveUserPassword = ({ theme, onSave }) => {
         <input
           type="password"
           name="conf"
-          defaultValue={userpass.conf || ''}
+          defaultValue={userpass.conf || ""}
           onChange={setNewPassword}
           placeholder="Confirmar nueva contraseña"
           className="bg-gray-200 p-4  rounded-2xl outline-none focus:text-slate-800"
@@ -379,7 +373,7 @@ const SaveUserDescription = ({ formData, theme, onSave }) => {
 const SaveUserAddress = ({ formData, theme, onSave }) => {
   const [userdir, setUserDir] = useState(formData);
   const [isValid, setValidState] = useState(false);
-  const reg = /^.{1,100}$/;
+  const reg = /^.{5,100}$/;
 
   const inputFormat = (value) => {
     setValidState(false);
@@ -435,7 +429,7 @@ const SaveUserAddress = ({ formData, theme, onSave }) => {
 const SaveUserProfession = ({ formData, theme, onSave }) => {
   const [userprof, setUserProf] = useState(formData);
   const [isValid, setValidState] = useState(false);
-  const reg = /^.{1,50}$/;
+  const reg = /^.{5,50}$/;
 
   const inputFormat = (value) => {
     setValidState(false);
@@ -454,9 +448,9 @@ const SaveUserProfession = ({ formData, theme, onSave }) => {
       <Title
         txt={
           <>
-            Cambiar dirección de consultorio
+            Cambiar profesión
             <i
-              className={`fa-solid fa-location-dot ms-4 float-end text text-${theme}-800`}
+              className={`fa-solid fa-user-tie ms-4 float-end text text-${theme}-800`}
             ></i>
           </>
         }
@@ -486,33 +480,80 @@ const SaveUserProfession = ({ formData, theme, onSave }) => {
       </button>
     </>
   );
-}
+};
 
-const Profile = () => {  /* 
+const Profile = () => {
+  /* 
     El usuario tiene que poder guardar la cuenta de instagram, vincular instagram a la cuenta de la app
   */
   const { userInfo, userConfig } = userHook();
+  const [picModified, setPicState] = useState<any>({
+    file: null,
+    name: "",
+  });
 
-  const [formStorage, setFormStorage] = useState<UserInterface>({
+  const [formStorage, setFormStorage] = useState({
     ID: userInfo["ID"],
     Username: userInfo["Username"],
     Email: userInfo["Email"],
     Gender: userInfo["Gender"],
     Birthdate: userInfo["Birthdate"],
-    Password: userInfo["Password"],
-    Picture: userInfo["Picture"],
+    Password: {
+      CurrentPassword: "",
+      NewPassword: ""
+    },
+    Picture: "",
     Telephone: userInfo["Telephone"],
     Address: userInfo["Address"] || "",
-    Description: userInfo["Description"] /*|| "" */,     //Solo si el usuario es Doctor
+    Description: userInfo["Description"] || "", //Solo si el usuario es Doctor
     Speciality: userInfo["Speciality"] || "",
-    CreatedAt: userInfo["CreatedAt"],
-    UpdatedAt: userInfo["UpdatedAt"],
-    DeletedAt: userInfo["DeletedAt"],
-    Perfil: {
-      ...userInfo["Perfil"]
-    }
   });
+
+  useEffect(()=>{
+    console.log(formStorage);
+  },[formStorage]);
   
+  const [errView, setErrView] = useState({
+    visible: false,
+    msg: ""
+  })
+
+  const submitFormData = async (e) => {
+    e.preventDefault();
+    try{
+      console.log(formStorage.Picture);
+      console.log(picModified.store);
+      const result = await axios.post(
+        "http://localhost:8000/saveChanges",
+        formStorage,    
+        {
+          headers: {"Content-Type": "application/json;charset=UTF-8"},
+          withCredentials: true 
+        }
+      );
+      console.log(result.data);
+      var res = result.data;
+      if((res).hasOwnProperty("redirect_route")){
+        window.location.href = res.redirect_route
+      }
+    } catch(err){
+      console.log(err.response?.data)
+      var response = err.response?.data;
+
+      if ((response).hasOwnProperty("redirect_route")) {
+        console.log("REDIRECT ROUTE")
+        window.location.href = response.redirect_route;
+      }
+      else {
+        console.log("NO REDIRECT ROUTE")
+      }
+      if ((response).hasOwnProperty("message")) {
+        console.log("THERE IS A MESSAGE")
+        setErrView({visible: true, msg: response.message});
+      }
+    }
+  };
+
   const [isGenderDisabled, setDisableState] = useState(true);
   const [inputModal, setModal] = useState(false);
   const [currentField, setCurrentField] = useState(null);
@@ -533,13 +574,40 @@ const Profile = () => {  /*
   };
 
   const clearFields = () => {
-    setFormStorage({...userInfo});
+    setPicState({store:null,file:null,name:""})
+    setFormStorage({Picture: picModified.store, ...userInfo, Password: {CurrentPassword: "", NewPassword: ""}});
     setFormChange(false);
   };
 
-  useEffect(() => {
-    console.log(formStorage);
-  }, [formStorage]);
+  const onInvalidImage = (e) => {
+    e.target.src = "img/logo.png";
+  };
+
+  const changePicture = (e) => {
+    var val = e.target.files[0];
+    const reader = new FileReader();
+    var base64data;
+
+    reader.onloadend = () => {
+      if (reader.result) {
+        console.log(reader.result);
+        base64data = reader.result.toString().split(',')[1]; // Obtener solo la parte Base64
+        setPicState({
+          store: base64data,
+          file: window.URL.createObjectURL(val),
+          name: val.name,
+        });
+        handleFieldSave("Picture", base64data);
+        console.log(base64data); // Asegúrate de que este log se ejecute después de que se haya leído el archivo
+      } else {
+        console.error("Error: reader.result es null");
+      }
+    }
+    reader.onerror = (err) => {
+      console.log(err);
+    }
+    reader.readAsDataURL(val);
+  };
 
   return (
     <>
@@ -557,11 +625,14 @@ const Profile = () => {  /*
       <div
         className={`max-h-60 bg-${userConfig.theme}-950 flex justify-center gap-2 p-6 opacity-0 animate-[slideIn_2s_ease-in-out_1_forwards]`}
       >
-        <img
-          src="img/Gaben.png"
-          alt="Page LOGO"
-          className="w-36 object-cover rounded-full"
-        />
+        <div className="bg-gray-600 w-48 h-48 rounded-full flex justify-center items-center">
+          <img
+            src={`http://localhost:8000/getImage/profiles/${userInfo.ID}/${userInfo.ID}`}
+            alt=""
+            onError={onInvalidImage}
+            className="size-full rounded-full object-cover"
+          />
+        </div>
         <div className="flex flex-col opacity-0 animate-[fadeIn_4s_ease-in-out_1_forwards]">
           <div className="mx-auto text-4xl text-white text-wrap">
             {userInfo["Username"]}
@@ -579,11 +650,16 @@ const Profile = () => {  /*
               <p className="underline underline-offset-8 decoration-1 decoration-gray-400/80 text-2xl">
                 Configuración de cuenta
               </p>
-              <div onClick={clearFields} className="group w-fit mt-3 float-end transition-all cursor-pointer hover:text-red-700 hover:scale-105">
+              <div
+                onClick={clearFields}
+                className="group w-fit mt-3 float-end transition-all cursor-pointer hover:text-red-700 hover:scale-105"
+              >
                 <i className="fa-regular fa-trash-can text-lg"></i>
-                <span className="underline hidden text-sm group-hover:inline">Descartar cambios</span>
+                <span className="underline hidden text-sm group-hover:inline">
+                  Descartar cambios
+                </span>
               </div>
-              <form action="">
+              <form action="" onSubmit={submitFormData}>
                 <div className="w-full grid grid-cols-3 gap-4 items-center text-slate-600 pt-6 px-2">
                   Nombre:
                   <div
@@ -645,7 +721,7 @@ const Profile = () => {  /*
                     <input
                       type="password"
                       name="password"
-                      value={formStorage['Password']}
+                      value={formStorage["Password"].NewPassword}
                       disabled={true}
                       className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                     />
@@ -675,7 +751,7 @@ const Profile = () => {  /*
                     onClick={() => {
                       setModalState(
                         <SaveUserBirthDate
-                          formData={formStorage['Birthdate']}
+                          formData={formStorage["Birthdate"]}
                           theme={userConfig.theme}
                           onSave={handleFieldSave}
                         />
@@ -686,7 +762,7 @@ const Profile = () => {  /*
                     <input
                       type="date"
                       name="birthdate"
-                      value={formStorage['Birthdate']}
+                      value={formStorage["Birthdate"]}
                       disabled={true}
                       className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                     />
@@ -696,14 +772,29 @@ const Profile = () => {  /*
                     <label htmlFor="profileFile">
                       <i className="fa-regular z-10 fa-pen-to-square hover:text-slate-800 absolute end-1  bg-gray-300"></i>
                     </label>
-                    <div className="flex underline bg-gray-300 px-4 py-2 rounded-2xl text-slate-700">
-                      <img src="img/Gaben.png" alt="" className="w-4 pe-1" />
-                      Pepe el manati andante.png
+                    <div className="flex underline bg-gray-300 px-4 py-1 rounded-2xl text-slate-700 h-10 max-w-72 leading-10">
+                      <img
+                        src={
+                          picModified.file
+                            ? picModified.file
+                            : `http://localhost:8000/getImage/profiles/${userInfo.ID}/${userInfo.ID}`
+                        }
+                        alt=""
+                        onError={onInvalidImage}
+                        className="pe-1 max-h-full"
+                      />
+                      <span className="hidden lg:inline truncate">
+                        {picModified.name ? picModified.name : "foto actual"}
+                      </span>
                     </div>
                     <input
                       type="file"
                       name="picture"
                       id="profileFile"
+                      accept=".png"
+                      onChange={(e) => {
+                        changePicture(e);
+                      }}
                       className="hidden"
                     />
                   </div>
@@ -716,7 +807,7 @@ const Profile = () => {  /*
                           setModalState(
                             <SaveUserDescription
                               //formData={formStorage.descripcion}
-                              formData={formStorage['Description']}
+                              formData={formStorage["Description"]}
                               theme={userConfig.theme}
                               onSave={handleFieldSave}
                             />
@@ -727,7 +818,7 @@ const Profile = () => {  /*
                         <input
                           type="text"
                           name="description"
-                          value={formStorage['Description']}
+                          value={formStorage["Description"]}
                           //value={formStorage.descripcion}
                           disabled={true}
                           className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
@@ -739,7 +830,7 @@ const Profile = () => {  /*
                         onClick={() => {
                           setModalState(
                             <SaveUserAddress
-                              formData={formStorage['Address']}
+                              formData={formStorage["Address"]}
                               theme={userConfig.theme}
                               onSave={handleFieldSave}
                             />
@@ -750,7 +841,7 @@ const Profile = () => {  /*
                         <input
                           type="text"
                           name="address"
-                          value={formStorage['Address']}
+                          value={formStorage["Address"]}
                           disabled={true}
                           className="bg-gray-300 px-4 py-2 w-full rounded-2xl outline-none text-slate-700 text-ellipsis pointer-events-none"
                         />
@@ -761,7 +852,7 @@ const Profile = () => {  /*
                         onClick={() => {
                           setModalState(
                             <SaveUserProfession
-                              formData={formStorage['Speciality']}
+                              formData={formStorage["Speciality"]}
                               theme={userConfig.theme}
                               onSave={handleFieldSave}
                             />
@@ -772,7 +863,7 @@ const Profile = () => {  /*
                         <input
                           type="text"
                           name="department"
-                          value={formStorage['Speciality']}
+                          value={formStorage["Speciality"]}
                           disabled={true}
                           className="bg-gray-300 px-4 py-2 rounded-2xl outline-none text-slate-700 text-ellipsis pointer-events-none"
                         />
@@ -794,8 +885,10 @@ const Profile = () => {  /*
                 </div>
               </form>
               <p className="flex flex-col gap-1 text-sm mt-7">
-                Registrado el: {userInfo["CreatedAt"]} 
-                <p className="italic">Última actualización el: {userInfo["UpdatedAt"]}</p>
+                Registrado el: {userInfo["CreatedAt"]}
+                <p className="italic">
+                  Última actualización el: {userInfo["UpdatedAt"]}
+                </p>
               </p>
             </div>
           </div>
@@ -812,7 +905,7 @@ const Profile = () => {  /*
                 Última Notificación
               </p>
             </div>
-            <div className="m-4">
+            <div className="flex flex-col gap-8 m-4">
               <Link to="/reminders">
                 <div
                   className={`bg-slate-200 p-4 rounded-3xl text-lg cursor-pointer hover:shadow-[5px_5px] hover:shadow-${userConfig.theme}-950 hover:text-white hover:bg-${userConfig.theme}-800 transition-all`}
@@ -826,6 +919,15 @@ const Profile = () => {  /*
                   </span>
                 </div>
               </Link>
+              <div className={`overflow-hidden rounded-3xl transition-shadow duration-500 ${errView.visible && "shadow-[5px_5px] shadow-yellow-300"}`}>
+                <div className={`bg-yellow-400 text-white p-4 transition-all duration-500 ${errView.visible ? "translate-x-0 visible" : "translate-x-full invisible"}`}>
+                  <p className="border-b-[1px] w-full font-medium text-xl mb-3">
+                    Error
+                    <i className="fa-solid fa-circle-info size-fit float-end"></i>
+                  </p>
+                  {errView.msg}
+                </div>
+              </div>
             </div>
           </div>
         </div>

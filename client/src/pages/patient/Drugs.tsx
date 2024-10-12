@@ -184,7 +184,7 @@ const Drugs = () => {
                 className="fa-solid fa-trash absolute end-1 hover:text-red-700 transition-all"
               ></i>
             )}
-            <img src="img/logo.png" alt="" />
+            <img src={`http://localhost:8000/getImage/drugs/${drug.ID}/3`} onError={(e) => e.target.src = "img/logo.png"} alt="" />
             <Title
               txt={drug.Nombre}
               className="overflow-hidden"

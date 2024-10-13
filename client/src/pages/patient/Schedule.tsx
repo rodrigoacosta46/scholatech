@@ -18,7 +18,7 @@ const Schedule = () => {
 
       <div className="relative flex flex-col gap-14 m-8">
         <Calendar scheme={userConfig.theme} />
-        <Section txt="eventos" scheme={userConfig.theme} />
+        <Section txt="Eventos" scheme={userConfig.theme} />
       </div>
     </>
   );

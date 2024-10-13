@@ -147,11 +147,11 @@ const Drugs = () => {
 
       <div className="flex flex-wrap w-full text-end items-center justify-center gap-2 p-4">
         <div className={`flex justify-between bg-white text-${userConfig.theme}-600 gap-4 rounded-full p-2 text-2xl min-w-36 shadow-[2px_2px] shadow-${userConfig.theme}-800`}>
-          <button onClick={()=>page != 1 && setPage(page-1)}>
+          <button onClick={()=>page != 1 && setPage(page-1)} className="transition-all duration-1000 peer">
             <i className="fa-solid fa-circle-left"></i>
           </button>
-          <p key={Math.random()}>{page}</p>
-          <button onClick={()=>page != Math.ceil(displayedDrugs.total/10) && setPage(page+1)}>
+          <p key={Math.random()} className={`animate-fadeIn transition-all duration-100 peer-active:-translate-x-full peer-active:invisible [&:has(+button:active)]:translate-x-full [&:has(+button:active)]:invisible `}>{page}</p>
+          <button onClick={()=>page != Math.ceil(displayedDrugs.total/10) && setPage(page+1)} className="">
             <i className="fa-solid fa-circle-right"></i>
           </button>
         </div>
@@ -184,7 +184,7 @@ const Drugs = () => {
                 className="fa-solid fa-trash absolute end-1 hover:text-red-700 transition-all"
               ></i>
             )}
-            <img src={`http://localhost:8000/getImage/drugs/${drug.ID}/3`} onError={(e) => e.target.src = "img/logo.png"} alt="" />
+            <img src={`http://localhost:8000/getImage/drugs/${drug.ID}/3`} onError={(e:any) => e.target.src = "img/logo.png"} alt="" />
             <Title
               txt={drug.Nombre}
               className="overflow-hidden"

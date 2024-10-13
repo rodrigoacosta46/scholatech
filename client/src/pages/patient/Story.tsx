@@ -1,9 +1,8 @@
-import OpenCard from '../../components/OpenCard';
-import Title from '../../components/Title';
-import Section from '../../components/Section';
-import { userHook } from '../../hooks/userHook';
-import React, { useEffect } from 'react';
-
+import OpenCard from "../../components/OpenCard";
+import Title from "../../components/Title";
+import Section from "../../components/Section";
+import { userHook } from "../../hooks/userHook";
+import React, { useEffect } from "react";
 
 const Story = () => {
   const { userConfig } = userHook();
@@ -19,17 +18,13 @@ const Story = () => {
         <div>
           <Section
             txt="Turnos Pendientes"
-            icon={(<i className="fa-solid fa-clock absolute end-5"></i>).toString()}
+            icon={<i className="fa-solid fa-clock absolute end-5"></i>}
             scheme={userConfig.theme}
           />
           <OpenCard
             className="m-4 text-center"
-            title={
-              <>
-                <i className="fa-solid fa-clock text-gray-400"></i>
-                <div className="ps-2 text-slate-700">Turno sin asignar</div>
-              </>
-            }
+            icon={<i className="fa-solid fa-clock text-gray-400"></i>}
+            title={<div className="ps-2 text-slate-700">Turno sin asignar</div>}
             content={
               <div className="mt-4 m-6 flex flex-wrap justify-evenly gap-3">
                 <p className="font-bold">
@@ -61,18 +56,18 @@ const Story = () => {
         <div>
           <Section
             txt="Turnos Asignados"
-            icon={(<i className="fa-solid fa-clipboard-list absolute end-5"></i>).toString() }
+            icon={<i className="fa-solid fa-clipboard-list absolute end-5"></i>}
             scheme={userConfig.theme}
           />
           <OpenCard
             className="m-4 text-center"
+            icon={
+              <i className="fa-solid fa-clipboard-list text-xl text-gray-700"></i>
+            }
             title={
-              <>
-                <i className="fa-solid fa-clipboard-list text-xl text-gray-700"></i>
-                <div className="ps-2 text-slate-700">
-                  Turno con el especialista Eugene Gutierrez
-                </div>
-              </>
+              <div className="ps-2 text-slate-700">
+                Turno con el especialista Eugene Gutierrez
+              </div>
             }
             content={
               <div className="mt-4 m-6 flex flex-wrap justify-evenly gap-3">
@@ -99,18 +94,16 @@ const Story = () => {
         <div>
           <Section
             txt="Turnos Pasados"
-            icon={(<i className="fa-solid fa-box-archive absolute end-5"></i>).toString()}
+            icon={<i className="fa-solid fa-box-archive absolute end-5"></i>}
             scheme={userConfig.theme}
           />
           <OpenCard
             className="m-4 text-center"
+            icon={<i className="fa-solid fa-check-to-slot text-green-800"></i>}
             title={
-              <>
-                <i className="fa-solid fa-check-to-slot text-green-800"></i>
-                <div className="ps-2 text-slate-700">
-                  Turno Dr.Otaro <span className="font-bold">20/03/29</span>
-                </div>
-              </>
+              <div className="ps-2 text-slate-700">
+                Turno Dr.Otaro <span className="font-bold">20/03/29</span>
+              </div>
             }
             content={
               <div className="relative pt-4 p-8">

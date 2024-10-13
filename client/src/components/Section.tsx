@@ -1,12 +1,17 @@
 import React from 'react';
 
-const Section = ({ txt, icon = '', scheme }) => {
+interface Props {
+  txt: string,
+  icon?: React.ReactNode,
+  scheme: string
+}
+const Section = (props: Props)=> {
   return (
     <p
-      className={`relative border-b-2 border-${scheme}-900 text-2xl text-${scheme}-950 font-thin`}
+      className={`relative border-b-2 border-${props.scheme}-900 text-2xl text-${props.scheme}-950 font-thin`}
     >
-      {txt}
-      {icon}
+      {props.txt}
+      {props.icon}
     </p>
   );
 };

@@ -12,6 +12,7 @@ import (
 
 	"github.com/nicolas-k-cmd/proj-redes/src/cookies"
 	"github.com/nicolas-k-cmd/proj-redes/src/database"
+	"github.com/nicolas-k-cmd/proj-redes/src/enum"
 	"github.com/nicolas-k-cmd/proj-redes/src/structs"
 	"gorm.io/gorm"
 
@@ -180,7 +181,7 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(structs.Response{
 		Message:       "La cuenta ha sido registrada con exito",
-		RedirectRoute: "/profile",
+		RedirectRoute: enum.URLs["profile"].Which(r),
 	})
 }
 
@@ -232,7 +233,7 @@ func LoginAuthHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 			json.NewEncoder(w).Encode(structs.Response{
 				Message:       "La autenticacion fue un exito",
-				RedirectRoute: "/profile",
+				RedirectRoute: enum.URLs["profile"].Which(r),
 			})
 			return
 		}

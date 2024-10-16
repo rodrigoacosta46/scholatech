@@ -7,6 +7,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/gorilla/sessions"
+	"github.com/nicolas-k-cmd/proj-redes/src/enum"
 	"github.com/nicolas-k-cmd/proj-redes/src/env"
 	"github.com/nicolas-k-cmd/proj-redes/src/structs"
 )
@@ -29,7 +30,7 @@ func GetCookiePostMiddleware(w http.ResponseWriter, r *http.Request) (*jwt.Token
 
 	if err != nil || !token.Valid {
 		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(structs.Response{Message: "Token JWT Invalido o Expirado", RedirectRoute: "/login", Authenticated: "true"})
+		json.NewEncoder(w).Encode(structs.Response{Message: "Token JWT Invalido o Expirado", RedirectRoute: enum.URLs["login"].Which(r), Authenticated: "true"})
 		panic("TOKEN INVALIDO")
 	}
 	return token, session
@@ -47,7 +48,7 @@ func JwtMiddleware(next http.Handler) http.Handler {
 		} else {
 			fmt.Println("El usuario NO esta autenticado")
 			w.WriteHeader(http.StatusFound)
-			json.NewEncoder(w).Encode(structs.Response{Message: "Usted debe autenticarse para poder continuar....", Authenticated: "false", RedirectRoute: "/login"})
+			json.NewEncoder(w).Encode(structs.Response{Message: "Usted debe autenticarse para poder continuar....", Authenticated: "false", RedirectRoute: enum.URLs["login"].Which(r)})
 		}
 	})
 
@@ -66,7 +67,7 @@ func AntiJwtMiddleware(next http.Handler) http.Handler {
 		} else {
 			fmt.Println("El usuario SI esta autenticado")
 			w.WriteHeader(http.StatusFound)
-			json.NewEncoder(w).Encode(structs.Response{Message: "Usted ya se encuentra autenticado en el sistema", Authenticated: "true", RedirectRoute: "/profile"})
+			json.NewEncoder(w).Encode(structs.Response{Message: "Usted ya se encuentra autenticado en el sistema", Authenticated: "true", RedirectRoute: enum.URLs["profile"].Which(r)})
 		}
 	})
 }
@@ -105,14 +106,14 @@ func ValidateJWTHandler(w http.ResponseWriter, r *http.Request) {
 	session, err := env.Store.Get(r, env.CookieName)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(structs.Response{Message: "Ocurrio un error al obtener la sesion", RedirectRoute: "/login", Authenticated: "false"})
+		json.NewEncoder(w).Encode(structs.Response{Message: "Ocurrio un error al obtener la sesion", RedirectRoute: enum.URLs["login"].Which(r), Authenticated: "false"})
 		return
 	}
 
 	tokenString, ok := session.Values["jwt"].(string)
 	if !ok {
 		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(structs.Response{Message: "Token JWT No encontrado", RedirectRoute: "/login", Authenticated: "false"})
+		json.NewEncoder(w).Encode(structs.Response{Message: "Token JWT No encontrado", RedirectRoute: enum.URLs["login"].Which(r), Authenticated: "false"})
 		return
 	}
 
@@ -123,12 +124,12 @@ func ValidateJWTHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil || !token.Valid {
 		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(structs.Response{Message: "Token JWT Invalido o Expirado", RedirectRoute: "/logout", Authenticated: "false"})
+		json.NewEncoder(w).Encode(structs.Response{Message: "Token JWT Invalido o Expirado", RedirectRoute: enum.URLs["logout"].Which(r), Authenticated: "false"})
 		return
 	}
 	messagePrint := fmt.Sprintf("El usuario %s se encuentra autenticado", claims.ID)
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(structs.Response{Message: messagePrint, RedirectRoute: "/profile", Authenticated: "true"})
+	json.NewEncoder(w).Encode(structs.Response{Message: messagePrint, RedirectRoute: enum.URLs["profile"].Which(r), Authenticated: "true"})
 }
 
 /*

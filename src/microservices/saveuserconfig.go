@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/nicolas-k-cmd/proj-redes/src/database"
+	"github.com/nicolas-k-cmd/proj-redes/src/enum"
 	Middleware "github.com/nicolas-k-cmd/proj-redes/src/middleware"
 	"github.com/nicolas-k-cmd/proj-redes/src/structs"
 	"golang.org/x/crypto/bcrypt"
@@ -158,7 +159,7 @@ func SaveUserConfig(w http.ResponseWriter, r *http.Request) {
 			if err = os.Mkdir(usDir, os.ModePerm); err != nil {
 				fmt.Println("Error al crear carpeta de usuario", err)
 				w.WriteHeader(http.StatusInternalServerError)
-				json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar imagen"})
+				json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar imagen", Fatal: "true"})
 				return
 			}
 		}
@@ -168,7 +169,7 @@ func SaveUserConfig(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("Error al decodificar base64", err)
 			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar imagen"})
+			json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar imagen", Fatal: "true"})
 			return
 		}
 
@@ -177,7 +178,7 @@ func SaveUserConfig(w http.ResponseWriter, r *http.Request) {
 		if err := os.WriteFile(filePath, img, 0644); err != nil {
 			fmt.Println("Error al formatear archivo de usuario", err)
 			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar imagen"})
+			json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar imagen", Fatal: "true"})
 			return
 		}
 	}
@@ -230,13 +231,13 @@ func SaveUserConfig(w http.ResponseWriter, r *http.Request) {
 	if err = database.Db.Model(&database.User{}).Where("id = ?", usId).Updates(modifiedFields).Error; err != nil {
 		fmt.Println("Error al guardar configuración de usuario", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar imagen"})
+		json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar imagen", Fatal: "true"})
 		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(structs.Response{
 		Message:       "Datos cambiados con exito",
-		RedirectRoute: "/profile",
+		RedirectRoute: enum.URLs["profile"].Which(r),
 	})
 }

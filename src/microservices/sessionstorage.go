@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/nicolas-k-cmd/proj-redes/src/database"
+	"github.com/nicolas-k-cmd/proj-redes/src/enum"
 	Middleware "github.com/nicolas-k-cmd/proj-redes/src/middleware"
 	"github.com/nicolas-k-cmd/proj-redes/src/structs"
 	"gorm.io/gorm"
@@ -22,7 +23,7 @@ func ServeSessionLocalStorage(w http.ResponseWriter, r *http.Request) {
 	id, err := (jwtToken.Claims.GetSubject())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode((structs.Response{Message: "Error al obtener el ID del sujeto", RedirectRoute: "/logout", Authenticated: "false"}))
+		json.NewEncoder(w).Encode((structs.Response{Message: "Error al obtener el ID del sujeto", RedirectRoute: enum.URLs["logout"].Which(r), Authenticated: "false"}))
 	}
 	var user database.User
 	result := database.Db.Omit("Password").Preload("Perfil").First(&user, id)
@@ -33,7 +34,7 @@ func ServeSessionLocalStorage(w http.ResponseWriter, r *http.Request) {
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
 			w.WriteHeader(http.StatusNotFound)
-			json.NewEncoder(w).Encode(structs.Response{Message: "No se ha encontrado el usuario", RedirectRoute: "/login", Authenticated: "false"})
+			json.NewEncoder(w).Encode(structs.Response{Message: "No se ha encontrado el usuario", RedirectRoute: enum.URLs["login"].Which(r), Authenticated: "false"})
 			return
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)

@@ -22,32 +22,29 @@ const Notifications = (props: NotificationsProps) => {
 
   //Axios
   const handleCardReadState = (e) => {
-    console.log("xd", e.target)
     let states = {
       "UNREAD": "READ",
       "READ": "UNREAD"
     }
 
     if (read != "READ") setReadState(states[read]);
-    console.log(states[read]);
-    console.log(read);
   }
 
   return (
     <div
-      className={`grid overflow-hidden rounded-3xl transition-all duration-1000 
+      className={`overflow-hidden rounded-3xl transition-all duration-1000
         ${
-          !visible ? "max-h-0 p-px " : "max-h-[490px] lg:max-h-60 p-2 "
+          !visible ? "flag max-h-0 p-px" : "max-h-96 p-2"
         }
         ${
-          read == "UNREAD" && "animate-pulse text-yellow-300"
+          read == "UNREAD" && "animate-pulse text-yellow-400"
         }
         `
      }
      onClick={handleCardReadState}
     >
       <OpenCard
-        className={`transition-all duration-1000 ${
+        className={`transition-[transform,opacity] duration-1000 ${
           !visible ? "translate-x-full opacity-0" : "translate-x-0 opacity-100"
         }`}
         icon={<i className="fa-solid fa-circle-info text-xl"></i>}
@@ -62,7 +59,7 @@ const Notifications = (props: NotificationsProps) => {
       >
         <div
           onClick={handleDelete}
-          className="transition-all duration-1000 cursor-pointer float-end hover:text-red-500 hover:after:content-['Eliminar'] after:underline text-gray-400 text-sm"
+          className="transition-all cursor-pointer float-end hover:text-red-500 after:transition-all after:delay-200 hover:after:text-sm after:content-['Eliminar'] after:text-[0px] after:underline text-gray-400 text-sm"
         >
           <i className="fa-solid fa-trash"></i>
         </div>

@@ -738,7 +738,7 @@ const Profile = () => {
                       onChange={(e) => {
                         handleFieldSave("Gender", e.target.value);
                       }}
-                      defaultValue={formStorage["Gender"]}
+                      value={formStorage["Gender"]}
                       className="transition-all outline-none bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700"
                     >
                       <option value="male">Masculino</option>

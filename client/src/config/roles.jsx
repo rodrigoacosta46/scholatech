@@ -38,6 +38,18 @@ export const config = {
         route: "/reminders",
         icon: "fa-solid fa-envelope pe-2",
       },
+      "Historial de Consultas": {
+        route: "/assignments",
+        icon: "fa-solid fa-box-archive pe-2"  
+      },
+      Tratamientos: {
+        route: "/treatments",
+        icon: "fa-solid fa-stethoscope pe-2"
+      },
+      Calendario: {
+        route: "/schedule",
+        icon: "fa-regular fa-calendar-days pe-2",
+      },
       "Información de medicamentos": {
         route: "/drugs",
         icon: "fa-solid fa-prescription-bottle-medical pe-2",

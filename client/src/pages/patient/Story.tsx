@@ -18,7 +18,7 @@ const Story = () => {
         <div>
           <Section
             txt="Turnos Pendientes"
-            icon={<i className="fa-solid fa-clock absolute end-5"></i>}
+            icon={<i className="fa-solid fa-clock"></i>}
             scheme={userConfig.theme}
           />
           <OpenCard
@@ -56,7 +56,7 @@ const Story = () => {
         <div>
           <Section
             txt="Turnos Asignados"
-            icon={<i className="fa-solid fa-clipboard-list absolute end-5"></i>}
+            icon={<i className="fa-solid fa-clipboard-list"></i>}
             scheme={userConfig.theme}
           />
           <OpenCard
@@ -94,7 +94,7 @@ const Story = () => {
         <div>
           <Section
             txt="Turnos Pasados"
-            icon={<i className="fa-solid fa-box-archive absolute end-5"></i>}
+            icon={<i className="fa-solid fa-box-archive"></i>}
             scheme={userConfig.theme}
           />
           <OpenCard

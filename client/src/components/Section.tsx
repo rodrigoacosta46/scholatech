@@ -8,10 +8,10 @@ interface Props {
 const Section = (props: Props)=> {
   return (
     <p
-      className={`relative border-b-2 border-${props.scheme}-900 text-2xl text-${props.scheme}-950 font-thin`}
+      className={`border-b-2 border-${props.scheme}-900 text-2xl text-${props.scheme}-950 font-thin`}
     >
       {props.txt}
-      {props.icon}
+      <span className="float-end">{props.icon}</span>
     </p>
   );
 };

@@ -200,17 +200,17 @@ const Register = () => {
               <option value="2">Doctor</option>
             </select>
           </label>
+          {response && (
+          <div className="w-80 mx-auto bg-yellow-400 text-white font-medium text-center p-4">
+            {response["message"]}
+          </div>
+        )}
           <input
             type="submit"
             id="submit"
             className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer  hover:text-white hover:bg-green-800 transition-all duration-75"
           />
         </div>
-        {response && (
-          <div className="w-80 mx-auto text-yellow-300 font-medium text-center mt-8">
-            {response["message"]}
-          </div>
-        )}
         <Link
           to="/login"
           className="text-sm text-start text-green-700 underline mt-8"

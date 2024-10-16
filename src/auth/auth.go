@@ -188,6 +188,11 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 Same thing as the RegisterAuthHandler but for login
 */
 
+type authUser struct {
+	Password string
+	ID       int
+}
+
 func LoginAuthHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -204,9 +209,10 @@ func LoginAuthHandler(w http.ResponseWriter, r *http.Request) {
 	username := req.Username
 	password := req.Password
 	fmt.Println("username:", username, "password:", password)
-	var hash string
 
-	if err := database.Db.Model(&database.User{}).Select("password").Where("username = ?", username).Scan(&hash).Error; err != nil {
+	userData := authUser{}
+
+	if err := database.Db.Model(&database.User{}).Select("password", "id").Where("username = ?", username).Scan(&userData).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			fmt.Println("error selecting Hash in db by Username")
 			w.WriteHeader(http.StatusUnauthorized)
@@ -218,10 +224,11 @@ func LoginAuthHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	} else {
-		err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+		fmt.Println(userData.Password)
+		err = bcrypt.CompareHashAndPassword([]byte(userData.Password), []byte(password))
 		// returns nil on succcess
 		if err == nil {
-			cookies.CreateHandler(w, r, 1)
+			cookies.CreateHandler(w, r, userData.ID)
 			w.WriteHeader(http.StatusOK)
 			json.NewEncoder(w).Encode(structs.Response{
 				Message:       "La autenticacion fue un exito",

@@ -175,7 +175,7 @@ const Drugs = () => {
             key={"n-"+page+i}
             onClick={() => modalSetState(i)}
             style={{ animationDelay: i * 0.1 + "s" }}
-            className="opacity-0 animate-fadeIn cursor-pointer relative "
+            className="opacity-0 animate-fadeIn cursor-pointer relative overflow-hidden"
             scheme={userConfig.theme}
           >
             {userInfo.Perfil.Name == "Admin" && (
@@ -184,13 +184,13 @@ const Drugs = () => {
                 className="fa-solid fa-trash absolute end-1 hover:text-red-700 transition-all"
               ></i>
             )}
-            <img src={`http://localhost:8000/getImage/drugs/${drug.ID}/3`} onError={(e:any) => e.target.src = "img/logo.png"} alt="" />
+            <img src={`http://localhost:8000/getImage/drugs/${drug.ID}/3`} onError={(e:any) => e.target.src = "img/logo.png"} alt="" className="w-auto max-h-96"/>
             <Title
               txt={drug.Nombre}
               className="overflow-hidden"
               scheme={userConfig.theme}
             />
-            <p className="text-slate-500 m-3 line-clamp-4">
+            <p className="text-slate-500 m-2 break-all line-clamp-4">
               {drug.Descripcion}
             </p>
           </Card>

@@ -26,7 +26,7 @@ func ServeImages(w http.ResponseWriter, r *http.Request) {
 			} else {
 				fmt.Printf("Error de consulta en serveimage: %v\n", err)
 				w.WriteHeader(http.StatusInternalServerError)
-				json.NewEncoder(w).Encode(structs.Response{Message: "Error al localizar imagen XD " + reqDir + "/" + vars["file"]})
+				json.NewEncoder(w).Encode(structs.Response{Message: "Error al localizar imagen" + reqDir + "/" + vars["file"]})
 				return
 			}
 		} else {

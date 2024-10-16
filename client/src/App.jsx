@@ -20,6 +20,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { roles } from "./config/roles";
 import List from "./pages/List";
 import React from "react";
+import Assignments from "./pages/patient/Assignments";
+import Treatments from "./pages/patient/Treatments";
 
 function App() {
   console.log(import.meta.env.VITE_SVPATH);
@@ -36,10 +38,16 @@ function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="drugs" element={<Drugs />} />
             <Route path="schedule" element={<Schedule />} />
-            <Route path="story" element={<Story />} />
             <Route path="reminders" element={<Reminders />} />
-            <Route path="doctors" element={<Doctors />} />
             <Route path="select/:uuid" element={<Select />} />
+            <Route element={<ProtectedRoute bypassRole={roles.pacient}/>}>
+              <Route path="story" element={<Story />} />
+              <Route path="doctors" element={<Doctors />} />
+            </Route>
+            <Route element={<ProtectedRoute bypassRole={roles.doctor}/>}>
+              <Route path="assignments" element={<Assignments />} />
+              <Route path="treatments" element={<Treatments />} />
+            </Route>
             <Route element={<ProtectedRoute bypassRole={roles.admin}/>}>
               <Route path="list" element={<List />} />
             </Route>

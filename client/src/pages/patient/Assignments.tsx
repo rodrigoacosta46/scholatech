@@ -135,7 +135,7 @@ const registros = [
           icon={<i className="fa-solid fa-clipboard-question"></i>}
           scheme={userConfig.theme}
         />
-        <Scroller loader={() => handle("s-1")} className="animate-slideIn my-2">
+        <Scroller loader={() => handle("s-1")} className="animate-[slideIn_2s] my-2">
           {Array.from({ length: qry["s-1"] }).map((_,i) => (
             <div key={"k"+i} className="opacity-0 animate-fadeIn flex flex-col flex-shrink-0 max-w-[280px] h-fit bg-white rounded-xl shadow-[2px_2px] shadow-gray-400 p-4">
               <img
@@ -191,7 +191,7 @@ const registros = [
           icon={<i className="fa-solid fa-clock"></i>}
           scheme={userConfig.theme}
         />
-        <Scroller loader={() => handle("s-2")} className="animate-slideIn my-2">
+        <Scroller loader={() => handle("s-2")} className="animate-[slideIn_2s] my-2">
           {Array.from({ length: qry["s-2"] }).map((_,i) => (
             <div key={"k"+i} className="relative animate-fadeIn flex flex-col flex-shrink-0 max-w-[280px] h-fit p-4 bg-white rounded-xl shadow-[2px_2px] shadow-gray-400 transition-all [&:has(>label>input:checked)]:shadow-red-500">
               <label className="cursor-pointer bg-red-600 absolute -top-1 end-1 rounded-lg p-2 text-white">
@@ -335,7 +335,7 @@ const registros = [
             </span>
           </label>
         </form>
-        <Scroller loader={() => handle("s-3")} className="animate-slideIn my-2">
+        <Scroller loader={() => handle("s-3")} className="animate-[slideIn_2s] my-2">
           {Array.from({ length: qry["s-3"] }).map((_,i) => (
             <div key={"k"+i} className="relative animate-fadeIn flex flex-col flex-shrink-0 max-w-[280px] h-fit bg-white rounded-xl shadow-[2px_2px] shadow-green-700 p-4">
               <i className="fa-solid fa-calendar-check absolute -top-1 -end-1 p-2 text-white bg-green-700 rounded-full"></i>

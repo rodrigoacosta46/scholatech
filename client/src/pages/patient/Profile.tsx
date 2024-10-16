@@ -575,7 +575,7 @@ const Profile = () => {
 
   const clearFields = () => {
     setPicState({store:null,file:null,name:""})
-    setFormStorage({Picture: picModified.store, ...userInfo, Password: {CurrentPassword: "", NewPassword: ""}});
+    setFormStorage({Picture: "", ...userInfo, Password: {CurrentPassword: "", NewPassword: ""}});
     setFormChange(false);
   };
 

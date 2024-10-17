@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 /*
 interface Props {
@@ -11,17 +11,20 @@ interface Props {
 
 const Scroller:React.FC<any> = ({loader, className, children, ...props}) => {
   const container = React.useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(container.current?.scrollLeft);
 
   const handleScroll = (tX) => {
-    
-    const { scrollLeft, scrollWidth, clientWidth }:any = container.current;
-    
-    if (scrollLeft + clientWidth >= scrollWidth - 280)
-      loader(container.current);
-
     container.current?.scrollBy({ left: tX, behavior: "smooth" });
+    setScrolled(container.current?.scrollLeft);
   };
 
+  useEffect(() => {  
+    let { scrollLeft, scrollWidth, clientWidth }:any = container.current;
+
+    if ( scrollLeft + clientWidth >= scrollWidth - 280){
+      loader();
+    }
+  }, [scrolled]);
   
   return (
     <div className={`grid relative overflow-hidden ${className}`} {...props}>
@@ -38,6 +41,7 @@ const Scroller:React.FC<any> = ({loader, className, children, ...props}) => {
         <i className="fa-solid fa-chevron-right absolute text-4xl top-40 end-0"></i>
       </button>
       <div
+        onScroll={(e:any) => setScrolled(e.target.scrollLeft)}
         ref={container}
         className="flex [justify-content:safe_center] h-fit gap-4 py-1 px-8 overflow-x-auto no-scrollbar snap-x snap-mandatory"
       >

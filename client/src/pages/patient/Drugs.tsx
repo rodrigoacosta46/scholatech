@@ -184,7 +184,7 @@ const Drugs = () => {
                 className="fa-solid fa-trash absolute end-1 hover:text-red-700 transition-all"
               ></i>
             )}
-            <img src={`http://localhost:8000/getImage/drugs/${drug.ID}/3`} onError={(e:any) => e.target.src = "img/logo.png"} alt="" className="w-auto max-h-96"/>
+            <img src={`http://localhost:8000/getImage/drugs/${drug.ID}/0`} onError={(e:any) => e.target.src = "img/logo.png"} alt="" className="w-auto max-h-96"/>
             <Title
               txt={drug.Nombre}
               className="overflow-hidden"

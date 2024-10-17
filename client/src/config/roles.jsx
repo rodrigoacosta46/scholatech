@@ -42,7 +42,7 @@ export const config = {
         route: "/assignments",
         icon: "fa-solid fa-box-archive pe-2"  
       },
-      Tratamientos: {
+      Diagnosticos: {
         route: "/treatments",
         icon: "fa-solid fa-stethoscope pe-2"
       },

@@ -38,5 +38,5 @@ func gorillaRouter() {
 	protectedRoutes.HandleFunc("/getImage/{dir}/{id:[0-9]+}/{file}", microservices.ServeImages)
 	protectedRoutes.HandleFunc("/saveChanges", microservices.SaveUserConfig)
 	fmt.Println("Database is ready for running")
-	http.ListenAndServe(":8000", r)
+	http.ListenAndServe("0.0.0.0:8000", r)
 }

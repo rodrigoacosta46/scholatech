@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const Log = () => {
+  const [visualizeInput, setInputView] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -63,7 +64,7 @@ const Log = () => {
   return (
       <form onSubmit={handleSubmit} method="POST">
         <div className={"w-96 bg-white p-8 my-4 border-b-2 border-e-2 shadow-lg rounded-sm overflow-hidden animate-slideIn transition-all duration-1000 " + (response ? "border-yellow-400" : "border-green-800")}>
-          <p className="text-4xl text-green-800 text-center py-12">Login</p>
+          <p className="text-4xl text-green-800 text-center py-12">Inicio de sesión</p>
           <div className="flex flex-col gap-2 relative">
             <label htmlFor="username" className="text-green-950 mb-2 select-none">
               <input
@@ -75,12 +76,12 @@ const Log = () => {
                 value={formData.username}
               />
               <span className={(formData.username ? "bottom-14" : "bottom-[2.1rem]") + " peer-focus:bottom-14 relative start-4 bg-white transition-all"}>
-                Username
+                Nombre
               </span>
             </label>
-            <label htmlFor="password" className="text-green-950 mb-2 select-none">
+            <label htmlFor="password" className="text-green-950 mb-2 select-none relative">
               <input
-                type="text"
+                type={visualizeInput ? "text" : "password"}
                 name="password"
                 id="password"
                 className="peer w-full p-2 border border-gray-300 focus:outline focus:outline-1 focus:outline-green-600"
@@ -88,8 +89,11 @@ const Log = () => {
                 value={formData.password}
               />
               <span className={(formData.password ? "bottom-14" : "bottom-[2.1rem]") + " peer-focus:bottom-14 relative start-4 bg-white transition-all"}>
-                Password
+                Contraseña
               </span>
+              <button type="button" onClick={()=>{ setInputView(!visualizeInput); }} className="absolute end-2 bottom-8 peer-[&:not(:placeholder-shown):invalid]:text-red-500">
+                <i className={`fa-solid ${!visualizeInput ? "fa-eye" : "fa-eye-slash"}`}></i>
+              </button>
             </label>
             <label htmlFor="remind" className="flex gap-[2px]">
               <input
@@ -102,6 +106,7 @@ const Log = () => {
             </label>
             <input
               type="submit"
+              value="Iniciar"
               id="submit"
               className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer hover:text-white hover:bg-green-800 transition-all duration-75"
             />

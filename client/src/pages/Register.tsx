@@ -83,7 +83,7 @@ const Register = () => {
   return (
     <form onSubmit={handleSubmit} method="POST" autoComplete="off">
       <div className="bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm my-4 overflow-hidden animate-slideIn">
-        <p className="text-4xl text-green-800 text-center py-12">Register</p>
+        <p className="text-4xl text-green-800 text-center py-12">Registrarse</p>
         <div className="flex flex-col gap-4 relative w-80">
           <label htmlFor="email" className="text-green-950 mb-2 select-none relative">
             <input
@@ -125,7 +125,7 @@ const Register = () => {
                 " peer-focus:bottom-8 peer-[&:not(:placeholder-shown):invalid]:text-red-500 absolute start-2 bg-white transition-all"
               }
             >
-              Username
+              Nombre
             </span>
           </label>
           <label htmlFor="password" className="text-green-950 mb-2 select-none relative">
@@ -147,9 +147,9 @@ const Register = () => {
                 " peer-focus:bottom-8 peer-[&:not(:placeholder-shown):invalid]:text-red-500 peer-checked:bottom-8 absolute start-2 bg-white transition-all"
               }
             >
-              Password
+              Contraseña
             </span>
-            <button onClick={()=>{ setInputView(!visualizeInput); }} className="absolute end-2 bottom-2 peer-[&:not(:placeholder-shown):invalid]:text-red-500">
+            <button type="button" onClick={()=>{ setInputView(!visualizeInput); }} className="absolute end-2 bottom-2 peer-[&:not(:placeholder-shown):invalid]:text-red-500">
               <i className={`fa-solid ${!visualizeInput ? "fa-eye" : "fa-eye-slash"}`}></i>
             </button>
           </label>
@@ -207,6 +207,7 @@ const Register = () => {
         )}
           <input
             type="submit"
+            value="Registrarse"
             id="submit"
             className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer  hover:text-white hover:bg-green-800 transition-all duration-75"
           />

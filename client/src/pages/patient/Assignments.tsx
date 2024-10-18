@@ -210,18 +210,13 @@ const registros = [
                   </p>
                 </details>
                 <button className="bg-slate-800 text-white rounded-lg p-2">
-                	<i class="fa-solid fa-clipboard me-1"></i>
+                	<i className="fa-solid fa-clipboard me-1"></i>
                 	Realizar diagnostico
                 </button>
               </div>
             </div>
           ))}
         </Scroller>
-        <Section
-          txt="Consultas Pasadas"
-          icon={<i className="fa-solid fa-clipboard-check"></i>}
-          scheme={userConfig.theme}
-        />
       </div>
     </>
   );

@@ -36,7 +36,7 @@ const Select = () => {
                   />
                 </div>
                 <p>
-                  <span className="font-bold">Username:</span> Octavio Pizarro
+                  <span className="font-bold">Nombre:</span> Octavio Pizarro
                 </p>
                 <p>
                   <span className="font-bold">Ocupación:</span> Médico de

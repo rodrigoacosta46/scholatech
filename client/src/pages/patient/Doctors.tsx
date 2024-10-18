@@ -1,39 +1,53 @@
-import Card from '../../components/Card';
-import Title from '../../components/Title';
-import Searchbar from '../../components/Searchbar';
-import Modal from '../../components/Modal';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { userHook } from '../../hooks/userHook';
-import Section from '../../components/Section';
-import React from 'react';
+import Card from "../../components/Card";
+import Title from "../../components/Title";
+import Searchbar from "../../components/Searchbar";
+import Modal from "../../components/Modal";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { userHook } from "../../hooks/userHook";
+import Section from "../../components/Section";
+import React from "react";
+import Scroller from "../../components/Scroller";
 
 const Doctors = () => {
   const { userConfig } = userHook();
+  const [doctors, setDoctors] = useState(0);
   const [modal, setModal] = useState(false);
   const modalSetState = () => {
     setModal(!modal);
   };
 
-  const docs = getItems();
+  const docPagination = () => {
+    setDoctors((prev) => prev + 5);
+  };
 
-  function getItems() {
+  useEffect(() => {
+    docPagination();
+  },[]);
+
+  const getItems = () => {
     //Reemplazar por fetch api
     let items: React.JSX.Element[] = [];
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < doctors; i++) {
       items.push(
         <Card
-          key={'n-' + i}
+          key={"n-" + i}
+          id={i}
           onClick={modalSetState}
-          style={{ animationDelay: i * 0.1 + 's' }}
-          className="opacity-0 animate-fadeIn cursor-pointer overflow-hidden"
+          className="relative opacity-0 animate-fadeIn flex flex-col flex-shrink-0 max-w-[280px] cursor-pointer overflow-hidden"
           scheme={userConfig!["theme"]}
         >
           <img src="img/Gaben.png" alt="" className="h-80 object-cover" />
           <p className="underline underline-offset-4 decoration-green-900 mt-4 text-center">
             Dr. Octavio Pizarro
           </p>
+          {i == 0 && 
+            <div className="bg-gray-600/40 text-gray-400 absolute top-0 start-0 h-full w-full flex flex-col items-center justify-center">
+              <i className="fa-solid fa-clock text-6xl"></i>
+              Turno pendiente
+            </div>
+          }
         </Card>
       );
     }
@@ -75,25 +89,7 @@ const Doctors = () => {
       <div className="w-full p-14 mt-12 flex flex-col gap-y-11">
         <div>
           <Section txt="Últimos turnos" scheme={userConfig.theme} />
-
-          <div className="grid place-content-evenly grid-cols-[repeat(auto-fit,minmax(250px,1fr))] p-4 gap-4">
-            <Card
-              key={'n-'}
-              onClick={modalSetState}
-              className="relative opacity-0 animate-fadeIn cursor-pointer overflow-hidden"
-              scheme={userConfig.theme}
-            >
-              <img src="img/Gaben.png" alt="" className="h-80 object-cover" />
-              <p className="underline underline-offset-4 decoration-green-900 mt-4 text-center">
-                Dr. Octavio Pizarro
-              </p>
-              <div className="bg-gray-600/40 text-gray-400 absolute top-0 start-0 h-full w-full flex flex-col items-center justify-center">
-                <i className="fa-solid fa-clock text-6xl"></i>
-                Turno pendiente
-              </div>
-            </Card>
-            {docs.slice(0, 4)}
-          </div>
+          <Scroller loader={docPagination} className="my-4 animate-[slideIn_1s]">{getItems().filter((_,i)=> i<5 )}</Scroller>
         </div>
         <div>
           <Section txt="Especialistas" scheme={userConfig.theme} />
@@ -109,9 +105,7 @@ const Doctors = () => {
               className="bg-green-800 text-white p-2 outline-none"
               defaultValue="none"
             >
-              <option value="none">
-                Especialidad
-              </option>
+              <option value="none">Especialidad</option>
               <option value="">Cardiología</option>
               <option value="">Cardiología</option>
             </select>
@@ -121,16 +115,12 @@ const Doctors = () => {
               className="bg-green-800 text-white p-2 outline-none"
               defaultValue="none"
             >
-              <option value="none">
-                Género
-              </option>
+              <option value="none">Género</option>
               <option value="">Masculino</option>
               <option value="">Femenino</option>
             </select>
           </div>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] p-4 gap-4">
-            {docs}
-          </div>
+          <Scroller loader={docPagination} className="my-4">{getItems().filter((_,i) => i>0)}</Scroller>
         </div>
       </div>
     </>

@@ -6,6 +6,9 @@ import { userHook } from "../../hooks/userHook";
 
 const Treatments = () => {
   const { userInfo, userConfig } = userHook();
+  const [data, setData] = useState(5);
+  const [arrInputs, setArrInputs] = useState<React.ReactNode[]>([]);
+  const pageContainer = useRef(null);
   const [formView, setFormView] = useState(false);
   const [formStorage, setFormStorage] = useState({
     motive: "",
@@ -42,31 +45,50 @@ const Treatments = () => {
     e.preventDefault();
     if (e.target.reportValidity()) console.log("id submit");
   };
-  
-  const [data, setData] = useState(5);
-  const pageContainer = useRef(null);
+
+  useEffect(()=>{
+    const observer = new IntersectionObserver(appendData, {threshold: .7});
+    if (pageContainer.current != null)
+      observer.observe(pageContainer.current);
+
+    return () => {
+      if (observer) observer.disconnect();
+    }
+  },[pageContainer]);
   
   const appendData = (entries) => {
-  console.log(entries[0]);
+    console.log(":v")
   	if(entries[0].isIntersecting){
-  		console.log(data+5);
-  		setData(data+5);
-  		observer.unobserve(pageContainer.current);
-  		observer.observe(pageContainer.current);
+  		setData(prevData => {
+        return prevData + 5;
+      });
   	}
-  		
   }
-  const paginatorOptions = {
-  	root: null,
-  	rootMargin: "0px",
-  	thresold: 0.5
-  }
+
+  useEffect(() => {
+    inRows();
+  },[])
   
-  useEffect(()=>{
-  const observer = new IntersectionObserver(appendData, paginatorOptions);
-  if (pageContainer.current != null)
-  	observer.observe(pageContainer.current);
-  },[pageContainer]);
+  const inRows = () => {
+    setArrInputs(prev => 
+      [...prev,
+        <>          
+          <select name="drug[]" className="outline-none">
+            <option value="">Paracetamol</option>
+            <option value="">Omeprazol</option>
+            <option value="">Aspirina</option>
+          </select>
+          <input type="text" name="amount[]" placeholder="Cantidad" className="transition-all outline-blue-600 focus:outline-offset-2"/>
+          <input type="text" name="time[]" placeholder="Cada cuanto" className="transition-all outline-blue-600 focus:outline-offset-2"/> 
+        </>
+      ]
+    );
+  }
+
+  const exRows = () => {
+    let last = arrInputs.length-1;
+    if(last != 0) setArrInputs(prev => prev.slice(0, last));
+  }
 
   return (
     <>
@@ -76,7 +98,7 @@ const Treatments = () => {
         scheme={userConfig.theme}
       />
 
-      <div className="m-12 space-y-32">
+      <div className="relative m-12 space-y-32">
         <div className="overflow-hidden max-h-fit">
           <Section
             txt="Nuevo diagnostico"
@@ -120,7 +142,7 @@ const Treatments = () => {
                     </span>
                     <input
                       type="text"
-                      className="transition-all text-[0px] peer-checked:text-base"
+                      className="transition-all text-[0px] peer-checked:text-base outline-none border-b-[1px] border-blue-600 bg-transparent"
                       placeholder="Nombre del paciente"
                       required
                     />
@@ -149,9 +171,9 @@ const Treatments = () => {
                     </span>
                     <input
                       type="text"
-                      className="transition-all text-[0px] peer-checked:text-base"
+                      className="transition-all text-[0px] peer-checked:text-base  outline-none border-b-[1px] border-blue-600 bg-transparent"
                       placeholder="Motivo de consulta"
-                      requiredpageContainer
+                      required
                     />
                   </label>
                      <label
@@ -169,7 +191,7 @@ const Treatments = () => {
                     </span>
                     <input
                       type="text"
-                      className="transition-all text-[0px] peer-checked:text-base"
+                      className="transition-all text-[0px] peer-checked:text-base  outline-none border-b-[1px] border-blue-600 bg-transparent"
                       placeholder="Fecha de consulta"
                       required
                     />
@@ -189,7 +211,7 @@ const Treatments = () => {
                     </span>
                     <input
                       type="text"
-                      className="transition-all text-[0px] peer-checked:text-base"
+                      className="transition-all text-[0px] peer-checked:text-base  outline-none border-b-[1px] border-blue-600 bg-transparent"
                       placeholder="Solicitud de consulta"
                       required
                     />
@@ -197,7 +219,7 @@ const Treatments = () => {
                   </div>
                   <hr className="my-4" />
                   <p className="text-2xl text-center">- Resultados -</p>
-                  <div className="relative bg-gray-200 flex flex-wrap justify-evenly text-center gap-3 p-12 my-2">
+                  <div className="relative bg-gray-200 flex flex-wrap justify-evenly text-center gap-3 p-12 my-2 space-y-2">
                      <label
                     className="underline underline-offset-4 ms-2"
                     htmlFor="checkDi"
@@ -213,31 +235,24 @@ const Treatments = () => {
                     </span>
                     <input
                       type="text"
-                      className="transition-all text-[0px] peer-checked:text-base"
+                      className="transition-all text-[0px] peer-checked:text-base outline-none border-b-[1px] border-blue-600 bg-transparent"
                       placeholder="Diagnostico final"
                       required
                     />
                   </label> 
-                  <textarea placeholder="Notas" rows={5} className="w-full"></textarea>
-                    <label
-                    className="underline underline-offset-4 ms-2"
-                    htmlFor="checkMe"
-                  >
-                    <input
-                      type="checkbox"
-                      id="checkMe"
-                      hidden={true}
-                      className="peer"
-                    />
-                    <span className="transition-all text-base peer-checked:text-[0px]">
-                      Medicacion asignada
-                    </span>
-                    <input
-                      type="text"
-                      className="transition-all text-[0px] peer-checked:text-base"
-                      placeholder="Paracetamol,Penicilina..."
-                    />
-                  </label> 
+                  <textarea placeholder="Notas" rows={5} className="w-full outline-none p-2"></textarea>
+                  <div className="font-bold">
+                    Medicación asignada: *opcional*
+                    <div className="relative grid grid-cols-3 border-2 border-dashed border-slate-400 gap-4 p-2 mt-3 w-full">
+                      <div className="absolute end-0 -top-7">
+                        <button onClick={inRows} className="bg-blue-950 text-white px-1 rounded-full"><i className="fa-solid fa-plus"></i></button>
+                        <button onClick={exRows} className="bg-red-950 text-white px-1 rounded-full"><i className="fa-solid fa-minus"></i></button>
+                      </div>
+                      {
+                        arrInputs
+                      }
+                    </div>
+                  </div>
                   </div>
                   <input type="submit" value="...Registrar diagnostico"  className="cursor-pointer absolute end-0 bottom-0 italic underline underline-offset-4 text-blue-600"/>
                 </div>
@@ -245,11 +260,11 @@ const Treatments = () => {
             />
           </form>
         </div>
-        <div ref={pageContainer}>
+        <div>
           <Section txt="Resultados" scheme={userConfig.theme} />
           <form
           onSubmit={submitForm}
-          className="flex flex-wrap gap-4 w-full bg-blue-700 justify-around items-center text-white my-4 p-4"
+          className="flex flex-wrap gap-4 w-full bg-blue-700 justify-around items-center text-white my-4 p-5"
         >
           <label htmlFor="formSubmit" className="cursor-pointer select-none">
             <input
@@ -340,7 +355,7 @@ const Treatments = () => {
         { Array.from({ length: data }).map((_,i) => (
           <OpenCard
           	key={"k-"+i}
-            className="m-4 text-center"
+            className="my-4 text-center animate-slideIn"
             icon={<i className="fa-solid fa-clipboard-check text-green-700"></i>}
             title={
               <div className="ps-2 text-slate-700">
@@ -405,6 +420,7 @@ const Treatments = () => {
           />
          ))}
         </div>
+        <div ref={pageContainer} className="absolute -bottom-14 mx-auto my-0 start-0 end-0 bg-white size-14 rounded-full border-8 border-green-400 border-t-8 border-t-blue-950 animate-spin"></div>
       </div>
     </>
   );

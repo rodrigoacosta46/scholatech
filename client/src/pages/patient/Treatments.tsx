@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Title from "../../components/Title";
 import Section from "../../components/Section";
 import OpenCard from "../../components/OpenCard";
@@ -7,6 +7,66 @@ import { userHook } from "../../hooks/userHook";
 const Treatments = () => {
   const { userInfo, userConfig } = userHook();
   const [formView, setFormView] = useState(false);
+  const [formStorage, setFormStorage] = useState({
+    motive: "",
+    name: "",
+    from: "",
+    to: "",
+  });
+  const validateDate = (e) => {
+    let value = e.target.value.toString();
+    //let arr = value.split();
+    //let date = Date.UTC(arr[2],arr[1],arr[0]);
+    //console.log(value, date, e.target.name, arr);
+    let reg = /\d{2}\/\d{2}\/\d{4}/;
+
+    if (!reg.test(value)) {
+      //console.log("xd1");
+      return e.target.setCustomValidity(
+        "Fecha inválida, el formato correcto es DD/MM/AAAA"
+      );
+    } /*else if (Number.isNaN(date)){
+        console.log("xd");
+        return e.target.setCustomValidity("Fecha inválida, el formato correcto es DD/MM/AAAA");
+    }*/
+    e.target.setCustomValidity("");
+  };
+
+  const changeData = (e) => {
+    const { name, value } = e.target;
+    setFormStorage({ ...formStorage, [name]: value });
+    //setFormChange(true);
+  };
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    if (e.target.reportValidity()) console.log("id submit");
+  };
+  
+  const [data, setData] = useState(5);
+  const pageContainer = useRef(null);
+  
+  const appendData = (entries) => {
+  console.log(entries[0]);
+  	if(entries[0].isIntersecting){
+  		console.log(data+5);
+  		setData(data+5);
+  		observer.unobserve(pageContainer.current);
+  		observer.observe(pageContainer.current);
+  	}
+  		
+  }
+  const paginatorOptions = {
+  	root: null,
+  	rootMargin: "0px",
+  	thresold: 0.5
+  }
+  
+  useEffect(()=>{
+  const observer = new IntersectionObserver(appendData, paginatorOptions);
+  if (pageContainer.current != null)
+  	observer.observe(pageContainer.current);
+  },[pageContainer]);
 
   return (
     <>
@@ -62,6 +122,7 @@ const Treatments = () => {
                       type="text"
                       className="transition-all text-[0px] peer-checked:text-base"
                       placeholder="Nombre del paciente"
+                      required
                     />
                   </label>
                 </div>
@@ -90,62 +151,195 @@ const Treatments = () => {
                       type="text"
                       className="transition-all text-[0px] peer-checked:text-base"
                       placeholder="Motivo de consulta"
+                      requiredpageContainer
                     />
                   </label>
-                    <p className="font-bold">
-                      Fecha asignada:
-                      <span className="ms-2 font-normal">
-                        20/03/29 11:30:00
-                      </span>
-                    </p>
-                    <p className="font-bold">
-                      Fecha de pedido de consulta:
-                      <span className="ms-2 font-normal">07/02/24</span>
-                    </p>
+                     <label
+                    className="underline underline-offset-4 ms-2"
+                    htmlFor="checkAss"
+                  >
+                    <input
+                      type="checkbox"
+                      id="checkAss"
+                      hidden={true}
+                      className="peer"
+                    />
+                    <span className="transition-all text-base peer-checked:text-[0px]">
+                      Fecha asignada
+                    </span>
+                    <input
+                      type="text"
+                      className="transition-all text-[0px] peer-checked:text-base"
+                      placeholder="Fecha de consulta"
+                      required
+                    />
+                  </label> 
+              	<label
+                    className="underline underline-offset-4 ms-2"
+                    htmlFor="checkSol"
+                  >
+                    <input
+                      type="checkbox"
+                      id="checkSol"
+                      hidden={true}
+                      className="peer"
+                    />
+                    <span className="transition-all text-base peer-checked:text-[0px]">
+                      Fecha de solicitud
+                    </span>
+                    <input
+                      type="text"
+                      className="transition-all text-[0px] peer-checked:text-base"
+                      placeholder="Solicitud de consulta"
+                      required
+                    />
+                  </label> 
                   </div>
                   <hr className="my-4" />
                   <p className="text-2xl text-center">- Resultados -</p>
                   <div className="relative bg-gray-200 flex flex-wrap justify-evenly text-center gap-3 p-12 my-2">
-                    <button className="absolute end-2 bottom-2 text-sm text-gray-500">
-                      <i className="fa-solid fa-download pe-1"></i>
-                      Descargar comprobante
-                    </button>
-                    <p className="font-bold">
-                      Diagnostico:
-                      <span className="ms-2 font-normal">
-                        Torsión de músculo superior
-                      </span>
-                    </p>
-                    <p className="font-bold">
-                      Notas:
-                      <span className="ms-2 font-normal">
-                        Tomar cada medicación cada 12 días Lorem ipsum dolor
-                        sit, amet consectetur adipisicing elit. Sequi, quibusdam
-                        adipisci omnis sunt cum magni eaque, itaque aliquid
-                        ipsam amet dolores recusandae suscipit dolorem quos
-                        laborum voluptate eos neque inventore.
-                      </span>
-                    </p>
-                    <div className="font-bold">
-                      Medicación asignada:
-                      <ul className="ms-2 font-normal underline list-disc">
-                        <li>Medicación</li>
-                        <li>Medicación</li>
-                        <li>Medicación</li>
-                        <li>Medicación</li>
-                      </ul>
-                    </div>
+                     <label
+                    className="underline underline-offset-4 ms-2"
+                    htmlFor="checkDi"
+                  >
+                    <input
+                      type="checkbox"
+                      id="checkDi"
+                      hidden={true}
+                      className="peer"
+                    />
+                    <span className="transition-all text-base peer-checked:text-[0px]">
+                      Diagnostico
+                    </span>
+                    <input
+                      type="text"
+                      className="transition-all text-[0px] peer-checked:text-base"
+                      placeholder="Diagnostico final"
+                      required
+                    />
+                  </label> 
+                  <textarea placeholder="Notas" rows={5} className="w-full"></textarea>
+                    <label
+                    className="underline underline-offset-4 ms-2"
+                    htmlFor="checkMe"
+                  >
+                    <input
+                      type="checkbox"
+                      id="checkMe"
+                      hidden={true}
+                      className="peer"
+                    />
+                    <span className="transition-all text-base peer-checked:text-[0px]">
+                      Medicacion asignada
+                    </span>
+                    <input
+                      type="text"
+                      className="transition-all text-[0px] peer-checked:text-base"
+                      placeholder="Paracetamol,Penicilina..."
+                    />
+                  </label> 
                   </div>
-                  
-                  <input type="submit" value="...Registrar diagnostico"  className="absolute end-0 bottom-0 italic underline underline-offset-4 text-blue-600"/>
+                  <input type="submit" value="...Registrar diagnostico"  className="cursor-pointer absolute end-0 bottom-0 italic underline underline-offset-4 text-blue-600"/>
                 </div>
               }
             />
           </form>
         </div>
-        <div>
+        <div ref={pageContainer}>
           <Section txt="Resultados" scheme={userConfig.theme} />
+          <form
+          onSubmit={submitForm}
+          className="flex flex-wrap gap-4 w-full bg-blue-700 justify-around items-center text-white my-4 p-4"
+        >
+          <label htmlFor="formSubmit" className="cursor-pointer select-none">
+            <input
+              type="submit"
+              value="Filtrar"
+              id="formSubmit"
+              className="hidden"
+            />
+            <span
+              className={`bg-blue-600 hover:bg-blue-900 transition-all text-lg p-4 rounded-lg`}
+            >
+              Filtrar
+            </span>
+          </label>
+          <label htmlFor="checkMotive2" className="cursor-pointer">
+            <input
+              type="checkbox"
+              hidden={true}
+              id="checkMotive2"
+              className="peer"
+            />
+            <input
+              type="text"
+              value={formStorage.motive}
+              name="motive"
+              placeholder="Motivo de consulta"
+              onChange={changeData}
+              className="transition-all duration-500 bg-transparent text-[0px] outline-none peer-checked:text-base peer-checked:ms-1 peer-checked:border-b-2"
+            />
+            <span className="transition-all duration-500 text-base peer-checked:text-[0px] hover:text-lg">
+              Motivo
+            </span>
+          </label>
+          <label htmlFor="checkUser" className="cursor-pointer">
+            <input
+              type="checkbox"
+              hidden={true}
+              id="checkUser"
+              className="peer"
+            />
+            <input
+              type="text"
+              name="name"
+              value={formStorage.name}
+              placeholder="Nombre de usuario"
+              onChange={changeData}
+              className="transition-all duration-500 text-[0px] peer-checked:text-base ms-1 outline-none border-b-2 bg-transparent"
+            />
+            <span className="transition-all duration-500 text-base peer-checked:text-[0px] hover:text-lg">
+              Nombre
+            </span>
+          </label>
+          <label
+            htmlFor="checkDate"
+            className="cursor-pointer flex justify-center"
+          >
+            <input
+              type="checkbox"
+              hidden={true}
+              id="checkDate"
+              className="peer"
+            />
+            <input
+              type="text"
+              value={formStorage.from}
+              name="from"
+              placeholder="Desde..."
+              pattern="\d{2}/\d{2}/\d{4}"
+              onChange={changeData}
+              onInvalid={validateDate}
+              className="transition-all duration-500 text-[0px] peer-checked:text-base ms-1 outline-none border-b-2 bg-transparent"
+            />
+            <input
+              type="text"
+              value={formStorage.to}
+              name="to"
+              placeholder="Hasta..."
+              pattern="\d{2}/\d{2}/\d{4}"
+              onChange={changeData}
+              onInvalid={validateDate}
+              className="transition-all duration-500 text-[0px] peer-checked:text-base ms-1 outline-none border-b-2 bg-transparent"
+            />
+            <span className="transition-all duration-500 text-base peer-checked:text-[0px] hover:text-lg">
+              Fecha
+            </span>
+          </label>
+        </form>
+        { Array.from({ length: data }).map((_,i) => (
           <OpenCard
+          	key={"k-"+i}
             className="m-4 text-center"
             icon={<i className="fa-solid fa-clipboard-check text-green-700"></i>}
             title={
@@ -209,6 +403,7 @@ const Treatments = () => {
               </div>
             }
           />
+         ))}
         </div>
       </div>
     </>

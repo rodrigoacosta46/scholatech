@@ -53,9 +53,10 @@ const Drugs = () => {
       );
       var response = result.data;
       var parsed = JSON.parse(response.message);
-      console.log(JSON.parse(parsed.drugs), parsed.total);
+      var drugsParsed = JSON.parse(parsed.object);
+      console.log(drugsParsed, parsed.total);
       setDisplayedDrugs({
-        display: JSON.parse(parsed.drugs),
+        display: drugsParsed,
         total: parsed.total,
       });
     } catch (error) {

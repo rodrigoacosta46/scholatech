@@ -8,11 +8,12 @@ import (
 	"github.com/nicolas-k-cmd/proj-redes/src/structs"
 )
 
-func ServeDrugs(w http.ResponseWriter, r *http.Request) {
-	var drugs []database.Medicamento
+func ServeDoctors(w http.ResponseWriter, r *http.Request) {
+
+	var doctors []database.User
 	spr, boolerr := MicroPagination(w, r, ClosureStruct{
-		structParser: drugs,
-		command:      database.Db.Model(&database.Medicamento{}).Where("doctor_id"),
+		structParser: doctors,
+		command:      database.Db.Model(&database.User{}).Where("perfil_id = 2"),
 		operation:    "Find",
 	})
 	if !boolerr {

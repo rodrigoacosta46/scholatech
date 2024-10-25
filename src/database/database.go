@@ -5,11 +5,16 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"reflect"
 	"time"
 
+	"github.com/go-faker/faker/v4"
+	"github.com/nicolas-k-cmd/proj-redes/src/env"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
+
+var count int64
 
 /*
 Database structures
@@ -18,21 +23,21 @@ The ORM will automigrate and generate the tables acording to the structs and its
 If a record is retrieved from the database, the corresponding structure will be used for it.
 */
 type User struct {
-	ID          int        `gorm:"primaryKey"`
-	Username    string     `gorm:"size:50;not null"`
-	Email       string     `gorm:"size:100;not null"`
-	Password    string     `gorm:"size:128;not null"`
-	Description *string    `gorm:"size:400"`
-	Telephone   *string    `gorm:"size:50"`
-	Address     *string    `gorm:"size:100"`
-	Speciality  *string    `gorm:"size:100"`
-	Gender      string     `gorm:"type:enum('male','female','another');not null"`
-	Birthdate   time.Time  `gorm:"type:date;not null"`
-	CreatedAt   time.Time  `gorm:"type:datetime;not null"`
-	UpdatedAt   *time.Time `gorm:"type:datetime"`
-	DeletedAt   *time.Time `gorm:"type:datetime"`
+	ID          int        `gorm:"primaryKey" faker:"-"`
+	Username    string     `gorm:"size:50;not null" faker:"username"`
+	Email       string     `gorm:"size:100;not null" faker:"email"`
+	Password    string     `gorm:"size:128;not null" faker:"password"`
+	Description string     `gorm:"size:400" faker:"sentence"`
+	Telephone   string     `gorm:"size:50" faker:"phone_number"`
+	Address     string     `gorm:"size:100" faker:"address"`
+	Speciality  string     `gorm:"size:100" faker:"word"`
+	Gender      string     `gorm:"type:enum('male','female','another');not null" faker:"oneof:male,female,another"`
+	Birthdate   time.Time  `gorm:"type:date;not null" faker:"date"`
+	CreatedAt   time.Time  `gorm:"type:datetime;not null" faker:"-"`
+	UpdatedAt   *time.Time `gorm:"type:datetime" faker:"-"`
+	DeletedAt   *time.Time `gorm:"type:datetime" faker:"-"`
 	PerfilID    int        `gorm:"not null"`
-	Perfil      Perfil     `gorm:"foreignKey:PerfilID;"` // Relación hasOne
+	Perfil      Perfil     `gorm:"foreignKey:PerfilID;" faker:"-"`
 }
 
 type Turno struct {
@@ -43,6 +48,7 @@ type Turno struct {
 	Hora       time.Time  `gorm:"type:time;not null"`
 	Motivo     string     `gorm:"size:50;not null"`
 	Notas      string     `gorm:"type:text;not null"`
+	Estado     string     `gorm:"type:enum('accepted','rejected','pending');not null"`
 	CreatedAt  time.Time  `gorm:"type:datetime;not null"`
 	UpdatedAt  *time.Time `gorm:"type:datetime"`
 	DeletedAt  *time.Time `gorm:"type:datetime"`
@@ -130,8 +136,6 @@ func init() {
 		fmt.Println("A FATAL ERROR OCURRED WHILE MIGRATING DATABASE")
 		panic(err)
 	}
-
-	var count int64
 	Db.Model(&Perfil{}).Count(&count)
 
 	if count == 0 {
@@ -151,6 +155,55 @@ func init() {
 	} else {
 		fmt.Println("Profile records already exist")
 	}
+	count = 0
+	if env.SEED_DRUGS == 1 {
+		SeedDrugs()
+	}
+	count = 0
+	if env.ENABLE_FAKER == 1 {
+		count = 0
+		fmt.Println("DATABASE FAKER IS ENABLED, SEEDING THE DATABASE....")
+		fmt.Println()
+		result, err := callFuncSeeder(env.FAKER_DOCTOR, UserFaker, 2, env.FAKER_DOCTOR_TOTAL, true)
+		if result == false {
+			fmt.Println("FAKER DOCTOR IS DISABLED")
+		} else if err != nil {
+			fmt.Println("Error while calling the Faker doctor")
+			panic(err)
+		}
+		result, err = callFuncSeeder(env.FAKER_PATIENT, UserFaker, 1, env.FAKER_PATIENT_TOTAL, true)
+		if result == false {
+			fmt.Println("FAKER PATIENT IS DISABLED")
+		} else if err != nil {
+			fmt.Println("Error while calling the Faker patient")
+			panic(err)
+		}
+	}
+}
+
+func callFuncSeeder(enabler int, fn interface{}, params ...interface{}) (interface{}, error) {
+	if enabler != 1 {
+		return false, nil
+	}
+
+	v := reflect.ValueOf(fn)
+	if v.Kind() != reflect.Func {
+		return nil, fmt.Errorf("first argument must be a value")
+	}
+
+	in := make([]reflect.Value, len(params))
+	for i, param := range params {
+		in[i] = reflect.ValueOf(param)
+	}
+	result := v.Call(in)
+
+	if len(result) == 0 {
+		return nil, nil
+	}
+	return result[0].Interface(), nil
+}
+
+func SeedDrugs() {
 
 	Db.Model(&Medicamento{}).Count(&count)
 
@@ -187,24 +240,64 @@ func init() {
 	} else {
 		fmt.Println("Drug records already exist")
 	}
+}
 
-	/*
-		perfiles := []Perfil{
-			{ID: 1, Name: "Paciente"},
-			{ID: 2, Name: "Doctor"},
-			{ID: 3, Name: "Admin"},
-		}
-		err = Db.Find(&perfiles).Error
-		if err == gorm.ErrRecordNotFound {
-			fmt.Println("Looks like the profile records are not inserted")
-			if errorInsert := Db.Create(&perfiles).Error; errorInsert != nil {
-				if errorInsert == gorm.ErrDuplicatedKey {
-					fmt.Println("We didnt add the profiles because they already exists")
-				} else {
-					fmt.Println("Couldnt add new entries to the profiles, it may be that the entries already exists?")
-					panic(errorInsert)
-				}
+func UserFaker(ProfileID int, number int, checkOcurrences bool) {
+	if checkOcurrences {
+		fmt.Println("Verifying ocurrences...")
+		if err := Db.Model(&User{}).Where("perfil_id = ?", ProfileID).Count(&count).Error; err != nil {
+			fmt.Printf("Failed to count the ProfileID %v entries", ProfileID)
+			panic(err)
+		} else {
+			fmt.Println("Number of entries in the users table: ", count)
+			if count < int64(number) {
+				fmt.Printf("Looks like there isnt enought ProfileID %v in the database assuming the number of entries is lower that the total of ProfileID requested. Inserting entries...", ProfileID)
+			} else {
+				fmt.Printf("Im assumming we already have the ProfileID %v inserted by the number of User entries", ProfileID)
+				return
 			}
 		}
-	*/
+	}
+	tx := Db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			fmt.Println("Failed trasaction:", r)
+		}
+	}()
+
+	for i := 0; i < number; i++ {
+		date, _ := time.Parse("2006-01-02", faker.Date())
+		userStruct := User{
+			Username:    faker.FirstName() + " " + faker.LastName(),
+			Email:       faker.Email(),
+			Description: faker.Sentence(),
+			Telephone:   faker.Phonenumber(),
+			Address:     faker.ChineseFirstName(),
+			Speciality:  "Neurologia",
+			Gender:      "male",
+			Birthdate:   date,
+			PerfilID:    ProfileID,
+		}
+		if err := tx.Create(&userStruct).Error; err != nil {
+			tx.Rollback()
+			fmt.Println("Failed to create the user:", err)
+			return
+		}
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		fmt.Println("Failed to commit userst:", err)
+	}
+}
+
+func SeedTurnos() {
+	tx := Db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			fmt.Println("Failed trasaction:", r)
+		}
+	}()
+
 }

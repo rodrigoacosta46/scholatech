@@ -27,11 +27,14 @@ var WebFullURL bool
 var SERVER_PROTOCOL, WEB_PROTOCOL, SERVER_ADDRESS, WEB_ADDRESS string
 var SERVER_PORT, WEB_PORT int
 
+var SEED_DRUGS, ENABLE_FAKER, FAKER_DOCTOR, FAKER_DOCTOR_TOTAL, FAKER_PATIENT, FAKER_PATIENT_TOTAL int
+
 /*
 This package loads the application secrets including the JWT Secret and Cookie Secret.
 The cookie name and the cookie session handler
 */
 func init() {
+	var err error
 	errLoad := godotenv.Load()
 	if errLoad != nil {
 		fmt.Println("FATAL: Couldnt load enviorment file", errLoad)
@@ -47,4 +50,35 @@ func init() {
 	WEB_ADDRESS = os.Getenv("WEB_ADDRESS")
 	WEB_PORT, _ = strconv.Atoi(os.Getenv("WEB_PORT"))
 	WEB_PROTOCOL = os.Getenv("WEB_PROTOCOL")
+	SEED_DRUGS, err = strconv.Atoi(os.Getenv("SEED_DRUGS"))
+	if err != nil {
+		fmt.Println("UNABLE TO PARSE ENVIROMENT VARIABLE SEED_DRUGS TO INT")
+		panic(err)
+	}
+	ENABLE_FAKER, err = strconv.Atoi(os.Getenv("ENABLE_FAKER"))
+	if err != nil {
+		fmt.Println("UNABLE TO PARSE ENVIROMENT VARIABLE ENABLE_FAKER TO INT")
+		panic(err)
+	}
+	FAKER_DOCTOR, err = strconv.Atoi(os.Getenv("FAKER_DOCTOR"))
+	if err != nil {
+		fmt.Println("UNABLE TO PARSE ENVIROMENT VARIABLE FAKER_DOCTOR TO INT")
+		panic(err)
+	}
+	FAKER_DOCTOR_TOTAL, err = strconv.Atoi(os.Getenv("FAKER_DOCTOR_TOTAL"))
+	if err != nil {
+		fmt.Println("UNABLE TO PARSE ENVIROMENT VARIABLE FAKER_DOCTOR_TOTAL TO INT")
+		panic(err)
+	}
+	FAKER_PATIENT, err = strconv.Atoi(os.Getenv("FAKER_PATIENT"))
+	if err != nil {
+		fmt.Println("UNABLE TO PARSE ENVIROMENT VARIABLE FAKER_PATIENT TO INT")
+		panic(err)
+	}
+	FAKER_PATIENT_TOTAL, err = strconv.Atoi(os.Getenv("FAKER_PATIENT_TOTAL"))
+	if err != nil {
+		fmt.Println("UNABLE TO PARSE ENVIROMENT VARIABLE FAKER_PATIENT_TOTAL TO INT")
+		panic(err)
+	}
+
 }

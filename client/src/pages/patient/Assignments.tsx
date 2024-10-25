@@ -4,6 +4,7 @@ import { userHook } from "../../hooks/userHook";
 import Section from "../../components/Section";
 import Modal from "../../components/Modal";
 import Scroller from "../../components/Scroller";
+import axios from "axios";
 
 const Assignments = () => {
   const { userConfig } = userHook();
@@ -14,6 +15,38 @@ const Assignments = () => {
     e.target.src = "img/logo.png";
   };
 //Datos falsos
+
+
+const pagination = async () => {
+  try {
+    const result = await axios.post(
+      "http://localhost:8000/getTurnos/rejected",
+      { Page: 1 },
+      { withCredentials: true }
+    );
+    var response = result.data;
+    var parsed = JSON.parse(response.message);
+    var drugsParsed = JSON.parse(parsed.object);
+    console.log(drugsParsed, parsed.total);
+  } catch (error) {
+    console.error("Error de consulta", error);
+    console.log("Resultados JSON");
+    console.log(error.response?.data);
+    var response = error.response?.data;
+
+    if (response.hasOwnProperty("redirect_route")) {
+      console.log("REDIRECT ROUTE");
+      window.location.href = response.redirect_route;
+    } else {
+      console.log("NO REDIRECT ROUTE");
+    }
+    if (response.hasOwnProperty("message")) {
+      console.log("THERE IS A MESSAGE");
+    }
+  }
+};
+
+
 const registros = [
   {
       nombre: "Laura Fernández",
@@ -69,6 +102,8 @@ const registros = [
     setQry({ ...qry, [field]: qry[field] + 3 });
   };
   useEffect(() => {
+    pagination()
+
     console.log("hola", qry);
   }, [qry]);
   return (

@@ -222,10 +222,10 @@ func SaveUserConfig(w http.ResponseWriter, r *http.Request) {
 		Password:    req.Password.NewPassword,
 		Birthdate:   parsedDate,
 		Gender:      gender,
-		Telephone:   &req.Telephone,
-		Address:     &req.Address,
-		Description: &req.Description,
-		Speciality:  &req.Speciality,
+		Telephone:   req.Telephone,
+		Address:     req.Address,
+		Description: req.Description,
+		Speciality:  req.Speciality,
 	}
 
 	if err = database.Db.Model(&database.User{}).Where("id = ?", usId).Updates(modifiedFields).Error; err != nil {

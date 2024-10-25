@@ -37,6 +37,8 @@ func gorillaRouter() {
 	protectedRoutes.HandleFunc("/getDrugs", microservices.ServeDrugs)
 	protectedRoutes.HandleFunc("/getImage/{dir}/{id:[0-9]+}/{file}", microservices.ServeImages)
 	protectedRoutes.HandleFunc("/saveChanges", microservices.SaveUserConfig)
+	protectedRoutes.HandleFunc("/getDoctors", microservices.ServeDoctors)
+	protectedRoutes.HandleFunc("/getTurnos/{status}", microservices.ServeAssigments)
 	fmt.Println("Database is ready for running")
 	http.ListenAndServe("0.0.0.0:8000", r)
 }

@@ -12,7 +12,7 @@ func ServeDrugs(w http.ResponseWriter, r *http.Request) {
 	var drugs []database.Medicamento
 	spr, boolerr := MicroPagination(w, r, ClosureStruct{
 		structParser: drugs,
-		command:      database.Db.Model(&database.Medicamento{}).Where("doctor_id"),
+		command:      database.Db.Model(&database.Medicamento{}),
 		operation:    "Find",
 	})
 	if !boolerr {

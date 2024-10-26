@@ -3,6 +3,8 @@ import Title from "../../components/Title";
 import Section from "../../components/Section";
 import OpenCard from "../../components/OpenCard";
 import { userHook } from "../../hooks/userHook";
+import LoadSpinner from "../../components/LoadSpinner";
+import VerticalScroller from "../../components/VerticalScroller";
 
 const Treatments = () => {
   const { userInfo, userConfig } = userHook();
@@ -46,24 +48,6 @@ const Treatments = () => {
     if (e.target.reportValidity()) console.log("id submit");
   };
 
-  useEffect(()=>{
-    const observer = new IntersectionObserver(appendData, {threshold: .7});
-    if (pageContainer.current != null)
-      observer.observe(pageContainer.current);
-
-    return () => {
-      if (observer) observer.disconnect();
-    }
-  },[pageContainer]);
-  
-  const appendData = (entries) => {
-    console.log(":v")
-  	if(entries[0].isIntersecting){
-  		setData(prevData => {
-        return prevData + 5;
-      });
-  	}
-  }
 
   useEffect(() => {
     inRows();
@@ -72,7 +56,7 @@ const Treatments = () => {
   const inRows = () => {
     setArrInputs(prev => 
       [...prev,
-        <>          
+        <div className="flex gap-2" key={"k-"+arrInputs.indexOf(prev)+1}>          
           <select name="drug[]" className="outline-none">
             <option value="">Paracetamol</option>
             <option value="">Omeprazol</option>
@@ -80,7 +64,7 @@ const Treatments = () => {
           </select>
           <input type="text" name="amount[]" placeholder="Cantidad" className="transition-all outline-blue-600 focus:outline-offset-2"/>
           <input type="text" name="time[]" placeholder="Cada cuanto" className="transition-all outline-blue-600 focus:outline-offset-2"/> 
-        </>
+        </div>
       ]
     );
   }
@@ -90,6 +74,71 @@ const Treatments = () => {
     if(last != 0) setArrInputs(prev => prev.slice(0, last));
   }
 
+  const treatModel = (registro, i) => {
+    return(
+      <OpenCard
+          	key={"j-"+i}
+            className="my-4 text-center animate-slideIn"
+            icon={<i className="fa-solid fa-clipboard-check text-green-700"></i>}
+            title={
+              <div className="ps-2 text-slate-700">
+                Raul Mazares <span className="font-bold">04/03/2024 18:30:00</span>
+              </div>
+            }
+            content={
+              <div className="relative pt-4 p-8">
+                <div className="flex flex-wrap justify-evenly gap-3">
+                  <p className="font-bold">
+                    Doctor asignado:
+                    <span className="ms-2 font-normal">Dr. Otaro</span>
+                  </p>
+                  <p className="font-bold">
+                    Motivo:
+                    <span className="ms-2 font-normal">Malestar al mover la cintura</span>
+                  </p>
+                  <p className="font-bold">
+                    Fecha asignada:
+                    <span className="ms-2 font-normal">04/03/2024 18:30:00</span>
+                  </p>
+                  <p className="font-bold">
+                    Fecha de pedido de consulta:
+                    <span className="ms-2 font-normal">02/02/2024 00:21:11</span>
+                  </p>
+                </div>
+                <hr className="my-4" />
+                <p className="text-2xl text-center">- Resultados -</p>
+                <div className="relative bg-gray-200 flex flex-wrap justify-evenly text-center gap-3 p-12 my-2">
+                  <button className="absolute end-2 bottom-2 text-sm text-gray-500">
+                    <i className="fa-solid fa-download pe-1"></i>
+                    Descargar comprobante
+                  </button>
+                  <p className="font-bold">
+                    Diagnostico:
+                    <span className="ms-2 font-normal">
+                      Lesión lumbar
+                    </span>
+                  </p>
+                  <p className="font-bold">
+                    Notas:
+                    <span className="ms-2 font-normal">
+                      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ullam omnis ducimus a repellendus, vel, quia odit dolorem cupiditate, voluptatum consequuntur ab exercitationem sit. Mollitia animi eveniet fugit repellat! Harum, quos.
+                    </span>
+                  </p>
+                  <div className="font-bold">
+                    Medicación asignada:
+                    <ul className="ms-2 font-normal underline list-disc">
+                      <li>Medicación</li>
+                      <li>Medicación</li>
+                      <li>Medicación</li>
+                      <li>Medicación</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            }
+          />
+    )
+  }
   return (
     <>
       <Title
@@ -243,7 +292,7 @@ const Treatments = () => {
                   <textarea placeholder="Notas" rows={5} className="w-full outline-none p-2"></textarea>
                   <div className="font-bold">
                     Medicación asignada: *opcional*
-                    <div className="relative grid grid-cols-3 border-2 border-dashed border-slate-400 gap-4 p-2 mt-3 w-full">
+                    <div className="relative space-y-2 border-2 border-dashed border-slate-400 p-2 mt-3 w-full">
                       <div className="absolute end-0 -top-7">
                         <button onClick={inRows} className="bg-blue-950 text-white px-1 rounded-full"><i className="fa-solid fa-plus"></i></button>
                         <button onClick={exRows} className="bg-red-950 text-white px-1 rounded-full"><i className="fa-solid fa-minus"></i></button>
@@ -352,75 +401,12 @@ const Treatments = () => {
             </span>
           </label>
         </form>
-        { Array.from({ length: data }).map((_,i) => (
-          <OpenCard
-          	key={"k-"+i}
-            className="my-4 text-center animate-slideIn"
-            icon={<i className="fa-solid fa-clipboard-check text-green-700"></i>}
-            title={
-              <div className="ps-2 text-slate-700">
-                Turno Raul Toledo <span className="font-bold">24/02/2022</span>
-              </div>
-            }
-            content={
-              <div className="relative pt-4 p-8">
-                <div className="flex flex-wrap justify-evenly gap-3">
-                  <p className="font-bold">
-                    Doctor asignado:
-                    <span className="ms-2 font-normal">Dr Otaro</span>
-                  </p>
-                  <p className="font-bold">
-                    Motivo:
-                    <span className="ms-2 font-normal">Tensión abdominal</span>
-                  </p>
-                  <p className="font-bold">
-                    Fecha asignada:
-                    <span className="ms-2 font-normal">20/03/29 11:30:00</span>
-                  </p>
-                  <p className="font-bold">
-                    Fecha de pedido de consulta:
-                    <span className="ms-2 font-normal">07/02/24</span>
-                  </p>
-                </div>
-                <hr className="my-4" />
-                <p className="text-2xl text-center">- Resultados -</p>
-                <div className="relative bg-gray-200 flex flex-wrap justify-evenly text-center gap-3 p-12 my-2">
-                  <button className="absolute end-2 bottom-2 text-sm text-gray-500">
-                    <i className="fa-solid fa-download pe-1"></i>
-                    Descargar comprobante
-                  </button>
-                  <p className="font-bold">
-                    Diagnostico:
-                    <span className="ms-2 font-normal">
-                      Torsión de músculo superior
-                    </span>
-                  </p>
-                  <p className="font-bold">
-                    Notas:
-                    <span className="ms-2 font-normal">
-                      Tomar cada medicación cada 12 días Lorem ipsum dolor sit,
-                      amet consectetur adipisicing elit. Sequi, quibusdam
-                      adipisci omnis sunt cum magni eaque, itaque aliquid ipsam
-                      amet dolores recusandae suscipit dolorem quos laborum
-                      voluptate eos neque inventore.
-                    </span>
-                  </p>
-                  <div className="font-bold">
-                    Medicación asignada:
-                    <ul className="ms-2 font-normal underline list-disc">
-                      <li>Medicación</li>
-                      <li>Medicación</li>
-                      <li>Medicación</li>
-                      <li>Medicación</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            }
-          />
-         ))}
+        <VerticalScroller 
+          url="http://localhost:8000/getDoctors"
+          renderModel={treatModel}
+          empty="No tenes diagnosticos listados"
+        />
         </div>
-        <div ref={pageContainer} className="absolute -bottom-14 mx-auto my-0 start-0 end-0 bg-white size-14 rounded-full border-8 border-green-400 border-t-8 border-t-blue-950 animate-spin"></div>
       </div>
     </>
   );

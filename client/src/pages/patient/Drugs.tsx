@@ -132,7 +132,7 @@ const Drugs = () => {
       )}
 
       <Modal state={modal} setter={modalSetState} scheme={userConfig.theme}>
-        <img src="img/logo.png" alt="" className="max-h-96 object-cover" />
+        <img src={`http://localhost:8000/getImage/drugs/${drugView?.ID}/0`} onError={(e:any) => e.target.src = "img/logo.png"} alt="" className="max-h-96 object-cover" />
         <div className="flex flex-col w-fit overflow-hidden">
           <Title txt={drugView?.Nombre} className="" scheme={userConfig.theme} />
           <p className="m-2">{drugView?.Descripcion}

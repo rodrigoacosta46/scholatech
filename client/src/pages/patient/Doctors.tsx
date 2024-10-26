@@ -9,27 +9,55 @@ import Section from "../../components/Section";
 import React from "react";
 import Scroller from "../../components/Scroller";
 
+interface Doctor {
+  Address: string;
+  Birthdate: string;
+  CreatedAt: string;
+  DeletedAt: string;
+  Description: string;
+  Email: string;
+  Gender: string;
+  ID: number;
+  Speciality: string;
+  Telephone: string;
+  UpdatedAt: string;
+  Username: string;
+}
+
 const Doctors = () => {
   const { userConfig } = userHook();
-  const [doctors, setDoctors] = useState(0);
+
   const [modal, setModal] = useState(false);
-  const modalSetState = () => {
+  const [modalData, setModalData] = useState<Doctor>();
+
+  const modalSetState = (data) => {
+    if (data != null) setModalData(data);
     setModal(!modal);
   };
 
-  const docPagination = () => {
-    setDoctors((prev) => prev + 5);
+  const doctorsModel = (registro, i) => {
+    return(
+    <Card
+      key={"k-"+i}
+      onClick={() => modalSetState(registro)}
+      className="relative opacity-0 animate-fadeIn flex flex-col flex-shrink-0 max-w-[280px] cursor-pointer overflow-hidden"
+      scheme={userConfig!["theme"]}
+    >
+      <img
+        src={`http://localhost:8000/getImage/profiles/${registro.ID}/${registro.ID}`}
+        alt=""
+        className="h-80 object-cover"
+      />
+      <p className="underline underline-offset-4 decoration-green-900 mt-4 text-center">
+        {registro.Username}
+      </p>
+    </Card>);
   };
-
-  useEffect(() => {
-    docPagination();
-  },[]);
-
   const getItems = () => {
     //Reemplazar por fetch api
     let items: React.JSX.Element[] = [];
 
-    for (let i = 0; i < doctors; i++) {
+    for (let i = 0; i < 4; i++) {
       items.push(
         <Card
           key={"n-" + i}
@@ -42,38 +70,40 @@ const Doctors = () => {
           <p className="underline underline-offset-4 decoration-green-900 mt-4 text-center">
             Dr. Octavio Pizarro
           </p>
-          {i == 0 && 
+          {i == 0 && (
             <div className="bg-gray-600/40 text-gray-400 absolute top-0 start-0 h-full w-full flex flex-col items-center justify-center">
               <i className="fa-solid fa-clock text-6xl"></i>
               Turno pendiente
             </div>
-          }
+          )}
         </Card>
       );
     }
 
     return items;
-  }
+  };
 
   return (
     <>
       <Modal state={modal} setter={modalSetState} scheme={userConfig.theme}>
         <img
-          src="img/Gaben.png"
+          src={`http://localhost:8000/getImage/profiles/${modalData?.ID}/${modalData?.ID}`}
           alt=""
-          className="max-h-96 object-cover mx-auto block"
+          className="h-80 object-cover"
         />
-        <div className="flex flex-col w-fit overflow-hidden">
-          <Title txt="Dr. Octavio" className="" scheme={userConfig.theme} />
+        <div className="flex flex-col w-full overflow-hidden">
+          <Title
+            txt={modalData?.Username}
+            className=""
+            scheme={userConfig.theme}
+          />
           <p className="m-2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis
-            blanditiis ut modi aliquid? Impedit obcaecati, voluptates mollitia
-            molestias distinctio blanditiis nesciunt accusamus aliquam laborum
-            atque ex. Velit illo maiores nostrum.
+            {modalData?.Description || "Sin descripción"}
           </p>
           <Link
             className="p-2 bg-slate-400 rounded-3xl text-slate-800 text-bold text-center mt-auto"
-            to="/select/id"
+            to="/select"
+            state={modalData}
           >
             <i className="fa-solid fa-stethoscope pe-[.5rem]"></i>
             Realizar consulta
@@ -89,7 +119,12 @@ const Doctors = () => {
       <div className="w-full p-14 mt-12 flex flex-col gap-y-11">
         <div>
           <Section txt="Últimos turnos" scheme={userConfig.theme} />
-          <Scroller loader={docPagination} className="my-4 animate-[slideIn_1s]">{getItems().filter((_,i)=> i<5 )}</Scroller>
+          <Scroller
+            url="http://localhost:8000/getTurnos"
+            className="animate-[slideIn_2s] my-2"
+            renderModel={doctorsModel}
+            empty="Por alguna extraña razón... no hay doctores"
+          />
         </div>
         <div>
           <Section txt="Especialistas" scheme={userConfig.theme} />
@@ -120,7 +155,12 @@ const Doctors = () => {
               <option value="">Femenino</option>
             </select>
           </div>
-          <Scroller loader={docPagination} className="my-4">{getItems().filter((_,i) => i>0)}</Scroller>
+          <Scroller
+            url="http://localhost:8000/getDoctors"
+            className="animate-[slideIn_2s] my-2"
+            renderModel={doctorsModel}
+            empty="Por alguna extraña razón... no hay doctores"
+          />
         </div>
       </div>
     </>

@@ -39,7 +39,7 @@ function App() {
             <Route path="drugs" element={<Drugs />} />
             <Route path="schedule" element={<Schedule />} />
             <Route path="reminders" element={<Reminders />} />
-            <Route path="select/:uuid" element={<Select />} />
+            <Route path="select" element={<Select />} />
             <Route element={<ProtectedRoute bypassRole={roles.pacient}/>}>
               <Route path="story" element={<Story />} />
               <Route path="doctors" element={<Doctors />} />

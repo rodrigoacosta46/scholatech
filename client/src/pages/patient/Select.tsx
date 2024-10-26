@@ -1,11 +1,21 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../../components/Card";
 import Title from "../../components/Title";
 import { userHook } from "../../hooks/userHook";
-import React from 'react';
+import React, { useEffect } from 'react';
 
 
 const Select = () => {
   const { userConfig } = userHook();
+  const { state } = useLocation();
+  const nav = useNavigate();
+  const { ID, Username, Description, Speciality } = state || {};
+
+  useEffect(() => {
+   if (state == null) {
+    nav("/profile");
+   } 
+  }, []);
 
   return (
     <>
@@ -18,13 +28,13 @@ const Select = () => {
             <div className="group flex justify-center max-h-96 overflow-hidden cursor-pointer">
               <div>
                 <img
-                  src="../img/Gaben.png"
+                  src={`http://localhost:8000/getImage/profiles/${ID}/${ID}`}
                   alt=""
                   className="h-80 object-cover"
                 />
                 <p className="underline underline-offset-4 decoration-green-900 mt-4 text-center">
-                  Dr. Octavio Pizarro
-                </p>
+{                  Username
+}                </p>
               </div>
               <div className="h-0 text-center text-green-900 transition-all duration-500 font-thin max-w-0 opacity-0 group-hover:max-w-xs group-hover:opacity-100">
                 <div className="text-end text-lg p-3">
@@ -36,18 +46,13 @@ const Select = () => {
                   />
                 </div>
                 <p>
-                  <span className="font-bold">Nombre:</span> Octavio Pizarro
+                  <span className="font-bold">Nombre:</span> {Username}
                 </p>
                 <p>
-                  <span className="font-bold">Ocupación:</span> Médico de
-                  cabecera
+                  <span className="font-bold">Ocupación:</span> {Speciality || "No especificada"}
                 </p>
                 <p>
-                  <span className="font-bold">Descripción:</span> Lorem ipsum
-                  dolor sit amet consectetur adipisicing elit. Ex molestias,
-                  amet doloribus voluptatum dicta vel nisi quae aut eius modi
-                  soluta consequuntur nobis rem dolor inventore omnis nihil
-                  totam maxime.
+                  <span className="font-bold">Descripción:</span> {Description || "Sin descripción"}
                 </p>
               </div>
             </div>

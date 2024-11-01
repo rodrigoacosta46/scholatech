@@ -1,30 +1,47 @@
 import { useState, useEffect } from "react";
 import useFetch from "./useFetch";
 
-const usePagination = (url: string) => {
+const usePagination = (url: string, params: any) => {
   const [dataPagination, setDataPagination] = useState<any>([]);
-  const [total, setTotal] = useState(0);
   const [pageNum, setPageNum] = useState(1);
+  const [theresMore, setNo] = useState(true);
+  const [srcChanging, setSrcState] = useState(false);
   const { response, fetcher, error, loading } = useFetch(url, {
+    ...params,
     Page: pageNum,
   });
 
-  const swipPage = () => {
-    setPageNum((prev) => prev + 1);
-  };
+  useEffect(() => {
+      console.log("Cambiando fuente, reseteando paginación");
+      setSrcState(true);
+      setPageNum(1); 
+      setDataPagination([]); 
+      setNo(true); 
+      setSrcState(false); 
+
+  }, [params]);
 
   useEffect(() => {
-    fetcher();
-  }, [pageNum]);
+    if (theresMore && !srcChanging) {
+      setSrcState(true); 
+      console.log("Cargando página: ", pageNum);
+      fetcher();
+      setSrcState(false); 
+
+    }
+  }, [pageNum, theresMore, srcChanging, params]); 
 
   useEffect(() => {
-    if (response && response.object !== "null") {
-      setDataPagination((prev) => [...prev, ...JSON.parse(response.object)]);
-      setTotal(response.total);
+    if (response) {
+      console.log("Respuesta recibida: ", response);
+      if (response.object && response.object !== "null") {
+        setDataPagination((prev) => [...prev, ...JSON.parse(response.object)]);
+      } else {
+        setNo(false);
+      }
     }
   }, [response]);
 
-  return { dataPagination, total, pageNum, swipPage, error, loading };
+  return { dataPagination, pageNum, setPageNum, error, loading, theresMore, srcChanging };
 };
-
 export default usePagination;

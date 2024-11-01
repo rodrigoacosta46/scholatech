@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const useFetch = (url: string, request?: Record<string, any>) => {
   const [response, setResponse] = useState<any>(null);
@@ -8,16 +8,16 @@ const useFetch = (url: string, request?: Record<string, any>) => {
 
   const fetcher = async () => {
     try {
-      const req = axios.post(
+      const result = await axios.post(
         url,
         request,
         { withCredentials: true }
       );
-      const result = await req
       var response = result.data;
       var parsed = JSON.parse(response.message);
       console.log("AHHHHHHHHHHHHHHH");
-      req.then(() => setResponse(parsed));
+      setResponse(parsed);
+      setError(null);
     } catch (error) {
       console.log(error);
       setError(error);
@@ -40,7 +40,7 @@ const useFetch = (url: string, request?: Record<string, any>) => {
     }
   };
 
-  return { response, fetcher, loading, error };
+  return { response, fetcher, loading, error, };
 };
 
 export default useFetch;

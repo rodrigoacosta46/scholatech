@@ -32,13 +32,17 @@ func gorillaRouter() {
 	protectedRoutes := r.NewRoute().Subrouter()
 	protectedRoutes.Use(Middleware.JwtMiddleware)
 	//protectedRoutes.HandleFunc("/logout", cookies.DeleteHandler)
-	protectedRoutes.HandleFunc("/sync", microservices.ServeSessionLocalStorage)
 	//	Services
+	protectedRoutes.HandleFunc("/sync", microservices.ServeSessionLocalStorage)
 	protectedRoutes.HandleFunc("/getDrugs", microservices.ServeDrugs)
 	protectedRoutes.HandleFunc("/getImage/{dir}/{id:[0-9]+}/{file}", microservices.ServeImages)
 	protectedRoutes.HandleFunc("/saveChanges", microservices.SaveUserConfig)
 	protectedRoutes.HandleFunc("/getDoctors", microservices.ServeDoctors)
 	protectedRoutes.HandleFunc("/getTurnos/{status}", microservices.ServeAssigments)
+	// Admin services
+	adminRoutes := protectedRoutes.NewRoute().Subrouter()
+	adminRoutes.Use(Middleware.AdminValidation)
+	adminRoutes.HandleFunc("/getUsers", microservices.ServeUsers)
 	fmt.Println("Database is ready for running")
 	http.ListenAndServe("0.0.0.0:8000", r)
 }

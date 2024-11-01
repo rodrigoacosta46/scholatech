@@ -7,6 +7,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/gorilla/sessions"
+	"github.com/nicolas-k-cmd/proj-redes/src/database"
 	"github.com/nicolas-k-cmd/proj-redes/src/enum"
 	"github.com/nicolas-k-cmd/proj-redes/src/env"
 	"github.com/nicolas-k-cmd/proj-redes/src/structs"
@@ -51,7 +52,6 @@ func JwtMiddleware(next http.Handler) http.Handler {
 			json.NewEncoder(w).Encode(structs.Response{Message: "Usted debe autenticarse para poder continuar....", Authenticated: "false", RedirectRoute: enum.URLs["login"].Which(r)})
 		}
 	})
-
 }
 
 /*
@@ -147,6 +147,24 @@ func EnableCORS(next http.Handler) http.Handler {
 		if r.Method == "OPTIONS" {
 			w.WriteHeader(http.StatusOK)
 			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
+func AdminValidation(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		jwtToken, _ := GetCookiePostMiddleware(w, r)
+		id, _ := (jwtToken.Claims.GetSubject())
+		res := database.Db.Where("perfil_id = 3").Find(&database.User{}, id)
+		if res.Error != nil {
+			fmt.Println("Error de consulta adminvalidation")
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(structs.Response{Message: "Error del servidor"})
+		} else if res.RowsAffected < 1 {
+			fmt.Println("Usuario no autorizado adminvalidation")
+			w.WriteHeader(http.StatusForbidden)
+			json.NewEncoder(w).Encode(structs.Response{Message: "No tiene los permisos requeridos"})
 		}
 		next.ServeHTTP(w, r)
 	})

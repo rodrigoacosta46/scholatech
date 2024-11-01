@@ -32,6 +32,7 @@ const Drugs = () => {
   });
   const [adminModal, setAdminModal] = useState(false);
   const [drugView, setDrugView] = useState<DrugInterface>();
+  const [imgSrc, setImgSrc] = useState("");
 
   const modalSetState = (key) => {
     setDrugView(displayedDrugs.display[key])
@@ -76,6 +77,14 @@ const Drugs = () => {
       }
     }
   };
+  
+  const viewFile = (e) => {
+    const file = e.target.files[0];
+    if (!file) return setImgSrc("");
+    const tmp = window.URL.createObjectURL(file);
+    console.log(file, tmp, e.target);
+    setImgSrc(tmp);    
+  }
 
   useEffect(() => {
     pagination();
@@ -95,15 +104,20 @@ const Drugs = () => {
             <div className="flex justify-center items-center p-14 border-4 border-dashed border-slate-400">
               <label
                 htmlFor="newDrugFile"
-                className="flex flex-col text-center text-2xl text-slate-400 cursor-pointer"
+                className="relative flex flex-col text-center text-2xl text-slate-400 cursor-pointer"
               >
-                <i className="fa-solid fa-file-arrow-up"></i>
-                <span className="text-sm">Subir archivo</span>
+                <div className={`${imgSrc && "hidden" }`}>
+                  <i className="fa-solid fa-file-arrow-up"></i>
+                  <span className="block text-sm">Subir archivo</span>
+                </div>
+                <img src={imgSrc} className="animate-fadeIn"/>
                 <input
                   type="file"
                   name="file"
                   id="newDrugFile"
                   className="hidden"
+                  onChange={(e) => viewFile(e)}
+                  accept="image/png"
                 />
               </label>
             </div>
@@ -124,7 +138,7 @@ const Drugs = () => {
                 rows={4}
                 placeholder="Descripción del medicamento"
                 maxLength={1000}
-                className="text-center resize-none outline-none p-px border border-red-700 focus:ring-1 ring-offset-4 ring-red-700 rounded-lg transition-all"
+                className="text-center resize-none h-full outline-none p-px border border-red-700 focus:ring-1 ring-offset-4 ring-red-700 rounded-lg transition-all"
               ></textarea>
             </div>
           </form>

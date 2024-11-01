@@ -4,39 +4,34 @@ import React from "react";
 import PaginationWrapper from "./PaginationWrapper";
 import LoadSpinner from "./LoadSpinner";
 
-const VerticalScroller = ({ url, className="", renderModel, empty, ...props }) => {
-  const { dataPagination, swipPage, pageNum, total, error } = usePagination(url);
+const VerticalScroller: React.FC<any> = ({ url, params, className = "", renderModel, empty, ...props }) => {
+  const { dataPagination, pageNum, setPageNum, error, loading, theresMore, srcChanging } = usePagination(url, params);
   const flag = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(swipPage, { threshold: 0.7 });
-    if (flag.current != null) observer.observe(flag.current);
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && theresMore && !srcChanging && !loading && error == null) {
+        console.log("seteo otra vez")
+        setPageNum((prev) => prev+1);
+      }
+    }, { threshold: 0.1 });
 
+    if (flag.current) observer.observe(flag.current);
     return () => {
       if (observer) observer.disconnect();
     };
-  }, []);
-
-  useEffect(()=>{
-    console.log(dataPagination);
-  },[dataPagination]);
-
-  if (error) return <div>Hubo un error de consulta</div>;
+  }, [pageNum, theresMore, srcChanging, loading, error, params]);
 
   return (
-    <div id="elpepe" className={className} {...props}>
+    <div className={`relative ${className}`} {...props}>
       <PaginationWrapper
         error={error}
-        loading={false}
+        loading={loading}
         data={dataPagination}
         renderModel={renderModel}
         emptyMessage={empty}
       />
-      {!dataPagination.object && Math.ceil(total/10) != pageNum &&(
-        <div ref={flag}>
-          <LoadSpinner className="absolute -bottom-14 mx-auto my-2 start-0 end-0" />
-        </div>
-      )}
+      <div ref={flag} className="size-0"/>
     </div>
   );
 };

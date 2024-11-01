@@ -3,8 +3,7 @@ import usePagination from '../hooks/usePagination';
 import PaginationWrapper from './PaginationWrapper';
 
 const Scroller: React.FC<any> = ({ url, className, renderModel, empty, ...props }) => {
-  const { dataPagination, total, pageNum, swipPage, error, loading } = usePagination(url);
-  const [fetchBlocker, setFetchBlocker] = useState(false);
+  const { dataPagination, swipPage, error, loading, theresMore } = usePagination(url);
   const container = useRef<HTMLDivElement>(null);
 
   const handleScroll = (tX) => {
@@ -14,8 +13,8 @@ const Scroller: React.FC<any> = ({ url, className, renderModel, empty, ...props 
   useEffect(() => {
     const handleScrollEvent = () => {
       const { scrollLeft, scrollWidth, clientWidth } = container.current!;
-      if (scrollLeft + clientWidth >= scrollWidth - 280 && !fetchBlocker && Math.ceil(total/10) != pageNum) {
-        setFetchBlocker(true);
+      if (scrollLeft + clientWidth >= scrollWidth - 280 && theresMore) {
+        console.log(theresMore);
         swipPage();
       }
     };
@@ -26,13 +25,7 @@ const Scroller: React.FC<any> = ({ url, className, renderModel, empty, ...props 
     return () => {
       currentContainer?.removeEventListener('scroll', handleScrollEvent);
     };
-  }, [fetchBlocker]);
-
-  useEffect(() => {
-    setFetchBlocker(false);
-  }, [dataPagination]);
-
-  if (error) return <div className='text-center my-4'>Hubo un error de consulta, comprobar conexión</div>;
+  }, [theresMore]);
 
   return (
     <div className={`grid relative overflow-hidden ${className}`} {...props}>

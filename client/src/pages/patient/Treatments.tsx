@@ -275,7 +275,7 @@ const Treatments = () => {
                         Fecha asignada
                       </span>
                       <input
-                        value={new Date(Fecha).toLocaleString()}
+                        value={Fecha && new Date(Fecha).toLocaleString()}
                         readOnly={true}
                         type="text"
                         className="transition-all text-[0px] peer-checked:text-base  outline-none border-b-[1px] border-blue-600 bg-transparent"
@@ -298,7 +298,7 @@ const Treatments = () => {
                         Fecha de solicitud
                       </span>
                       <input
-                        value={new Date(CreatedAt).toLocaleString()}
+                        value={CreatedAt && new Date(CreatedAt).toLocaleString()}
                         readOnly={true}
                         type="text"
                         className="transition-all text-[0px] peer-checked:text-base  outline-none border-b-[1px] border-blue-600 bg-transparent"

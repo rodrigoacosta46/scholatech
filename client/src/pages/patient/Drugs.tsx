@@ -6,6 +6,9 @@ import { userHook } from "../../hooks/userHook";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { roles } from "../../config/roles";
+import useFetch from "../../hooks/useFetch";
+import LoadSpinner from "../../components/LoadSpinner";
+import VerticalScroller from "../../components/VerticalScroller";
 
 interface DrugInterface {
   ID: number;
@@ -16,91 +19,74 @@ interface DrugInterface {
   DeletedAt: string;
   UpdatedAt: string;
 }
+
 const Drugs = () => {
   // Por default, traer drogas más comunes
   // Tiene que haber un apartado para drogas ya usadas por le paciente
   const { userInfo, userConfig } = userHook();
   const [modal, setModal] = useState(false);
-  const [page, setPage] = useState(1);
-  const [displayedDrugs, setDisplayedDrugs] = useState<{
-    display: DrugInterface[];
-    total: number;
-  }>({
-    display: [],
-    total: 0,
-  });
-  const [searchTerm, setSearchTerm] = useState(""); // Estado para el término de búsqueda
+  const [searchTerm, setSearchTerm] = useState({
+    Search: ""
+  }); // Estado para el término de búsqueda
   const [adminModal, setAdminModal] = useState(false);
   const [drugView, setDrugView] = useState<DrugInterface>();
   const [imgSrc, setImgSrc] = useState("");
 
   const modalSetState = (key) => {
-    setDrugView(displayedDrugs.display[key])
+    //setDrugView(displayedDrugs.display[key])
     setModal(!modal);
   };
 
-  const addDrug = (e) => {};
+  const addDrug = (e) => { };
   const deleteDrug = (e) => {
     e.stopPropagation();
     confirm("Elimino medicamento");
   };
 
-  const pagination = async (searchTerm: string = "") => {
-    try {
-      const result = await axios.post(
-        "http://localhost:8000/getDrugs",
-        { Page: page, Search: searchTerm },
-        { withCredentials: true }
-      );
-      var response = result.data;
-      var parsed = JSON.parse(response.message);
-      var drugsParsed = JSON.parse(parsed.object);
-      console.log(drugsParsed, parsed.total);
-      setDisplayedDrugs({
-        display: drugsParsed,
-        total: parsed.total,
-      });
-    } catch (error) {
-      console.error("Error de consulta", error);
-      console.log("Resultados JSON");
-      console.log(error.response?.data);
-      var response = error.response?.data;
+  const drugModel = (registro, i) => {
+    console.log(registro);
+    return (
+      <Card
+        key={"n-" + i}
+        onClick={() => modalSetState(i)}
+        style={{ animationDelay: i * 0.1 + "s" }}
+        className="opacity-0 animate-fadeIn cursor-pointer relative overflow-hidden"
+        scheme={userConfig.theme}
+      >
+        {userInfo.Perfil.Name == "Admin" && (
+          <i
+            onClick={deleteDrug}
+            className="fa-solid fa-trash absolute end-1 hover:text-red-700 transition-all"
+          ></i>
+        )}
+        <img src={`http://localhost:8000/getImage/drugs/${registro.ID}/0`} onError={(e: any) => e.target.src = "img/logo.png"} alt="" className="w-auto max-h-96" />
+        <Title
+          txt={registro.Nombre}
+          className="overflow-hidden"
+          scheme={userConfig.theme}
+        />
+        <p className="text-slate-500 m-2 break-all line-clamp-4">
+          {registro.Descripcion}
+        </p>
+      </Card>
+    )
+  }
 
-      if (response.hasOwnProperty("redirect_route")) {
-        console.log("REDIRECT ROUTE");
-        window.location.href = response.redirect_route;
-      } else {
-        console.log("NO REDIRECT ROUTE");
-      }
-      if (response.hasOwnProperty("message")) {
-        console.log("THERE IS A MESSAGE");
-      }
-    }
-  };
-  
   const viewFile = (e) => {
     const file = e.target.files[0];
     if (!file) return setImgSrc("");
     const tmp = window.URL.createObjectURL(file);
     console.log(file, tmp, e.target);
-    setImgSrc(tmp);    
+    setImgSrc(tmp);
   }
-  
+
   /*
 
   useEffect(() => {
     pagination();
   }, [page]);
 */
-useEffect(() => {
-  const timer = setTimeout(() => {
-    pagination(searchTerm); // Ejecuta la búsqueda con el término actual
-  }, 2000); // Espera 2 segundos después de que el usuario deje de escribir
 
-  return () => {
-    clearTimeout(timer); // Limpia el temporizador si el usuario sigue escribiendo
-  };
-}, [searchTerm, page]); // Se ejecuta cuando el término de búsqueda o la página cambian
   return (
     <>
       {userInfo.Perfil.Name == roles.admin && (
@@ -117,11 +103,11 @@ useEffect(() => {
                 htmlFor="newDrugFile"
                 className="relative flex flex-col text-center text-2xl text-slate-400 cursor-pointer"
               >
-                <div className={`${imgSrc && "hidden" }`}>
+                <div className={`${imgSrc && "hidden"}`}>
                   <i className="fa-solid fa-file-arrow-up"></i>
                   <span className="block text-sm">Subir archivo</span>
                 </div>
-                <img src={imgSrc} className="animate-fadeIn"/>
+                <img src={imgSrc} className="animate-fadeIn" />
                 <input
                   type="file"
                   name="file"
@@ -157,7 +143,7 @@ useEffect(() => {
       )}
 
       <Modal state={modal} setter={modalSetState} scheme={userConfig.theme}>
-        <img src={`http://localhost:8000/getImage/drugs/${drugView?.ID}/0`} onError={(e:any) => e.target.src = "img/logo.png"} alt="" className="max-h-96 object-cover" />
+        <img src={`http://localhost:8000/getImage/drugs/${drugView?.ID}/0`} onError={(e: any) => e.target.src = "img/logo.png"} alt="" className="max-h-96 object-cover" />
         <div className="flex flex-col w-fit overflow-hidden">
           <Title txt={drugView?.Nombre} className="" scheme={userConfig.theme} />
           <p className="m-2">{drugView?.Descripcion}
@@ -172,21 +158,10 @@ useEffect(() => {
       />
 
       <div className="flex flex-wrap w-full text-end items-center justify-center gap-2 p-4">
-        <div className={`flex justify-between bg-white text-${userConfig.theme}-600 gap-4 rounded-full p-2 text-2xl min-w-36 shadow-[2px_2px] shadow-${userConfig.theme}-800`}>
-          <button onClick={()=>page != 1 && setPage(page-1)} className="transition-all duration-1000 peer">
-            <i className="fa-solid fa-circle-left"></i>
-          </button>
-          <p key={Math.random()} className={`animate-fadeIn transition-all duration-100 peer-active:-translate-x-full peer-active:invisible [&:has(+button:active)]:translate-x-full [&:has(+button:active)]:invisible `}>{page}</p>
-          <button onClick={()=>page != Math.ceil(displayedDrugs.total/10) && setPage(page+1)} className="">
-            <i className="fa-solid fa-circle-right"></i>
-          </button>
-        </div>
         <Searchbar
           placeholder={"Buscar medicamento"}
           className="p-3 w-96 lg:ms-auto"
-        //@ts-ignore
-          onChange={(e) => setSearchTerm(e.target.value)} // Actualiza el estado de búsqueda
-          
+          onChange={(e) => { setSearchTerm({ Search: e.target.value }) }} // Actualiza el estado de búsqueda
         />
         {userInfo.Perfil.Name == "Admin" && (
           <button
@@ -196,35 +171,14 @@ useEffect(() => {
             + Añadir droga
           </button>
         )}
-
       </div>
-      <div className="grid place-content-evenly grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 p-4">
-        {displayedDrugs.display.map((drug, i) => (
-          <Card
-            key={"n-"+page+i}
-            onClick={() => modalSetState(i)}
-            style={{ animationDelay: i * 0.1 + "s" }}
-            className="opacity-0 animate-fadeIn cursor-pointer relative overflow-hidden"
-            scheme={userConfig.theme}
-          >
-            {userInfo.Perfil.Name == "Admin" && (
-              <i
-                onClick={deleteDrug}
-                className="fa-solid fa-trash absolute end-1 hover:text-red-700 transition-all"
-              ></i>
-            )}
-            <img src={`http://localhost:8000/getImage/drugs/${drug.ID}/0`} onError={(e:any) => e.target.src = "img/logo.png"} alt="" className="w-auto max-h-96"/>
-            <Title
-              txt={drug.Nombre}
-              className="overflow-hidden"
-              scheme={userConfig.theme}
-            />
-            <p className="text-slate-500 m-2 break-all line-clamp-4">
-              {drug.Descripcion}
-            </p>
-          </Card>
-        ))}
-      </div>
+        <VerticalScroller 
+          url="http://localhost:8000/getDrugs"
+          params={searchTerm}
+          renderModel={drugModel}
+          empty="No hay drogas"
+          className="grid place-content-center grid-cols-[repeat(auto-fit,250px)] gap-4 p-4"
+        />
     </>
   );
 };

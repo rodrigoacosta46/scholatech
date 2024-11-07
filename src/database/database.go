@@ -1,6 +1,7 @@
 package database
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/go-faker/faker/v4"
 	"github.com/nicolas-k-cmd/proj-redes/src/env"
+	redis "github.com/redis/go-redis/v9"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -118,6 +120,10 @@ type Rol struct {
 
 var Db *gorm.DB
 
+var Ctx context.Context
+
+var Client *redis.Client
+
 /*
 This function runs automatically when importing the package
 and is responsible for the orchestration, execution and migration
@@ -179,6 +185,38 @@ func init() {
 			panic(err)
 		}
 	}
+	redisService()
+}
+
+func redisService() {
+	Ctx = context.Background()
+	Client = redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // No password set
+		DB:       0,  // Use default DB
+		Protocol: 2,  // Connection protocol
+	})
+	if Client == nil {
+		panic("Nil client")
+	}
+	// Verificar la conexión
+	_, err := Client.Ping(Ctx).Result()
+	if err != nil {
+		fmt.Printf("Error al conectar a Redis: %v\n", err)
+		os.Exit(1) // Salir si no se puede conectar
+	} else {
+		fmt.Println("Conexión a Redis establecida exitosamente")
+	}
+	err = Client.Set(Ctx, "DATABASE_MIGRATION_TIMESTAMP", "UNDEFINED", 0).Err()
+	if err != nil {
+		panic(err)
+	}
+	val, err := Client.Get(Ctx, "DATABASE_MIGRATION_TIMESTAMP").Result()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("DATABASE_MIGRAITON_TIMESTAMP", val)
+
 }
 
 func callFuncSeeder(enabler int, fn interface{}, params ...interface{}) (interface{}, error) {

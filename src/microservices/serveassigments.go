@@ -29,7 +29,8 @@ func ServeAssigments(w http.ResponseWriter, r *http.Request) {
 		structParser: turnos,
 		command:      database.Db.Model(&database.Turno{}).Where("doctor_id = ? AND estado = ?", id, vars["status"]),
 		operation:    "Find",
-	})
+		requestedBy:  "assigments",
+	}, false)
 	if !boolerr {
 		return
 	} else {

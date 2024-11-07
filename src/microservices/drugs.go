@@ -11,10 +11,12 @@ import (
 func ServeDrugs(w http.ResponseWriter, r *http.Request) {
 	var drugs []database.Medicamento
 	spr, boolerr := MicroPagination(w, r, ClosureStruct{
-		structParser: drugs,
-		command:      database.Db.Model(&database.Medicamento{}),
-		operation:    "Find",
-	})
+		structParser:    drugs,
+		command:         database.Db.Model(&database.Medicamento{}),
+		operation:       "Find",
+		requestedBy:     "drugs",
+		SearchableEntry: "Nombre",
+	}, true)
 	if !boolerr {
 		return
 	} else {

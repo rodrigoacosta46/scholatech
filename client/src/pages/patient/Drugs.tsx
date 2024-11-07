@@ -16,7 +16,6 @@ interface DrugInterface {
   DeletedAt: string;
   UpdatedAt: string;
 }
-
 const Drugs = () => {
   // Por default, traer drogas más comunes
   // Tiene que haber un apartado para drogas ya usadas por le paciente
@@ -30,6 +29,7 @@ const Drugs = () => {
     display: [],
     total: 0,
   });
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para el término de búsqueda
   const [adminModal, setAdminModal] = useState(false);
   const [drugView, setDrugView] = useState<DrugInterface>();
   const [imgSrc, setImgSrc] = useState("");
@@ -45,11 +45,11 @@ const Drugs = () => {
     confirm("Elimino medicamento");
   };
 
-  const pagination = async () => {
+  const pagination = async (searchTerm: string = "") => {
     try {
       const result = await axios.post(
         "http://localhost:8000/getDrugs",
-        { Page: page },
+        { Page: page, Search: searchTerm },
         { withCredentials: true }
       );
       var response = result.data;
@@ -85,11 +85,22 @@ const Drugs = () => {
     console.log(file, tmp, e.target);
     setImgSrc(tmp);    
   }
+  
+  /*
 
   useEffect(() => {
     pagination();
   }, [page]);
+*/
+useEffect(() => {
+  const timer = setTimeout(() => {
+    pagination(searchTerm); // Ejecuta la búsqueda con el término actual
+  }, 2000); // Espera 2 segundos después de que el usuario deje de escribir
 
+  return () => {
+    clearTimeout(timer); // Limpia el temporizador si el usuario sigue escribiendo
+  };
+}, [searchTerm, page]); // Se ejecuta cuando el término de búsqueda o la página cambian
   return (
     <>
       {userInfo.Perfil.Name == roles.admin && (
@@ -173,6 +184,9 @@ const Drugs = () => {
         <Searchbar
           placeholder={"Buscar medicamento"}
           className="p-3 w-96 lg:ms-auto"
+        //@ts-ignore
+          onChange={(e) => setSearchTerm(e.target.value)} // Actualiza el estado de búsqueda
+          
         />
         {userInfo.Perfil.Name == "Admin" && (
           <button

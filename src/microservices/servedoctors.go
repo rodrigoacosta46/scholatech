@@ -15,7 +15,8 @@ func ServeDoctors(w http.ResponseWriter, r *http.Request) {
 		structParser: doctors,
 		command:      database.Db.Model(&database.User{}).Where("perfil_id = 2"),
 		operation:    "Find",
-	})
+		requestedBy:  "doctors",
+	}, true)
 	if !boolerr {
 		return
 	} else {

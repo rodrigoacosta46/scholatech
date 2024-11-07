@@ -44,14 +44,15 @@ type Turno struct {
 	ID         int        `gorm:"primaryKey"`
 	DoctorID   int        `gorm:"not null"`
 	PacienteID int        `gorm:"not null"`
-	Fecha      time.Time  `gorm:"type:date;not null"`
-	Hora       time.Time  `gorm:"type:time;not null"`
+	Fecha      *time.Time `gorm:"type:datetime"`
 	Motivo     string     `gorm:"size:50;not null"`
 	Notas      string     `gorm:"type:text;not null"`
-	Estado     string     `gorm:"type:enum('accepted','rejected','pending');not null"`
+	Estado     string     `gorm:"type:enum('accepted','closed','pending');not null"`
 	CreatedAt  time.Time  `gorm:"type:datetime;not null"`
 	UpdatedAt  *time.Time `gorm:"type:datetime"`
 	DeletedAt  *time.Time `gorm:"type:datetime"`
+	Doctor     User       `gorm:"foreignKey:DoctorID;" faker:"-"`
+	Paciente   User       `gorm:"foreignKey:PacienteID;" faker:"-"`
 }
 
 type Historial struct {
@@ -63,6 +64,7 @@ type Historial struct {
 	CreatedAt   time.Time  `gorm:"type:datetime;not null"`
 	UpdatedAt   *time.Time `gorm:"type:datetime"`
 	DeletedAt   *time.Time `gorm:"type:datetime"`
+	Turno       Turno      `gorm:"foreignKey:TurnoID;" faker:"-"`
 }
 
 type Medicamento struct {
@@ -77,6 +79,7 @@ type Medicamento struct {
 type Notificacion struct {
 	ID         int        `gorm:"primaryKey"`
 	UsuarioID  int        `gorm:"not null"`
+	Title      string     `gorm:"type:text;not null"`
 	Mensaje    string     `gorm:"type:text;not null"`
 	FechaEnvio time.Time  `gorm:"type:datetime;not null"`
 	Estado     string     `gorm:"type:enum('pendiente','leido','enviado');not null"`
@@ -95,12 +98,16 @@ type Perfil struct {
 }
 
 type Receta struct {
-	ID            int        `gorm:"primaryKey"`
-	HistorialID   int        `gorm:"not null"`
-	MedicamentoID int        `gorm:"not null"`
-	CreatedAt     time.Time  `gorm:"type:datetime;not null"`
-	UpdatedAt     *time.Time `gorm:"type:datetime"`
-	DeletedAt     *time.Time `gorm:"type:datetime"`
+	ID            int         `gorm:"primaryKey"`
+	HistorialID   int         `gorm:"not null"`
+	MedicamentoID int         `gorm:"not null"`
+	Cantidad      float32     `gorm:"not null"`
+	Tomas         string      `gorm:"not null"`
+	CreatedAt     time.Time   `gorm:"type:datetime;not null"`
+	UpdatedAt     *time.Time  `gorm:"type:datetime"`
+	DeletedAt     *time.Time  `gorm:"type:datetime"`
+	Historial     Historial   `gorm:"foreignKey:HistorialID;" faker:"-"`
+	Medicamento   Medicamento `gorm:"foreignKey:MedicamentoID;" faker:"-"`
 }
 
 /*
@@ -126,7 +133,7 @@ of the database. In case of failure, it will throw a panic error.
 func init() {
 	fmt.Println("BOOTING UP DATABASE SERVICE....")
 	var err error
-	Db, err = gorm.Open(mysql.Open("root@tcp(localhost:3306)/scholaTech26GORM?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
+	Db, err = gorm.Open(mysql.Open("root@tcp(localhost:3306)/scholaTech26GORM?charset=utf8mb4&parseTime=True&loc=UTC"), &gorm.Config{})
 	if err != nil {
 		fmt.Println("FATAL: No se pudo conectar a la base de datos")
 		panic(err)

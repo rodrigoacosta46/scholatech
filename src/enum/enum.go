@@ -68,4 +68,9 @@ func init() {
 		Client_URL()+"/profile",
 		"com.suiza.profile",
 	)
+	URLs["story"] = NewStatusMap(
+		"/story",
+		Client_URL()+"/story",
+		Client_URL()+"/story",
+	)
 }

@@ -40,7 +40,7 @@ const Doctors = () => {
     <Card
       key={"k-"+i}
       onClick={() => modalSetState(registro)}
-      className="relative opacity-0 animate-fadeIn flex flex-col flex-shrink-0 max-w-[280px] cursor-pointer overflow-hidden"
+      className="relative opacity-0 animate-fadeIn flex flex-col flex-shrink-0 max-w-[280px] m-2 cursor-pointer overflow-hidden"
       scheme={userConfig!["theme"]}
     >
       <img

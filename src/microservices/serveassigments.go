@@ -22,12 +22,13 @@ func ServeAssigments(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(structs.Response{Message: "Solicitud GET Invalida"})
 		return
 	}
+
 	jwtToken, _ := Middleware.GetCookiePostMiddleware(w, r)
 	id, _ := (jwtToken.Claims.GetSubject())
 	var turnos []database.Turno
 	spr, boolerr := MicroPagination(w, r, ClosureStruct{
 		structParser: turnos,
-		command:      database.Db.Model(&database.Turno{}).Where("doctor_id = ? AND estado = ?", id, vars["status"]),
+		command:      database.Db.Model(&database.Turno{}).Where("paciente_id = ? OR doctor_id = ?", id, id).Where("estado = ?", vars["status"]).Where("deleted_at IS NULL AND estado != 'closed'").Order("updated_at DESC").Preload("Doctor").Preload("Paciente"),
 		operation:    "Find",
 	})
 	if !boolerr {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import OpenCard from "./OpenCard";
 import React from "react";
+import useFetch from "../hooks/useFetch";
 
 interface NotificationsProps {
   id: string,
@@ -12,24 +13,47 @@ interface NotificationsProps {
 const Notifications = (props: NotificationsProps) => {
   const [visible, setVisible] = useState(true);
   const [read, setReadState] = useState(props.state);
-  
+  const { response:successDiscard, fetcher:discard, error:errorDiscard } = useFetch("http://localhost:8000/updateNotification/delete", {ID: props.id});
+  const { response:successRead, fetcher:markAsRead, error:errorRead } = useFetch("http://localhost:8000/updateNotification/read", {ID: props.id});
+  const states = {
+    "pendiente": "leido",
+    "leido": "pendiente"
+  }
+
   //Axios
   const handleDelete = () => {
-    if(read != "UNREAD"){
-      setVisible(!visible);
+    if(read != "pendiente"){
+      discard()
     }
   };
 
+  useEffect(() => {
+    if (errorDiscard != null && errorDiscard.response.data) {
+      return alert(errorDiscard.response.data.message);
+    } 
+    
+    if (successDiscard != null) {
+      console.log(successDiscard, errorDiscard);
+      setVisible(!visible);
+    }
+  }, [successDiscard, errorDiscard])
+
   //Axios
   const handleCardReadState = (e) => {
-    let states = {
-      "UNREAD": "READ",
-      "READ": "UNREAD"
-    }
-
-    if (read != "READ") setReadState(states[read]);
+    if (read != "leido") markAsRead();
   }
 
+  useEffect(() => {
+    if (errorRead != null && errorRead.response.data) {
+      return alert(errorRead.response.data.message);
+    } 
+    
+    if (successRead != null) {
+      console.log(successRead, errorRead);
+      setReadState(states[read]);
+    }
+  }, [successRead, errorRead])
+  
   return (
     <div
       className={`overflow-hidden rounded-3xl transition-all duration-1000
@@ -37,7 +61,7 @@ const Notifications = (props: NotificationsProps) => {
           !visible ? "flag max-h-0 p-px" : "max-h-96 p-2"
         }
         ${
-          read == "UNREAD" && "animate-pulse text-yellow-400"
+          read == "pendiente" && "animate-pulse text-yellow-400"
         }
         `
      }

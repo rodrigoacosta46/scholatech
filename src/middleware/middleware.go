@@ -152,20 +152,22 @@ func EnableCORS(next http.Handler) http.Handler {
 	})
 }
 
-func AdminValidation(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		jwtToken, _ := GetCookiePostMiddleware(w, r)
-		id, _ := (jwtToken.Claims.GetSubject())
-		res := database.Db.Where("perfil_id = 3").Find(&database.User{}, id)
-		if res.Error != nil {
-			fmt.Println("Error de consulta adminvalidation")
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(structs.Response{Message: "Error del servidor"})
-		} else if res.RowsAffected < 1 {
-			fmt.Println("Usuario no autorizado adminvalidation")
-			w.WriteHeader(http.StatusForbidden)
-			json.NewEncoder(w).Encode(structs.Response{Message: "No tiene los permisos requeridos"})
-		}
-		next.ServeHTTP(w, r)
-	})
+func RoleValidation(roleID string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			jwtToken, _ := GetCookiePostMiddleware(w, r)
+			id, _ := (jwtToken.Claims.GetSubject())
+			res := database.Db.Where("perfil_id = "+roleID).Find(&database.User{}, id)
+			if res.Error != nil {
+				fmt.Println("Error de consulta rolevaldation")
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(structs.Response{Message: "Error del servidor"})
+			} else if res.RowsAffected < 1 {
+				fmt.Println("Usuario no autorizado rolevalidation")
+				w.WriteHeader(http.StatusForbidden)
+				json.NewEncoder(w).Encode(structs.Response{Message: "No tiene los permisos requeridos"})
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
 }

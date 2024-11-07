@@ -591,14 +591,14 @@ const Profile = () => {
     reader.onloadend = () => {
       if (reader.result) {
         console.log(reader.result);
-        base64data = reader.result.toString().split(',')[1]; // Obtener solo la parte Base64
+        base64data = reader.result.toString().split(',')[1];
         setPicState({
           store: base64data,
           file: window.URL.createObjectURL(val),
           name: val.name,
         });
         handleFieldSave("Picture", base64data);
-        console.log(base64data); // Asegúrate de que este log se ejecute después de que se haya leído el archivo
+        console.log(base64data);
       } else {
         console.error("Error: reader.result es null");
       }

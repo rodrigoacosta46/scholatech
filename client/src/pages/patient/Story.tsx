@@ -1,103 +1,103 @@
 import OpenCard from "../../components/OpenCard";
+import VerticalScroller from "../../components/VerticalScroller";
 import Title from "../../components/Title";
 import Section from "../../components/Section";
 import { userHook } from "../../hooks/userHook";
-import React, { useEffect } from "react";
+import React from "react";
 
 const Story = () => {
   const { userConfig } = userHook();
-  return (
-    <>
-      <Title
-        txt="Historial médico"
-        allowAnimations={true}
-        scheme={userConfig.theme}
-      />
 
-      <div className="flex flex-col gap-12 m-12">
-        <div>
-          <Section
-            txt="Turnos Pendientes"
-            icon={<i className="fa-solid fa-clock"></i>}
-            scheme={userConfig.theme}
-          />
-          <OpenCard
-            className="m-4 text-center"
-            icon={<i className="fa-solid fa-clock text-gray-400"></i>}
-            title={<div className="ps-2 text-slate-700">Turno sin asignar</div>}
-            content={
-              <div className="mt-4 m-6 flex flex-wrap justify-evenly gap-3">
-                <p className="font-bold">
-                  Doctor asignado:
-                  <span className="ms-2 font-normal">
-                    pendiente
-                    <i className="fa-solid fa-clock text-gray-400"></i>
-                  </span>
-                </p>
-                <p className="font-bold">
-                  Motivo:
-                  <span className="ms-2 font-normal">N/a</span>
-                </p>
-                <p className="font-bold">
-                  Fecha asignada:
-                  <span className="ms-2 font-normal">
-                    pendiente
-                    <i className="fa-solid fa-clock text-gray-400"></i>
-                  </span>
-                </p>
-                <p className="font-bold">
-                  Fecha de pedido de consulta:
-                  <span className="ms-2 font-normal">07/02/24</span>
-                </p>
-              </div>
-            }
-          />
-        </div>
-        <div>
-          <Section
-            txt="Turnos Asignados"
-            icon={<i className="fa-solid fa-clipboard-list"></i>}
-            scheme={userConfig.theme}
-          />
-          <OpenCard
-            className="m-4 text-center"
-            icon={
-              <i className="fa-solid fa-clipboard-list text-xl text-gray-700"></i>
-            }
-            title={
-              <div className="ps-2 text-slate-700">
-                Turno con el especialista Eugene Gutierrez
-              </div>
-            }
-            content={
-              <div className="mt-4 m-6 flex flex-wrap justify-evenly gap-3">
-                <p className="font-bold">
-                  Doctor asignado:
-                  <span className="ms-2 font-normal">Eugene Gutierrez</span>
-                </p>
-                <p className="font-bold">
-                  Motivo:
-                  <span className="ms-2 font-normal">Dolor estomacal</span>
-                </p>
-                <p className="font-bold">
-                  Fecha asignada:
-                  <span className="ms-2 font-normal">03/10/24</span>
-                </p>
-                <p className="font-bold">
-                  Fecha de pedido de consulta:
-                  <span className="ms-2 font-normal">07/04/24</span>
-                </p>
-              </div>
-            }
-          />
-        </div>
-        <div>
-          <Section
-            txt="Turnos Pasados"
-            icon={<i className="fa-solid fa-box-archive"></i>}
-            scheme={userConfig.theme}
-          />
-          <OpenCard
+  const pendingAssigmentsModel = (registro, i) => {
+    let createdAt = new Date(registro.CreatedAt).toLocaleString();
+    return (
+      <OpenCard
+        key={"n-" + i}
+        className="m-4 text-center"
+        icon={<i className="fa-solid fa-clock text-gray-400"></i>}
+        title={
+          <div className="ps-2 text-slate-700">
+            Turno sin asignar &nbsp;
+            <span className="font-bold">{createdAt}</span>
+          </div>
+        }
+        content={
+          <div className="mt-4 m-6 flex flex-wrap justify-evenly gap-3">
+            <p className="font-bold">
+              Doctor solicitado:
+              <span className="ms-2 font-normal">
+                {registro.Doctor.Username}
+              </span>
+            </p>
+            <p className="font-bold">
+              Motivo:
+              <span className="ms-2 font-normal">{registro.Motivo}</span>
+            </p>
+            <p className="font-bold">
+              Fecha asignada:
+              <span className="ms-2 font-normal">
+                pendiente
+                <i className="fa-solid fa-clock text-gray-400"></i>
+              </span>
+            </p>
+            <p className="font-bold">
+              Fecha de pedido de consulta:
+              <span className="ms-2 font-normal">{createdAt}</span>
+            </p>
+          </div>
+        }
+      />
+    );
+  };
+
+  const assignedAssigmentModel = (registro, i) => {
+    return (
+      <OpenCard
+        key={"m-" + i}
+        className="m-4 text-center"
+        icon={
+          <i className="fa-solid fa-clipboard-list text-xl text-gray-700"></i>
+        }
+        title={
+          <div className="ps-2 text-slate-700">
+            Turno con el especialista {registro.Doctor.Username}
+          </div>
+        }
+        content={
+          <div className="mt-4 m-6 flex flex-wrap justify-evenly gap-3">
+            <p className="font-bold">
+              Doctor asignado:
+              <span className="ms-2 font-normal">
+                {registro.Doctor.Username}
+              </span>
+            </p>
+            <p className="font-bold">
+              Motivo:
+              <span className="ms-2 font-normal">{registro.Motivo}</span>
+            </p>
+            <p className="font-bold">
+              Fecha asignada:
+              <span className="ms-2 font-normal">
+                {new Date(registro.Fecha).toLocaleString()}
+              </span>
+            </p>
+            <p className="font-bold">
+              Fecha de pedido de consulta:
+              <span className="ms-2 font-normal">
+                {new Date(registro.CreatedAt).toLocaleString()}
+              </span>
+            </p>
+          </div>
+        }
+      />
+    );
+  };
+
+  const closedAssigmentModel = (registro, i) => {
+    console.log(registro);
+    return(
+      <OpenCard
+      key={"o-"+i}
             className="m-4 text-center"
             icon={<i className="fa-solid fa-check-to-slot text-green-800"></i>}
             title={
@@ -160,6 +160,52 @@ const Story = () => {
                 </div>
               </div>
             }
+          />
+    )
+  }
+  return (
+    <>
+      <Title
+        txt="Historial médico"
+        allowAnimations={true}
+        scheme={userConfig.theme}
+      />
+
+      <div className="flex flex-col gap-12 m-12">
+        <div>
+          <Section
+            txt="Turnos Pendientes"
+            icon={<i className="fa-solid fa-clock"></i>}
+            scheme={userConfig.theme}
+          />
+          <VerticalScroller
+            url="http://localhost:8000/getTurnos/pending"
+            renderModel={pendingAssigmentsModel}
+            empty="No tenes asignaciones pendientes"
+          />
+        </div>
+        <div>
+          <Section
+            txt="Turnos Asignados"
+            icon={<i className="fa-solid fa-clipboard-list"></i>}
+            scheme={userConfig.theme}
+          />
+          <VerticalScroller
+            url="http://localhost:8000/getTurnos/accepted"
+            renderModel={assignedAssigmentModel}
+            empty="No tenes turnos asignados pendientes"
+          />
+        </div>
+        <div>
+          <Section
+            txt="Turnos Pasados"
+            icon={<i className="fa-solid fa-box-archive"></i>}
+            scheme={userConfig.theme}
+          />
+          <VerticalScroller
+            url="http://localhost:8000/getResults"
+            renderModel={closedAssigmentModel}
+            empty="No tenes turnos pasados"
           />
         </div>
       </div>

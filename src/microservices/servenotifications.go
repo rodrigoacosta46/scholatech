@@ -22,7 +22,8 @@ func ServeNotifications(w http.ResponseWriter, r *http.Request) {
 		structParser: notificaciones,
 		command:      database.Db.Model(&database.Notificacion{}).Where("usuario_id = ? AND deleted_at IS NULL", id).Select("notificacions.*, CASE WHEN DATE(notificacions.created_at) = DATE(LAG(notificacions.created_at) OVER (ORDER BY notificacions.created_at DESC)) THEN 0 ELSE 1 END AS isSection").Order("notificacions.created_at DESC"),
 		operation:    "Scan",
-	})
+		requestedBy:  "Notificaitons",
+	}, false)
 	if !boolerr {
 		return
 	} else {

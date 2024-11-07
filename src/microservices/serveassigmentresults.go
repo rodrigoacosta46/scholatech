@@ -14,7 +14,8 @@ func ServeAssigmentsResults(w http.ResponseWriter, r *http.Request) {
 		structParser: historial,
 		command:      database.Db.Model(&database.Historial{}).Joins("Turno"), //Preload does not work
 		operation:    "Find",
-	})
+		requestedBy:  "Turno",
+	}, false)
 	if !boolerr {
 		return
 	} else {

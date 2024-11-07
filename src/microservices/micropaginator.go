@@ -42,6 +42,7 @@ func SampleClosure(input ClosureStruct, req PaginationRequest) func() (ServePagi
 		var err error
 		err = input.command.Count(&totalPages).Error
 		if err != nil {
+			fmt.Println("Error al ejecutar la closure4", err)
 			return spr, false
 		}
 		searchTerm := "%" + req.Search + "%" // Añadir los comodines de LIKE
@@ -57,8 +58,11 @@ func SampleClosure(input ClosureStruct, req PaginationRequest) func() (ServePagi
 			err = input.command.First(&input.structParser).Error
 		case "Last":
 			err = input.command.Offset(from).Last(&input.structParser).Error
+		case "Scan":
+			err = input.command.Scan(&input.structParser).Error
 		}
 		if err != nil {
+			fmt.Println("Error al ejecutar la closure", err)
 			return spr, false
 		} else {
 			spr.Total = int(totalPages)

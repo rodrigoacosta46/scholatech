@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useFetch from "./useFetch";
 
-const usePagination = (url: string, params: any) => {
+const usePagination = (url: string, params: Record<string, any> = {}) => {
   const [dataPagination, setDataPagination] = useState<any>([]);
   const [pageNum, setPageNum] = useState(1);
   const [theresMore, setNo] = useState(true);
@@ -12,24 +12,23 @@ const usePagination = (url: string, params: any) => {
   });
 
   useEffect(() => {
-      console.log("Cambiando fuente, reseteando paginación");
+      if (Object.keys(params).length > 0) {
+        console.log("Cambiando fuente, reseteando paginación", response);
+
       setSrcState(true);
       setPageNum(1); 
       setDataPagination([]); 
       setNo(true); 
       setSrcState(false); 
-
+      }
   }, [params]);
 
   useEffect(() => {
     if (theresMore && !srcChanging) {
-      setSrcState(true); 
       console.log("Cargando página: ", pageNum);
       fetcher();
-      setSrcState(false); 
-
     }
-  }, [pageNum, theresMore, srcChanging, params]); 
+  }, [pageNum, theresMore, srcChanging]); 
 
   useEffect(() => {
     if (response) {

@@ -24,7 +24,7 @@ var Store *sessions.CookieStore
 
 var WebFullURL bool
 
-var SERVER_PROTOCOL, WEB_PROTOCOL, SERVER_ADDRESS, WEB_ADDRESS string
+var SERVER_PROTOCOL, WEB_PROTOCOL, SERVER_ADDRESS, WEB_ADDRESS, JWT_ISSUER, CACHE_NO_ISSUER string
 var SERVER_PORT, WEB_PORT int
 
 var SEED_DRUGS, ENABLE_FAKER, FAKER_DOCTOR, FAKER_DOCTOR_TOTAL, FAKER_PATIENT, FAKER_PATIENT_TOTAL int
@@ -45,11 +45,17 @@ func init() {
 	CookieName = os.Getenv("COOKIE_NAME")
 	WebFullURL = (os.Getenv("WEB_FULL_URL") == "1")
 	SERVER_ADDRESS = os.Getenv("SERVER_ADDRESS")
-	SERVER_PORT, _ = strconv.Atoi(os.Getenv("SERVER_PORT"))
+	JWT_ISSUER = os.Getenv("JWT_ISSUER")
 	SERVER_PROTOCOL = os.Getenv("SERVER_PROTOCOL")
 	WEB_ADDRESS = os.Getenv("WEB_ADDRESS")
 	WEB_PORT, _ = strconv.Atoi(os.Getenv("WEB_PORT"))
+	CACHE_NO_ISSUER = os.Getenv("CACHE_NO_ISSUER")
 	WEB_PROTOCOL = os.Getenv("WEB_PROTOCOL")
+	SERVER_PORT, err = strconv.Atoi(os.Getenv("SERVER_PORT"))
+	if err != nil {
+		fmt.Println("UNABLE TO PARSE ENVIROMENT VARIABLE SERVER_PORT TO INT")
+		panic(err)
+	}
 	SEED_DRUGS, err = strconv.Atoi(os.Getenv("SEED_DRUGS"))
 	if err != nil {
 		fmt.Println("UNABLE TO PARSE ENVIROMENT VARIABLE SEED_DRUGS TO INT")

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/nicolas-k-cmd/proj-redes/src/database"
+	"github.com/nicolas-k-cmd/proj-redes/src/env"
 	"github.com/nicolas-k-cmd/proj-redes/src/structs"
 	redis "github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
@@ -88,7 +89,13 @@ func MicroPagination(w http.ResponseWriter, r *http.Request, input ClosureStruct
 		json.NewEncoder(w).Encode(structs.Response{Message: "Solicitud JSON Invalida"})
 		return ServePaginationResponse{}, false
 	}
-	cacheKey := fmt.Sprintf("pagination:%s:%s:%d", input.requestedBy, req.Search, req.Page)
+	var CacheKeywords string
+	if req.Search != nil {
+		CacheKeywords = *req.Search
+	} else {
+		CacheKeywords = env.CACHE_NO_ISSUER
+	}
+	cacheKey := fmt.Sprintf("pagination:%s:%s:%d", input.requestedBy, CacheKeywords, req.Page)
 
 	if StoreRedis {
 		cachedResult, err := database.Client.Get(database.Ctx, cacheKey).Result()

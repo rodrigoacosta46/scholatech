@@ -12,10 +12,12 @@ func ServeDoctors(w http.ResponseWriter, r *http.Request) {
 
 	var doctors []database.User
 	spr, boolerr := MicroPagination(w, r, ClosureStruct{
-		structParser: doctors,
-		command:      database.Db.Model(&database.User{}).Where("perfil_id = 2"),
-		operation:    "Find",
-		requestedBy:  "doctors",
+		structParser:    doctors,
+		command:         database.Db.Model(&database.User{}).Where("perfil_id = 2"),
+		operation:       "Find",
+		requestedBy:     "doctors",
+		SearchableEntry: "",
+		AllowLike:       false,
 	}, true)
 	if !boolerr {
 		return

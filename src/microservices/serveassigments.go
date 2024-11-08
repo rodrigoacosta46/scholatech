@@ -27,10 +27,12 @@ func ServeAssigments(w http.ResponseWriter, r *http.Request) {
 	id, _ := (jwtToken.Claims.GetSubject())
 	var turnos []database.Turno
 	spr, boolerr := MicroPagination(w, r, ClosureStruct{
-		structParser: turnos,
-		command:      database.Db.Model(&database.Turno{}).Where("paciente_id = ? OR doctor_id = ?", id, id).Where("estado = ?", vars["status"]).Where("deleted_at IS NULL AND estado != 'closed'").Order("updated_at DESC").Preload("Doctor").Preload("Paciente"),
-		operation:    "Find",
-		requestedBy:  "assigments",
+		structParser:    turnos,
+		command:         database.Db.Model(&database.Turno{}).Where("paciente_id = ? OR doctor_id = ?", id, id).Where("estado = ?", vars["status"]).Where("deleted_at IS NULL AND estado != 'closed'").Order("updated_at DESC").Preload("Doctor").Preload("Paciente"),
+		operation:       "Find",
+		requestedBy:     "assigments",
+		SearchableEntry: "",
+		AllowLike:       false,
 	}, false)
 	if !boolerr {
 		return

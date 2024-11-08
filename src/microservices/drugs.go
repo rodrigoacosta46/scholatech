@@ -16,6 +16,7 @@ func ServeDrugs(w http.ResponseWriter, r *http.Request) {
 		operation:       "Find",
 		requestedBy:     "drugs",
 		SearchableEntry: "Nombre",
+		AllowLike:       true,
 	}, true)
 	if !boolerr {
 		return

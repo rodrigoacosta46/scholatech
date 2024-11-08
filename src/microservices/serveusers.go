@@ -65,9 +65,11 @@ func ServeUsers(w http.ResponseWriter, r *http.Request) {
 	pageStruct.Page = req.Page
 
 	spr, boolerr := (SampleClosure(ClosureStruct{
-		structParser: users,
-		command:      qry.Preload("Perfil"),
-		operation:    "Find",
+		structParser:    users,
+		command:         qry.Preload("Perfil"),
+		operation:       "Find",
+		SearchableEntry: "",
+		AllowLike:       false,
 	}, pageStruct))()
 	if !boolerr {
 		return

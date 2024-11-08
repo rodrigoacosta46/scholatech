@@ -11,10 +11,12 @@ import (
 func ServeAssigmentsResults(w http.ResponseWriter, r *http.Request) {
 	var historial []database.Turno
 	spr, boolerr := MicroPagination(w, r, ClosureStruct{
-		structParser: historial,
-		command:      database.Db.Model(&database.Historial{}).Joins("Turno"), //Preload does not work
-		operation:    "Find",
-		requestedBy:  "Turno",
+		structParser:    historial,
+		command:         database.Db.Model(&database.Historial{}).Joins("Turno"), //Preload does not work
+		operation:       "Find",
+		requestedBy:     "Turno",
+		SearchableEntry: "",
+		AllowLike:       false,
 	}, false)
 	if !boolerr {
 		return

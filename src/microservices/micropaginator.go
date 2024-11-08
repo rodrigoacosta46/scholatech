@@ -19,7 +19,7 @@ type ServePaginationResponse struct {
 
 type PaginationRequest struct {
 	Page   int
-	Search string
+	Search *string
 }
 
 type ClosureStruct struct {
@@ -28,6 +28,7 @@ type ClosureStruct struct {
 	operation       string
 	requestedBy     string
 	SearchableEntry string
+	AllowLike       bool
 }
 
 var LIMIT_PAGE int = 10
@@ -45,15 +46,18 @@ func SampleClosure(input ClosureStruct, req PaginationRequest) func() (ServePagi
 			fmt.Println("Error al ejecutar la closure4", err)
 			return spr, false
 		}
-		searchTerm := "%" + req.Search + "%" // Añadir los comodines de LIKE
-		input.command = input.command.Where(input.SearchableEntry+" LIKE ?", searchTerm)
+		if input.AllowLike && req.Search != nil {
+			searchTerm := "%" + *req.Search + "%"
+			input.command = input.command.Where(input.SearchableEntry+" LIKE ?", searchTerm)
+		}
+
 		input.command = input.command.Offset(from).Limit(LIMIT_PAGE)
 		switch input.operation {
 		case "Find":
-			//err = input.command.Find(&input.structParser).Error
-			resultDebug := input.command.Debug().Find(&input.structParser)
-			fmt.Println(resultDebug.Statement.SQL.String())
-			err = nil
+			err = input.command.Find(&input.structParser).Error
+			//resultDebug := input.command.Debug().Find(&input.structParser)
+			//fmt.Println(resultDebug.Statement.SQL.String())
+			//err = nil
 		case "First":
 			err = input.command.First(&input.structParser).Error
 		case "Last":

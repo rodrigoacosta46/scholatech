@@ -61,6 +61,7 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 	var nameFormat bool = true
 
 	regex := regexp.MustCompile(`^([A-ZÑÁÉÍÓÚÜ][a-zñáéíóúü\.\-']+)(\s[A-ZÑÁÉÍÓÚÜ][a-zñáéíóúü\.\-']+){1,}$`)
+	fmt.Println("Username: ", username)
 	if regex.MatchString(username) {
 		fmt.Println("Nombre cumple con formato")
 	} else {

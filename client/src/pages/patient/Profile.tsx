@@ -625,7 +625,7 @@ const Profile = () => {
       <div
         className={`max-h-60 bg-${userConfig.theme}-950 flex justify-center gap-2 p-6 opacity-0 animate-[slideIn_2s_ease-in-out_1_forwards]`}
       >
-        <div className="bg-gray-600 w-48 h-48 rounded-full flex justify-center items-center">
+        <div className="bg-gray-600 size-48 rounded-full flex justify-center items-center">
           <img
             src={`http://localhost:8000/getImage/profiles/${userInfo.ID}/${userInfo.ID}`}
             alt=""

@@ -8,6 +8,7 @@ import (
 	"net/mail"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/nicolas-k-cmd/proj-redes/src/cookies"
@@ -57,7 +58,7 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(structs.Response{Message: "Solicitud JSON Invalida"})
 		return
 	}
-	username := req.Username
+	username := strings.TrimSpace(req.Username)
 	var nameFormat bool = true
 
 	regex := regexp.MustCompile(`^([A-ZÑÁÉÍÓÚÜ][a-zñáéíóúü\.\-']+)(\s[A-ZÑÁÉÍÓÚÜ][a-zñáéíóúü\.\-']+){1,}$`)
@@ -123,7 +124,8 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(structs.Response{Message: "La fecha de nacimiento es invalida"})
 		return
 	}
-	email := req.Email
+
+	email := strings.TrimSpace(req.Email)
 	_, err_email := mail.ParseAddress(email)
 	if err_email != nil {
 		fmt.Println("Correo electronico invalido")

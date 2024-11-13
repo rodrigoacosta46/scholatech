@@ -9,9 +9,9 @@ const PaginationWrapper = ({ error, loading, data, renderModel, emptyMessage }) 
 
   if (loading) {
     return (
-      <div>
-        <LoadSpinner className="mx-auto" />
-        Cargando
+      <div className="flex flex-col items-center">
+        <LoadSpinner />
+        Cargando...
       </div>
     );
   }

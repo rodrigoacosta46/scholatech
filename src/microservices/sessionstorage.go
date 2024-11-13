@@ -34,7 +34,7 @@ func ServeSessionLocalStorage(w http.ResponseWriter, r *http.Request) {
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
 			w.WriteHeader(http.StatusNotFound)
-			json.NewEncoder(w).Encode(structs.Response{Message: "No se ha encontrado el usuario", RedirectRoute: enum.URLs["login"].Which(r), Authenticated: "false"})
+			json.NewEncoder(w).Encode(structs.Response{Message: "No se ha encontrado el usuario", RedirectRoute: enum.URLs["logout"].Which(r), Authenticated: "false"})
 			return
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)

@@ -120,7 +120,7 @@ const Doctors = () => {
         <div>
           <Section txt="Últimos turnos" scheme={userConfig.theme} />
           <Scroller
-            url="http://localhost:8000/getTurnos/accepted"
+            url="http://localhost:8000/lastdoctor"
             className="animate-[slideIn_2s] my-2"
             renderModel={doctorsModel}
             empty="Por alguna extraña razón... no hay doctores"

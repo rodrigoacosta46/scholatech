@@ -344,11 +344,11 @@ func UserFaker(ProfileID int, number int, checkOcurrences bool) {
 	}
 }
 
-func randomNumber(max int) int {
+func randomNumber(start int, max int) int {
 	rand.Seed(time.Now().UnixNano())
 
 	var n int = max
-	randomNumber := rand.Intn(n) + 1
+	randomNumber := rand.Intn(n) + start
 	//fmt.Printf("Numero aleatorio entre 1 y %d: %d\n", n, randomNumber)
 	return randomNumber
 }
@@ -406,11 +406,11 @@ func TurnosFaker(number int, maxDoctors int, maxPatients int, checkOcurrences bo
 				fmt.Println("AN ERROR OCURRED WHILE PARSING A FAKE DATE FOR ASSIGMENTS")
 			}
 			turnoStruct := Turno{
-				DoctorID:   randomNumber(int(TotalDoctors)),
-				PacienteID: randomNumber(int(TotalPatients)),
+				DoctorID:   randomNumber(1, int(TotalDoctors)),
+				PacienteID: randomNumber(201, int(TotalPatients)),
 				Fecha:      &parsedDate,
 				Motivo:     (faker.Paragraph())[:20],
-				Estado:     statuses[(randomNumber(len(statuses)))-1],
+				Estado:     statuses[(randomNumber(0, len(statuses)))],
 			}
 			if err = tx.Create(&turnoStruct).Error; err != nil {
 				tx.Rollback()

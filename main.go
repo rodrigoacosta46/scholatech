@@ -29,9 +29,12 @@ func gorillaRouter() {
 	guestRoutes.HandleFunc("/testingCreateHandler", func(w http.ResponseWriter, r *http.Request) {
 		cookies.CreateHandler(w, r, 1)
 	})
+	guestRoutes.HandleFunc("/testingCreateHandlerpatient", func(w http.ResponseWriter, r *http.Request) {
+		cookies.CreateHandler(w, r, 205)
+	})
 	protectedRoutes := r.NewRoute().Subrouter()
 	protectedRoutes.Use(Middleware.JwtMiddleware)
-	//protectedRoutes.HandleFunc("/logout", cookies.DeleteHandler)
+	//protectedRoutes.HandleFunc("/logout", cookiesx.DeleteHandler)
 	//	Services
 	protectedRoutes.HandleFunc("/sync", microservices.ServeSessionLocalStorage)
 	protectedRoutes.HandleFunc("/getDrugs", microservices.ServeDrugs)
@@ -43,6 +46,7 @@ func gorillaRouter() {
 	protectedRoutes.HandleFunc("/getNotifications", microservices.ServeNotifications)
 	protectedRoutes.HandleFunc("/updateNotification/{action}", microservices.UpdateNotification)
 	protectedRoutes.HandleFunc("/getResults", microservices.ServeAssigmentsResults)
+	protectedRoutes.HandleFunc("/lastdoctor", microservices.LastDoctor)
 	// Doctor services
 	doctorRoutes := protectedRoutes.NewRoute().Subrouter()
 	doctorRoutes.Use(Middleware.RoleValidation("2"))

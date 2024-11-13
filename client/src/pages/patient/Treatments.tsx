@@ -87,14 +87,16 @@ const Treatments = () => {
   };
 
   const treatModel = (registro, i) => {
+    console.log(registro);
     return (
       <OpenCard
         key={"j-" + i}
-        className="my-4 text-center animate-slideIn"
+        style={{ animationDelay: (i % 10) * 0.05 + "s" }}
+        className="animate-slideIn my-4 text-center opacity-0"
         icon={<i className="fa-solid fa-clipboard-check text-green-700"></i>}
         title={
           <div className="ps-2 text-slate-700">
-            Raul Mazares <span className="font-bold">04/03/2024 18:30:00</span>
+            {registro.Turno.Paciente.Username} <span className="font-bold">{new Date(registro.CreatedAt).toLocaleString()}</span>
           </div>
         }
         content={
@@ -102,21 +104,21 @@ const Treatments = () => {
             <div className="flex flex-wrap justify-evenly gap-3">
               <p className="font-bold">
                 Doctor asignado:
-                <span className="ms-2 font-normal">Dr. Otaro</span>
+                <span className="ms-2 font-normal">{registro.Turno.Doctor.Username}</span>
               </p>
               <p className="font-bold">
                 Motivo:
                 <span className="ms-2 font-normal">
-                  Malestar al mover la cintura
+                  {registro.Turno.Motivo}
                 </span>
               </p>
               <p className="font-bold">
                 Fecha asignada:
-                <span className="ms-2 font-normal">04/03/2024 18:30:00</span>
+                <span className="ms-2 font-normal">{new Date(registro.Turno.Fecha).toLocaleString()}</span>
               </p>
               <p className="font-bold">
                 Fecha de pedido de consulta:
-                <span className="ms-2 font-normal">02/02/2024 00:21:11</span>
+                <span className="ms-2 font-normal">{new Date(registro.Turno.CreatedAt).toLocaleString()}</span>
               </p>
             </div>
             <hr className="my-4" />
@@ -128,26 +130,24 @@ const Treatments = () => {
               </button>
               <p className="font-bold">
                 Diagnostico:
-                <span className="ms-2 font-normal">Lesión lumbar</span>
+                <span className="ms-2 font-normal">{registro.Diagnostico}</span>
               </p>
               <p className="font-bold">
                 Notas:
                 <span className="ms-2 font-normal">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Ullam omnis ducimus a repellendus, vel, quia odit dolorem
-                  cupiditate, voluptatum consequuntur ab exercitationem sit.
-                  Mollitia animi eveniet fugit repellat! Harum, quos.
+                  {registro.Notas}
                 </span>
               </p>
-              <div className="font-bold">
-                Medicación asignada:
-                <ul className="ms-2 font-normal underline list-disc">
-                  <li>Medicación</li>
-                  <li>Medicación</li>
-                  <li>Medicación</li>
-                  <li>Medicación</li>
-                </ul>
-              </div>
+              {registro.Recetas != null && (
+                <div className="font-bold">
+                  Medicación asignada:
+                  <ul className="ms-2 font-normal list-disc">
+                    {registro.Recetas.map((drug, k) => (
+                      <li key={"drug-" + k} title="Para más información, puede buscar la medicación en información sobre medicamentos">{drug.Medicamento.Nombre}.....{drug.Cantidad}gr.....{drug.Tomas}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         }
@@ -385,7 +385,7 @@ const Treatments = () => {
                               step={0.01}
                               name={"amount"}
                               onChange={(e) => handleDrugChange(e, index, "amount")}
-                              placeholder="Cantidad"
+                              placeholder="Cantidad (gramos)"
                               className="transition-all outline-blue-600 focus:outline-offset-2"
                               required
                             />
@@ -416,7 +416,7 @@ const Treatments = () => {
         <div>
           <Section txt="Diagnósticos Pasados" scheme={userConfig.theme} />
           <VerticalScroller
-            url="http://localhost:8000/getDoctors"
+            url="http://localhost:8000/getResults"
             renderModel={treatModel}
             empty="No tenes diagnosticos listados"
           />

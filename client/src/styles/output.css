@@ -920,10 +920,6 @@ video {
   display: block;
 }
 
-.inline {
-  display: inline;
-}
-
 .flex {
   display: flex;
 }
@@ -956,6 +952,11 @@ video {
   height: 1rem;
 }
 
+.size-48 {
+  width: 12rem;
+  height: 12rem;
+}
+
 .size-fit {
   width: -moz-fit-content;
   width: fit-content;
@@ -968,11 +969,6 @@ video {
   height: 100%;
 }
 
-.size-48 {
-  width: 12rem;
-  height: 12rem;
-}
-
 .h-0 {
   height: 0px;
 }
@@ -983,10 +979,6 @@ video {
 
 .h-10 {
   height: 2.5rem;
-}
-
-.h-48 {
-  height: 12rem;
 }
 
 .h-6 {

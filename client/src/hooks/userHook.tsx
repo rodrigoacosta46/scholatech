@@ -102,6 +102,10 @@ export const UserContextProvider = ({}) => {
         }
       } else {
         console.error('Error en la solicitud:', xhr.statusText);
+        var e = JSON.parse(xhr.responseText);
+        if (e.hasOwnProperty("redirect_route") && (e["redirect_route"] == "/logout")) {
+          window.location.href = "http://localhost:8000/logout";
+        }
       }
   
       if (model !== undefined) {

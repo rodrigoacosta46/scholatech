@@ -138,6 +138,9 @@ const Assignments = () => {
   };
 
   const acceptedModel = (registros, i) => {
+    console.log("ENTRO A ACCEPTEDMODEL")
+    console.log(registros)
+    console.log(i)
     return(
     <div key={"j-"+i} className={`overflow-hidden relative animate-fadeIn flex flex-col flex-shrink-0 bg-white rounded-xl shadow-[2px_2px] shadow-gray-400 transition-all duration-500 [&:has(>label>input:checked)]:shadow-red-500 ${deleteCardCan.includes(registros.ID) ? "opacity-0 max-w-0 p-0 m-0 h-0" : "max-w-[280px] animate-fadeIn p-4 m-2"}`}>
       <label className="cursor-pointer bg-red-600 absolute -top-1 end-1 rounded-lg p-2 text-white">

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math/rand"
 	"os"
 	"reflect"
 	"time"
@@ -191,6 +192,13 @@ func init() {
 			fmt.Println("Error while calling the Faker patient")
 			panic(err)
 		}
+		result, err = callFuncSeeder(env.FAKER_TURNOS, TurnosFaker, env.FAKER_TURNOS_TOTAL, env.FAKER_DOCTOR_TOTAL, env.FAKER_PATIENT_TOTAL, true)
+		if result == false {
+			fmt.Println("FAKER TURNOS IS DISABLED")
+		} else if err != nil {
+			fmt.Println("Error while calling the Faker turnos")
+			panic(err)
+		}
 	}
 	redisService()
 }
@@ -336,13 +344,86 @@ func UserFaker(ProfileID int, number int, checkOcurrences bool) {
 	}
 }
 
-func SeedTurnos() {
-	tx := Db.Begin()
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-			fmt.Println("Failed trasaction:", r)
+func randomNumber(start int, max int) int {
+	rand.Seed(time.Now().UnixNano())
+
+	var n int = max
+	randomNumber := rand.Intn(n) + start
+	//fmt.Printf("Numero aleatorio entre 1 y %d: %d\n", n, randomNumber)
+	return randomNumber
+}
+
+func TurnosFaker(number int, maxDoctors int, maxPatients int, checkOcurrences bool) {
+	var count int64
+	if checkOcurrences {
+		fmt.Println("Verifying ocurrences...")
+		if err := Db.Model(&Turno{}).Count(&count).Error; err != nil {
+			fmt.Printf("Failed to count the Turnos entries")
+			panic(err)
+		} else {
+			fmt.Println("Number of entries in the turnos table: ", count)
+			if count < int64(number) {
+				fmt.Printf("Looks like there isnt enought turnos the database assuming the number of entries is lower that the total of turnos requested. Inserting entries...")
+			} else {
+				fmt.Printf("Im assumming we already have the turnos inserted by the number of turnos entries %v", count)
+				return
+			}
 		}
-	}()
+	}
+	var TotalPatients int64
+	var TotalDoctors int64
+	err := Db.Model(User{}).Where("perfil_id = 1").Count(&TotalPatients).Error
+	if err != nil {
+		fmt.Println("FATAL ERROR WHILE COUNTING THE TOTAL OF PATIENTS FOR ASSIGMENTS SEEDING")
+		panic(err)
+	}
+	err = Db.Model(User{}).Where("perfil_id = 2").Count(&TotalDoctors).Error
+	if err != nil {
+		fmt.Println("FATAL ERROR WHILE COUNTING THE TOTAL OF DOCTORS FOR ASSIGMENTS SEEDING")
+		panic(err)
+	}
+	fmt.Printf("Total doctors %v", TotalDoctors)
+	fmt.Printf("Total patients %v", TotalPatients)
+	if (TotalDoctors >= int64(maxDoctors)) && (int64(maxPatients) <= TotalPatients) {
+		tx := Db.Begin()
+		defer func() {
+			if r := recover(); r != nil {
+				tx.Rollback()
+				fmt.Println("Failed trasaction:", r)
+			}
+		}()
+		statuses := []string{"accepted", "closed", "pending"}
+		for i := 0; i < number; i++ {
+
+			dateString := faker.Date()
+
+			// Definir el formato de la fecha generada por faker (YYYY-MM-DD HH:MM:SS)
+			layout := "2006-01-02" // Formato común en faker.Date()
+
+			// Parsear la fecha de string a time.Time
+			parsedDate, err := time.Parse(layout, dateString)
+			if err != nil {
+				fmt.Println("AN ERROR OCURRED WHILE PARSING A FAKE DATE FOR ASSIGMENTS")
+			}
+			turnoStruct := Turno{
+				DoctorID:   randomNumber(1, int(TotalDoctors)),
+				PacienteID: randomNumber(201, int(TotalPatients)),
+				Fecha:      &parsedDate,
+				Motivo:     (faker.Paragraph())[:20],
+				Estado:     statuses[(randomNumber(0, len(statuses)))],
+			}
+			if err = tx.Create(&turnoStruct).Error; err != nil {
+				tx.Rollback()
+				fmt.Println("Failed to create the assigment:", err)
+				return
+			}
+		}
+		if err := tx.Commit().Error; err != nil {
+			fmt.Println("Failed to commit turrnos:", err)
+		}
+		fmt.Println("Assigments created successfuly")
+	} else {
+		fmt.Println("Cantidad de usuarios y doctores insuficientes para crear los turnos")
+	}
 
 }

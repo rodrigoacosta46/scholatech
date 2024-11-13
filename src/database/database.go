@@ -199,6 +199,13 @@ func init() {
 			fmt.Println("Error while calling the Faker turnos")
 			panic(err)
 		}
+		result, err = callFuncSeeder(env.FAKER_HISTORIAL_TURNOS_CLOSED, HistorialFaker, true)
+		if result == false {
+			fmt.Println("FAKER HISTORIAL IS DISABLED")
+		} else if err != nil {
+			fmt.Println("Error while calling the Faker Historial")
+			panic(err)
+		}
 	}
 	redisService()
 }
@@ -354,6 +361,7 @@ func randomNumber(start int, max int) int {
 }
 
 func TurnosFaker(number int, maxDoctors int, maxPatients int, checkOcurrences bool) {
+	fmt.Println("TURNOS FAKER IS ENABLED, CHECKING...")
 	var count int64
 	if checkOcurrences {
 		fmt.Println("Verifying ocurrences...")
@@ -419,11 +427,62 @@ func TurnosFaker(number int, maxDoctors int, maxPatients int, checkOcurrences bo
 			}
 		}
 		if err := tx.Commit().Error; err != nil {
-			fmt.Println("Failed to commit turrnos:", err)
+			fmt.Println("Failed to commit turnos:", err)
 		}
 		fmt.Println("Assigments created successfuly")
 	} else {
 		fmt.Println("Cantidad de usuarios y doctores insuficientes para crear los turnos")
 	}
 
+}
+
+func HistorialFaker(checkOcurrences bool) {
+	fmt.Println("HISTORIAL FAKER IS ENABLED, CHECKING...")
+	if checkOcurrences {
+		var turnosSinHistorial []Turno
+		err := Db.Model(&Turno{}).
+			Where("estado = ?", "closed").
+			Where("id NOT IN (SELECT turno_id FROM historials)").
+			Find(&turnosSinHistorial).Error
+		if err != nil {
+			fmt.Println("Error al verificar turnos sin historial")
+			panic(err)
+		}
+		if len(turnosSinHistorial) == 0 {
+			fmt.Println("No hay turnos cerrados sin historial")
+			return
+		} else {
+			fmt.Println("Turnos cerrados sin historial encontrados:", len(turnosSinHistorial))
+		}
+	}
+	var turnosCerrados []Turno
+	err := Db.Model(&Turno{}).Where("estado = ?", "closed").Find(&turnosCerrados).Error
+	if err != nil {
+		fmt.Println("Error al obtener turnos cerrados")
+		panic(err)
+	}
+	tx := Db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			fmt.Println("Failed trasaction:", r)
+		}
+	}()
+	for _, turno := range turnosCerrados {
+		historial := Historial{
+			TurnoID:     turno.ID,
+			Diagnostico: (faker.Paragraph())[:20],
+			Tratamiento: (faker.Paragraph())[:20],
+			Notas:       (faker.Paragraph())[:20],
+		}
+
+		if err = tx.Create(&historial).Error; err != nil {
+			tx.Rollback()
+			fmt.Println("Failed to create the historial:", err)
+			return
+		}
+	}
+	if err := tx.Commit().Error; err != nil {
+		fmt.Println("Failed to commit historial:", err)
+	}
 }

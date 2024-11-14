@@ -13,7 +13,7 @@ const usePagination = (url: string, params: Record<string, any> = {}) => {
 
   useEffect(() => {
       if (Object.keys(params).length > 0) {
-        console.log("Cambiando fuente, reseteando paginación", response);
+        console.log("Cambiando fuente, reseteando paginación");
 
       setSrcState(true);
       setPageNum(1); 

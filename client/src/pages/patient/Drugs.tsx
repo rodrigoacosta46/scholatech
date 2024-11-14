@@ -32,8 +32,8 @@ const Drugs = () => {
   const [drugView, setDrugView] = useState<DrugInterface>();
   const [imgSrc, setImgSrc] = useState("");
 
-  const modalSetState = (key) => {
-    //setDrugView(displayedDrugs.display[key])
+  const modalSetState = (display) => {
+    setDrugView(display);
     setModal(!modal);
   };
 
@@ -44,12 +44,11 @@ const Drugs = () => {
   };
 
   const drugModel = (registro, i) => {
-    console.log(registro);
     return (
       <Card
         key={"n-" + i}
-        onClick={() => modalSetState(i)}
-        style={{ animationDelay: i * 0.1 + "s" }}
+        onClick={() => modalSetState(registro)}
+        style={{ animationDelay: i%10 * 0.05 + "s" }}
         className="opacity-0 animate-fadeIn cursor-pointer relative overflow-hidden"
         scheme={userConfig.theme}
       >

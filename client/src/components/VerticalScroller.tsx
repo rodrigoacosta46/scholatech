@@ -4,13 +4,12 @@ import React from "react";
 import PaginationWrapper from "./PaginationWrapper";
 
 const VerticalScroller: React.FC<any> = ({ url, params = {}, className = "", renderModel, empty, ...props }) => {
-  const { dataPagination, pageNum, setPageNum, error, loading, theresMore, srcChanging } = usePagination(url, params);
+  const { dataPagination, setPageNum, error, loading, theresMore, srcChanging } = usePagination(url, params);
   const flag = useRef(null);
   
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && (Object.keys(params).length > 0 || theresMore) && !srcChanging && !loading && error == null) {
-        console.log("seteo porque soy grazioso", dataPagination, params, Object.keys(params).length);
+      if (entries[0].isIntersecting && theresMore && !srcChanging && !loading && error == null) {
         setPageNum((prev) => prev+1);
       }
     }, { threshold: 0.7 });
@@ -19,7 +18,7 @@ const VerticalScroller: React.FC<any> = ({ url, params = {}, className = "", ren
     return () => {
       if (observer) observer.disconnect();
     };
-  }, [pageNum, theresMore, srcChanging, loading, error, params]);
+  }, [theresMore, srcChanging, loading, error]);
 
   return (
     <div className={`relative ${className}`} {...props}>
@@ -30,7 +29,9 @@ const VerticalScroller: React.FC<any> = ({ url, params = {}, className = "", ren
         renderModel={renderModel}
         emptyMessage={empty}
       />
-      <div ref={flag}/>
+      {
+        theresMore && error == null && <div ref={flag}/>
+      }
     </div>
   );
 };

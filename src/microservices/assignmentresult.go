@@ -63,10 +63,11 @@ func AssigmentResults(w http.ResponseWriter, r *http.Request) {
 		Notas:       req.Notas,
 	}
 
-	res := tx.Model(&database.Historial{}).Create(&historial)
-	if res.Error != nil {
+	res := tx.Model(&database.Historial{}).Where("turno_id = ?", historial.TurnoID).FirstOrCreate(&historial)
+	if res.Error != nil || res.RowsAffected == 0 {
 		tx.Rollback()
 		fmt.Println("Error de consulta en assigmentresult: ", res.Error)
+		fmt.Println("Turno id: ", historial.TurnoID)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
 		return

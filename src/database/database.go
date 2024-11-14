@@ -68,6 +68,20 @@ type Historial struct {
 	UpdatedAt   *time.Time `gorm:"type:datetime"`
 	DeletedAt   *time.Time `gorm:"type:datetime"`
 	Turno       Turno      `gorm:"foreignKey:TurnoID;" faker:"-"`
+	Recetas     []Receta   `gorm:"foreignKey:HistorialID"`
+}
+
+type Receta struct {
+	ID            int         `gorm:"primaryKey"`
+	HistorialID   int         `gorm:"not null"`
+	MedicamentoID int         `gorm:"not null"`
+	Cantidad      float32     `gorm:"not null"`
+	Tomas         string      `gorm:"not null"`
+	CreatedAt     time.Time   `gorm:"type:datetime;not null"`
+	UpdatedAt     *time.Time  `gorm:"type:datetime"`
+	DeletedAt     *time.Time  `gorm:"type:datetime"`
+	Historial     Historial   `gorm:"foreignKey:HistorialID;" faker:"-"`
+	Medicamento   Medicamento `gorm:"foreignKey:MedicamentoID;" faker:"-"`
 }
 
 type Medicamento struct {
@@ -98,19 +112,6 @@ type Perfil struct {
 	CreatedAt   time.Time  `gorm:"type:datetime;not null"`
 	UpdatedAt   *time.Time `gorm:"type:datetime"`
 	DeletedAt   *time.Time `gorm:"type:datetime"`
-}
-
-type Receta struct {
-	ID            int         `gorm:"primaryKey"`
-	HistorialID   int         `gorm:"not null"`
-	MedicamentoID int         `gorm:"not null"`
-	Cantidad      float32     `gorm:"not null"`
-	Tomas         string      `gorm:"not null"`
-	CreatedAt     time.Time   `gorm:"type:datetime;not null"`
-	UpdatedAt     *time.Time  `gorm:"type:datetime"`
-	DeletedAt     *time.Time  `gorm:"type:datetime"`
-	Historial     Historial   `gorm:"foreignKey:HistorialID;" faker:"-"`
-	Medicamento   Medicamento `gorm:"foreignKey:MedicamentoID;" faker:"-"`
 }
 
 /*

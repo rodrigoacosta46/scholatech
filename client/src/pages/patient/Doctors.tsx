@@ -123,7 +123,7 @@ const Doctors = () => {
             url="http://localhost:8000/lastdoctor"
             className="animate-[slideIn_2s] my-2"
             renderModel={doctorsModel}
-            empty="Por alguna extraña razón... no hay doctores"
+            empty="No hiciste ningún turno"
           />
         </div>
         <div>

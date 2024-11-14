@@ -3,13 +3,16 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/nicolas-k-cmd/proj-redes/src/auth"
 	"github.com/nicolas-k-cmd/proj-redes/src/cookies"
+	"github.com/nicolas-k-cmd/proj-redes/src/env"
 	"github.com/nicolas-k-cmd/proj-redes/src/microservices"
 	Middleware "github.com/nicolas-k-cmd/proj-redes/src/middleware"
+	"github.com/nicolas-k-cmd/proj-redes/src/ratelimiter"
 )
 
 func main() {
@@ -24,6 +27,7 @@ func gorillaRouter() {
 	r.HandleFunc("/logout", cookies.DeleteHandler)
 	guestRoutes := r.NewRoute().Subrouter()
 	guestRoutes.Use(Middleware.AntiJwtMiddleware)
+	guestRoutes.Use(ratelimiter.GetRatelimiter(env.RATELIMITER_GUEST, time.Minute))
 	guestRoutes.HandleFunc("/loginauth", auth.LoginAuthHandler)
 	guestRoutes.HandleFunc("/registerauth", auth.RegisterAuthHandler)
 	guestRoutes.HandleFunc("/testingCreateHandler", func(w http.ResponseWriter, r *http.Request) {
@@ -34,6 +38,7 @@ func gorillaRouter() {
 	})
 	protectedRoutes := r.NewRoute().Subrouter()
 	protectedRoutes.Use(Middleware.JwtMiddleware)
+	protectedRoutes.Use(ratelimiter.GetRatelimiter(env.RATELIMITER_PROTECTED, time.Minute))
 	//protectedRoutes.HandleFunc("/logout", cookiesx.DeleteHandler)
 	//	Services
 	protectedRoutes.HandleFunc("/sync", microservices.ServeSessionLocalStorage)

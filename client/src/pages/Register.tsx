@@ -12,6 +12,7 @@ const Register = () => {
     gender: "male",
     role: "1",
     birthdate: "",
+    telephone: ""
   });
 
   const inputErrorMessages = {
@@ -20,6 +21,7 @@ const Register = () => {
     password:
       "Debe contener mayúsculas, minúsculas, números y caracteres especiales. Longitud no menor a 8 letras",
     birthdate: "Debes ser mayor de 18 años",
+    telephone: "Ingresa pais, codigo de area y numero de telefono",
   };
   const [response, setResponse] = useState(null);
   const [visualizeInput, setInputView] = useState(false);
@@ -152,6 +154,26 @@ const Register = () => {
             <button type="button" onClick={()=>{ setInputView(!visualizeInput); }} className="absolute end-2 bottom-2 peer-[&:not(:placeholder-shown):invalid]:text-red-500">
               <i className={`fa-solid ${!visualizeInput ? "fa-eye" : "fa-eye-slash"}`}></i>
             </button>
+          </label>
+          <label htmlFor="telephone" className="text-green-950 mb-2 select-none relative">
+            <input
+              type="text"
+              id="telephone"
+              name="telephone"
+              className="peer w-full p-2 outline-none border border-gray-300 focus:placeholder-shown:border-green-600 invalid:text-red-900 invalid:[&:not(:placeholder-shown)]:border-red-400"
+              required
+              placeholder=" "
+              onChange={handleChange}
+              onInvalid={handleValidity}
+              value={formData.telephone}              />
+              <span
+              className={
+                (formData.telephone ? "bottom-8" : "bottom-2") +
+                " peer-focus:bottom-8 peer-[&:not(:placeholder-shown):invalid]:text-red-500 absolute start-2 bg-white transition-all"
+              }
+            >
+              Telefono
+            </span>
           </label>
           <label htmlFor="gender" className="flex justify-between">
             Género:

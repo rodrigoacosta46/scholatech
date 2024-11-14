@@ -116,7 +116,7 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(structs.Response{Message: "El perfil seleccionado es invalido"})
 		return
 	}
-
+	telephone := req.Telephone
 	birth_date_form := req.Birthdate
 	parsedDate, err := time.Parse("2006-01-02", birth_date_form)
 	if err != nil {
@@ -165,6 +165,7 @@ func RegisterAuthHandler(w http.ResponseWriter, r *http.Request) {
 	userInsert := database.User{
 		Username:  username,
 		Email:     email,
+		Telephone: telephone,
 		Password:  string(hash),
 		Gender:    gender,
 		Birthdate: parsedDate,

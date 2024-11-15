@@ -9,6 +9,7 @@ import (
 	"github.com/nicolas-k-cmd/proj-redes/src/database"
 	Middleware "github.com/nicolas-k-cmd/proj-redes/src/middleware"
 	"github.com/nicolas-k-cmd/proj-redes/src/structs"
+	"gorm.io/gorm"
 )
 
 func ServeAssigments(w http.ResponseWriter, r *http.Request) {
@@ -27,8 +28,19 @@ func ServeAssigments(w http.ResponseWriter, r *http.Request) {
 	id, _ := (jwtToken.Claims.GetSubject())
 	var turnos []database.Turno
 	spr, boolerr := MicroPagination(w, r, ClosureStruct{
-		structParser:    turnos,
-		command:         database.Db.Model(&database.Turno{}).Where("paciente_id = ? OR doctor_id = ?", id, id).Where("estado = ?", vars["status"]).Where("deleted_at IS NULL AND estado != 'closed'").Order("updated_at DESC").Preload("Doctor").Preload("Paciente"),
+		structParser: turnos,
+		//command:         database.Db.Model(&database.Turno{}).Where("paciente_id = ? OR doctor_id = ?", id, id).Where("estado = ?", vars["status"]).Where("deleted_at IS NULL AND estado != 'closed'").Order("updated_at DESC").Preload("Doctor").Preload("Paciente"),
+		command: database.Db.Model(&database.Turno{}).
+			Where("paciente_id = ? OR doctor_id = ?", id, id).
+			Where("estado = ?", vars["status"]).
+			Where("deleted_at IS NULL AND estado != 'closed'").
+			Order("updated_at DESC").
+			Preload("Doctor", func(db *gorm.DB) *gorm.DB {
+				return db.Select("id, username, email, description, telephone, address, speciality, gender, birthdate, created_at, updated_at, perfil_id")
+			}).
+			Preload("Paciente", func(db *gorm.DB) *gorm.DB {
+				return db.Select("id, username, email, description, telephone, address, speciality, gender, birthdate, created_at, updated_at, perfil_id")
+			}),
 		operation:       "Find",
 		requestedBy:     "assigments",
 		SearchableEntry: "",

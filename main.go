@@ -23,6 +23,7 @@ func main() {
 func gorillaRouter() {
 	r := mux.NewRouter()
 	r.Use(Middleware.EnableCORS)
+	r.Use(Middleware.CspAndSecurityMiddleware)
 	r.HandleFunc("/isAuthenticated", Middleware.ValidateJWTHandler)
 	r.HandleFunc("/logout", cookies.DeleteHandler)
 	guestRoutes := r.NewRoute().Subrouter()

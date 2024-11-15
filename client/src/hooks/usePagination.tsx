@@ -14,7 +14,7 @@ const usePagination = (url: string, pageNum: number, setPageNum: any, params: Re
   useEffect(() => {
     if (JSON.stringify(prevParams.current) !== JSON.stringify(params)) {
       console.log('Params han cambiado, reseteando paginador');
-      setPageNum(1);
+      setPageNum(0);
       setDataPagination([]);
       setNo(true);
       fetcher();

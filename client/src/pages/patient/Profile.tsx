@@ -548,6 +548,7 @@ const SaveUserProfession = ({ formData, theme, onSave }) => {
 };
 
 const Profile = () => {
+
   /* 
     El usuario tiene que poder guardar la cuenta de instagram, vincular instagram a la cuenta de la app
   */
@@ -582,6 +583,29 @@ const Profile = () => {
     visible: false,
     msg: ""
   })
+  const [notifications, setNotifications] = useState<any[]>([]);  
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const result = await axios.post(
+          "http://localhost:8000/getNotifications", 
+          { Page: 1 },
+          { withCredentials: true }
+        );
+        setNotifications(JSON.parse((JSON.parse((result.data)["message"]))["object"])[0]["Notificacion"]["Mensaje"]
+      ); 
+      } catch (err) {
+        console.log(err.response?.data);
+        const response = err.response?.data;
+        if (response?.message) {
+          setErrView({ visible: true, msg: response.message });
+        }
+      }
+    };
+
+    fetchNotifications();
+  }, []);
 
   const submitFormData = async (e) => {
     e.preventDefault();
@@ -998,11 +1022,11 @@ const Profile = () => {
                   className={`bg-slate-200 p-4 rounded-3xl text-lg cursor-pointer hover:shadow-[5px_5px] hover:shadow-${userConfig.theme}-950 hover:text-white hover:bg-${userConfig.theme}-800 transition-all`}
                 >
                   <i className="fa-solid fa-circle-info size-fit"></i>
+                  {}
                   <span className="line-clamp-3">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Aut, unde quaerat laboriosam asperiores ea reiciendis dolore
-                    repellat aliquid dolorem perspiciatis magnam ipsam nam
-                    eligendi quae fugit pariatur similique. Et, voluptatum!
+                    {notifications.length > 0
+                      ?  notifications
+                      : "No hay notificaciones nuevas."}
                   </span>
                 </div>
               </Link>

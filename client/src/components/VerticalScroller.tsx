@@ -4,13 +4,15 @@ import React from "react";
 import PaginationWrapper from "./PaginationWrapper";
 
 const VerticalScroller: React.FC<any> = ({ url, params = {}, className = "", renderModel, empty, ...props }) => {
-  const { dataPagination, setPageNum, error, loading, theresMore, srcChanging } = usePagination(url, params);
+  const [page, setPage] = useState(1);
+  const { dataPagination, error, loading, theresMore } = usePagination(url, page, setPage,params);
   const flag = useRef(null);
   
+
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && theresMore && !srcChanging && !loading && error == null) {
-        setPageNum((prev) => prev+1);
+      if (entries[0].isIntersecting && theresMore && !loading && error == null) {
+        setPage((prev) => prev+1);
       }
     }, { threshold: 0.7 });
 
@@ -18,7 +20,7 @@ const VerticalScroller: React.FC<any> = ({ url, params = {}, className = "", ren
     return () => {
       if (observer) observer.disconnect();
     };
-  }, [theresMore, srcChanging, loading, error]);
+  }, [theresMore, loading, error]);
 
   return (
     <div className={`relative ${className}`} {...props}>

@@ -103,6 +103,7 @@ type Notificacion struct {
 	CreatedAt  time.Time  `gorm:"type:datetime;not null"`
 	UpdatedAt  *time.Time `gorm:"type:datetime"`
 	DeletedAt  *time.Time `gorm:"type:datetime"`
+	User       User       `gorm:"foreignKey:UsuarioID;" faker:"-"`
 }
 
 type Perfil struct {

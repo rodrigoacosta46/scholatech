@@ -262,9 +262,6 @@ const List = () => {
               </select>
             </label>
             <div className="w-full flex justify-end gap-2 mt-4">
-              <span className="text-slate-400 text-sm me-auto mt-auto">
-                - 100 Resultados -
-              </span>
               <button
                 onClick={clearFilters}
                 type="button"

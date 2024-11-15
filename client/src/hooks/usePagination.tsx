@@ -1,34 +1,34 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import useFetch from "./useFetch";
 
-const usePagination = (url: string, params: Record<string, any> = {}) => {
+const usePagination = (url: string, pageNum: number, setPageNum: any, params: Record<string, any> = {}) => {
   const [dataPagination, setDataPagination] = useState<any>([]);
-  const [pageNum, setPageNum] = useState(1);
   const [theresMore, setNo] = useState(true);
-  const [srcChanging, setSrcState] = useState(false);
   const { response, fetcher, error, loading } = useFetch(url, {
     ...params,
     Page: pageNum,
   });
+  
+  const prevParams = useRef(params);
 
   useEffect(() => {
-      if (Object.keys(params).length > 0) {
-        console.log("Cambiando fuente, reseteando paginación");
-
-      setSrcState(true);
-      setPageNum(1); 
-      setDataPagination([]); 
-      setNo(true); 
-      setSrcState(false); 
-      }
+    if (JSON.stringify(prevParams.current) !== JSON.stringify(params)) {
+      console.log('Params han cambiado, reseteando paginador');
+      setPageNum(1);
+      setDataPagination([]);
+      setNo(true);
+      fetcher();
+      prevParams.current = params;
+    }
   }, [params]);
 
   useEffect(() => {
-    if (theresMore && !srcChanging) {
+    console.log(theresMore, loading, error);
+    if (theresMore) {
       console.log("Cargando página: ", pageNum);
       fetcher();
     }
-  }, [pageNum, theresMore, srcChanging]); 
+  }, [pageNum, theresMore]);
 
   useEffect(() => {
     if (response) {
@@ -41,6 +41,7 @@ const usePagination = (url: string, params: Record<string, any> = {}) => {
     }
   }, [response]);
 
-  return { dataPagination, pageNum, setPageNum, error, loading, theresMore, srcChanging };
+  return { dataPagination, error, loading, theresMore };
 };
+
 export default usePagination;

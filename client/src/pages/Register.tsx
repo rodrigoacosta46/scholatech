@@ -12,11 +12,12 @@ const Register = () => {
     gender: "male",
     role: "1",
     birthdate: "",
-    telephone: ""
+    telephone: "",
   });
 
   const inputErrorMessages = {
-    username: "Nombre real completo, con mayusculas en el inicio. Ejemplo: Osvaldo Motrices",
+    username:
+      "Nombre real completo, con mayusculas en el inicio. Ejemplo: Osvaldo Motrices",
     email: "Formato incorrecto, ejemplo: micorreo@gmail.com",
     password:
       "Debe contener mayúsculas, minúsculas, números y caracteres especiales. Longitud no menor a 8 letras",
@@ -28,9 +29,9 @@ const Register = () => {
 
   const handleValidity = (e) => {
     let el = e.target;
-    const { name } =el;
+    const { name } = el;
     el.setCustomValidity(inputErrorMessages[name]);
-  }
+  };
 
   const handleChange = (e) => {
     e.target.setCustomValidity("");
@@ -87,7 +88,10 @@ const Register = () => {
       <div className="bg-white p-8 border-b-2 border-e-2 border-green-800 shadow-lg rounded-sm my-4 overflow-hidden animate-slideIn">
         <p className="text-4xl text-green-800 text-center py-12">Registrarse</p>
         <div className="flex flex-col gap-4 relative w-80">
-          <label htmlFor="email" className="text-green-950 mb-2 select-none relative">
+          <label
+            htmlFor="email"
+            className="text-green-950 mb-2 select-none relative"
+          >
             <input
               type="email"
               id="email"
@@ -108,7 +112,10 @@ const Register = () => {
               Correo Electrónico
             </span>
           </label>
-          <label htmlFor="username" className="text-green-950 mb-2 select-none relative">
+          <label
+            htmlFor="username"
+            className="text-green-950 mb-2 select-none relative"
+          >
             <input
               type="text"
               id="username"
@@ -130,7 +137,10 @@ const Register = () => {
               Nombre
             </span>
           </label>
-          <label htmlFor="password" className="text-green-950 mb-2 select-none relative">
+          <label
+            htmlFor="password"
+            className="text-green-950 mb-2 select-none relative"
+          >
             <input
               type={visualizeInput ? "text" : "password"}
               id="password"
@@ -151,11 +161,24 @@ const Register = () => {
             >
               Contraseña
             </span>
-            <button type="button" onClick={()=>{ setInputView(!visualizeInput); }} className="absolute end-2 bottom-2 peer-[&:not(:placeholder-shown):invalid]:text-red-500">
-              <i className={`fa-solid ${!visualizeInput ? "fa-eye" : "fa-eye-slash"}`}></i>
+            <button
+              type="button"
+              onClick={() => {
+                setInputView(!visualizeInput);
+              }}
+              className="absolute end-2 bottom-2 peer-[&:not(:placeholder-shown):invalid]:text-red-500"
+            >
+              <i
+                className={`fa-solid ${
+                  !visualizeInput ? "fa-eye" : "fa-eye-slash"
+                }`}
+              ></i>
             </button>
           </label>
-          <label htmlFor="telephone" className="text-green-950 mb-2 select-none relative">
+          <label
+            htmlFor="telephone"
+            className="text-green-950 mb-2 select-none relative"
+          >
             <input
               type="text"
               id="telephone"
@@ -164,9 +187,12 @@ const Register = () => {
               required
               placeholder=" "
               onChange={handleChange}
+              pattern="(\d+\s)(\d+\s)(\d{4,})"
+              maxLength={15}
               onInvalid={handleValidity}
-              value={formData.telephone}              />
-              <span
+              value={formData.telephone}
+            />
+            <span
               className={
                 (formData.telephone ? "bottom-8" : "bottom-2") +
                 " peer-focus:bottom-8 peer-[&:not(:placeholder-shown):invalid]:text-red-500 absolute start-2 bg-white transition-all"
@@ -223,10 +249,10 @@ const Register = () => {
             </select>
           </label>
           {response && (
-          <div className="w-80 mx-auto bg-yellow-400 text-white font-medium text-center p-4">
-            {response["message"]}
-          </div>
-        )}
+            <div className="w-80 mx-auto bg-yellow-400 text-white font-medium text-center p-4">
+              {response["message"]}
+            </div>
+          )}
           <input
             type="submit"
             value="Registrarse"

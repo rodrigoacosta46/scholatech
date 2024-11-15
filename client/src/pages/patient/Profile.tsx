@@ -132,6 +132,71 @@ const SaveUserMail = ({ formData, theme, onSave }) => {
   );
 };
 
+const SaveUserPhone = ({ formData, theme, onSave }) => {
+  const [phone, setUserPhone] = useState(formData);
+  const [isValid, setValidState] = useState(true);
+  const reg = /^(\d+\s)(\d+\s)(\d{4,})$/;
+
+  const inputFormat = (e) => {
+    let input = e.target.value;
+
+    if (!reg.test(input)) {
+      return setValidState(false);
+    }
+
+    setValidState(true);
+    setUserPhone(input);
+  };
+
+  const saveChanges = () => {
+    onSave("Telephone", phone);
+  };
+
+  return (
+    <>
+      <Title
+        txt={
+          <>
+            Cambiar número telefónico
+            <i
+              className={`fa-solid fa-phone ms-4 float-end text-3xl text-${theme}-800`}
+            ></i>
+          </>
+        }
+        allowAnimations={true}
+        scheme={theme}
+        className="text-2xl"
+      />
+      <div className="flex flex-col p-8">
+        <input
+          type="text"
+          defaultValue={phone}
+          onChange={inputFormat}
+          placeholder="Número telefónico"
+          maxLength={15}
+          className="bg-gray-200 outline-none p-4 rounded-2xl "
+        />
+        {!isValid && (
+          <p className={`text-red-700 text-sm italic`}>
+            Debe ser un número real, Ej: 11 32 32321234
+          </p>
+        )}
+      </div>
+      <button
+        onClick={saveChanges}
+        disabled={!isValid || formData == phone}
+        className={`w-full p-4 transition-all bg-gray-200 text-slate-800 ${
+          isValid &&
+          phone != formData &&
+          `hover:bg-${theme}-900 hover:text-white`
+        }`}
+      >
+        Guardar
+      </button>
+    </>
+  );
+};
+
 const SaveUserPassword = ({ theme, onSave }) => {
   const [userpass, setNewPass] = useState({
     current: "",
@@ -505,7 +570,7 @@ const Profile = () => {
     Picture: "",
     Telephone: userInfo["Telephone"],
     Address: userInfo["Address"] || "",
-    Description: userInfo["Description"] || "", //Solo si el usuario es Doctor
+    Description: userInfo["Description"] || "",
     Speciality: userInfo["Speciality"] || "",
   });
 
@@ -701,6 +766,28 @@ const Profile = () => {
                       type="email"
                       name="email"
                       value={formStorage["Email"]}
+                      disabled={true}
+                      className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
+                    />
+                  </div>
+                  Teléfono:
+                  <div
+                    className="col-span-2 relative"
+                    onClick={() => {
+                      setModalState(
+                        <SaveUserPhone
+                          formData={formStorage["Telephone"]}
+                          theme={userConfig.theme}
+                          onSave={handleFieldSave}
+                        />
+                      );
+                    }}
+                  >
+                    <i className="fa-regular fa-pen-to-square hover:text-slate-800 absolute end-px"></i>
+                    <input
+                      type="text"
+                      name="phone"
+                      value={formStorage["Telephone"]}
                       disabled={true}
                       className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                     />

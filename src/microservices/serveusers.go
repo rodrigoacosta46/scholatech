@@ -29,7 +29,7 @@ func ServeUsers(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(structs.Response{Message: "Solicitud JSON Invalida"})
 		return
 	}
-
+	fmt.Println(req.Birthdate, req.Email, req.Gender, req.Name, req.Page, req.Role)
 	qry := database.Db.Model(&database.User{})
 
 	if req.Name != "" {
@@ -72,10 +72,13 @@ func ServeUsers(w http.ResponseWriter, r *http.Request) {
 		AllowLike:       false,
 	}, pageStruct))()
 	if !boolerr {
+		fmt.Println("Error al realizar qry en serveusers")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(structs.Response{Message: "Error al ejecutar consulta"})
 		return
 	} else {
-		w.WriteHeader(http.StatusOK)
 		spr_response, _ := json.Marshal(spr)
+		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(structs.Response{Message: string(spr_response)})
 		return
 	}

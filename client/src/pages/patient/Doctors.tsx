@@ -24,11 +24,25 @@ interface Doctor {
   Username: string;
 }
 
+interface FilterInterface {
+  Username: string,
+  Gender: string,
+  Speciality: string
+}
+
 const Doctors = () => {
   const { userConfig } = userHook();
-
+  const [filters, setFilters] = useState<FilterInterface>();
   const [modal, setModal] = useState(false);
   const [modalData, setModalData] = useState<Doctor>();
+
+  const handleFilterChange = (e) => {
+    const {name, value} = e.target;
+    let time = setTimeout(() => {
+      setFilters((prev) => ({...prev!, [name]: value}));
+      clearTimeout(time);
+    }, 500);
+  }
 
   const modalSetState = (data) => {
     if (data != null) setModalData(data);
@@ -123,7 +137,7 @@ const Doctors = () => {
             url="http://localhost:8000/lastdoctor"
             className="animate-[slideIn_2s] my-2"
             renderModel={doctorsModel}
-            empty="No hiciste ningún turno"
+            empty="No tuviste ningún turno"
           />
         </div>
         <div>
@@ -131,35 +145,34 @@ const Doctors = () => {
           <div className="flex flex-wrap gap-2 justify-evenly items-center bg-green-950 text-white text-xl p-4 mt-3">
             Filtrar por:
             <Searchbar
+              name="Username"
+              onChange={handleFilterChange}
               placeholder="Nombre del Especialista"
               className="p-2 text-lg"
             />
+            <Searchbar
+              name="Speciality"
+              onChange={handleFilterChange}
+              placeholder="Especialidad"
+              className="p-2 text-lg"
+            />
             <select
-              name=""
-              id=""
-              className="bg-green-800 text-white p-2 outline-none"
-              defaultValue="none"
-            >
-              <option value="none">Especialidad</option>
-              <option value="">Cardiología</option>
-              <option value="">Cardiología</option>
-            </select>
-            <select
-              name=""
-              id=""
+              name="Gender"
+              onChange={handleFilterChange}
               className="bg-green-800 text-white p-2 outline-none"
               defaultValue="none"
             >
               <option value="none">Género</option>
-              <option value="">Masculino</option>
-              <option value="">Femenino</option>
+              <option value="male">Masculino</option>
+              <option value="female">Femenino</option>
             </select>
           </div>
           <Scroller
             url="http://localhost:8000/getDoctors"
+            params={{...filters}}
             className="animate-[slideIn_2s] my-2"
             renderModel={doctorsModel}
-            empty="Por alguna extraña razón... no hay doctores"
+            empty="No se encontraron resultados"
           />
         </div>
       </div>

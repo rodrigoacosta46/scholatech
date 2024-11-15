@@ -183,10 +183,18 @@ func SaveUserConfig(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	fmt.Println(req.Telephone, len(req.Telephone))
+	if len(req.Telephone) > 15 || !regexp.MustCompile(`^(\d+\s)(\d+\s)(\d{4,})$`).MatchString(req.Telephone) {
+		fmt.Println("formato incorrecto de Telefono")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(structs.Response{Message: "Número de teléfono inválido"})
+		return
+	}
+
 	fmt.Println("Rol del usuario: ", usInfo.Perfil.Name)
 	if usInfo.Perfil.Name == "Doctor" {
 		var errorFlag bool
-		fmt.Println("Campos: ", req.Description, req.Address, req.Telephone, req.Speciality)
+		fmt.Println("Campos: ", req.Description, req.Address, req.Speciality)
 		if req.Description != "" && (len(req.Description) > 400 || len(req.Description) < 50) {
 			fmt.Println("formato incorrecto de Descripción")
 			errorFlag = true
@@ -199,10 +207,6 @@ func SaveUserConfig(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("formato incorrecto de Especialidad")
 			errorFlag = true
 		}
-		if req.Telephone != "" && (regexp.MustCompile("[0-9]{3}-[0-9]{3}-[0-9]{4}").MatchString(req.Telephone)) {
-			fmt.Println("formato incorrecto de Telefono")
-			errorFlag = true
-		}
 		if errorFlag {
 			fmt.Println("Error al verificar campos reservados")
 			w.WriteHeader(http.StatusBadRequest)
@@ -212,7 +216,6 @@ func SaveUserConfig(w http.ResponseWriter, r *http.Request) {
 	} else {
 		req.Description = ""
 		req.Address = ""
-		req.Telephone = ""
 		req.Speciality = ""
 	}
 

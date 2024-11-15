@@ -632,6 +632,22 @@ video {
   inset: 0.75rem;
 }
 
+.inset-1 {
+  inset: 0.25rem;
+}
+
+.inset-10 {
+  inset: 2.5rem;
+}
+
+.inset-14 {
+  inset: 3.5rem;
+}
+
+.inset-32 {
+  inset: 8rem;
+}
+
 .-end-2 {
   inset-inline-end: -0.5rem;
 }
@@ -728,6 +744,10 @@ video {
   top: 1.25rem;
 }
 
+.top-10 {
+  top: 2.5rem;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -788,6 +808,10 @@ video {
   margin: 2rem;
 }
 
+.m-14 {
+  margin: 3.5rem;
+}
+
 .mx-14 {
   margin-left: 3.5rem;
   margin-right: 3.5rem;
@@ -831,10 +855,6 @@ video {
 
 .me-2 {
   margin-inline-end: 0.5rem;
-}
-
-.me-auto {
-  margin-inline-end: auto;
 }
 
 .ms-2 {
@@ -1331,6 +1351,18 @@ video {
 
 .grid-cols-\[repeat\(auto-fit\2c 250px\)\] {
   grid-template-columns: repeat(auto-fit,250px);
+}
+
+.grid-cols-\[repeat\(auto-fit\2c 270px\)\] {
+  grid-template-columns: repeat(auto-fit,270px);
+}
+
+.grid-cols-\[repeat\(auto-fit\2c 280px\)\] {
+  grid-template-columns: repeat(auto-fit,280px);
+}
+
+.grid-cols-\[repeat\(auto-fit\2c 290px\)\] {
+  grid-template-columns: repeat(auto-fit,290px);
 }
 
 .flex-col {

@@ -32,6 +32,13 @@ const Drugs = () => {
   const [drugView, setDrugView] = useState<DrugInterface>();
   const [imgSrc, setImgSrc] = useState("");
 
+  const handleSearch = (e) => {
+    let time = setTimeout(() => {
+      setSearchTerm({ Search: e.target.value });
+      clearTimeout(time);
+    }, 500);
+  }
+
   const modalSetState = (display) => {
     setDrugView(display);
     setModal(!modal);
@@ -160,7 +167,7 @@ const Drugs = () => {
         <Searchbar
           placeholder={"Buscar medicamento"}
           className="p-3 w-96 lg:ms-auto"
-          onChange={(e) => { setSearchTerm({ Search: e.target.value }) }} // Actualiza el estado de búsqueda
+          onChange={handleSearch} // Actualiza el estado de búsqueda
         />
         {userInfo.Perfil.Name == "Admin" && (
           <button

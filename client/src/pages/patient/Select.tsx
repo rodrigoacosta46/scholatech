@@ -5,6 +5,7 @@ import { userHook } from "../../hooks/userHook";
 import React, { useEffect, useState } from 'react';
 import useFetch from "../../hooks/useFetch";
 
+
 interface SelectRequest {
   DoctorID: number,
   Motivo:   string,
@@ -21,7 +22,8 @@ const Select = () => {
     Motivo: "",
     Detalles: "",
   });
-  const { fetcher, response, error } = useFetch("http://localhost:8000/assignDoctor", { ...formData });
+  const { fetcher, response, error } = useFetch(process.env.REACT_APP_API_URL
+  + "/assignDoctor", { ...formData });
 
   const customValiditySettings = {
     Motivo: "El texto no debe superar los 30 caracteres",
@@ -68,7 +70,8 @@ const Select = () => {
             <div className="group flex justify-center max-h-96 overflow-hidden cursor-pointer">
               <div>
                 <img
-                  src={`http://localhost:8000/getImage/profiles/${ID}/${ID}`}
+                  src={process.env.REACT_APP_API_URL
+  + `/getImage/profiles/${ID}/${ID}`}
                   alt=""
                   className="h-80 object-cover"
                 />

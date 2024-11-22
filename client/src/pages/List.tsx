@@ -92,7 +92,8 @@ const List = () => {
         >
           <i className="fa-solid fa-check absolute -top-4 -end-2 p-3 transition-all duration-500 rounded-full bg-green-600 text-white opacity-0"></i>
           <img
-            src={`http://localhost:8000/getImage/profiles/${registro.ID}/${registro.ID}`}
+            src={process.env.REACT_APP_API_URL
+  + `/getImage/profiles/${registro.ID}/${registro.ID}`}
           />
           <Title
               txt={
@@ -282,7 +283,8 @@ const List = () => {
         </div>
       </div>
       <VerticalScroller
-        url="http://localhost:8000/getUsers"
+        url={String(process.env.REACT_APP_API_URL
+  + "/getUsers")}
         params={sendPost}
         className="grid grid-cols-[repeat(auto-fit,250px)] gap-4 place-content-center place-items-center m-4"
         renderModel={userModel}

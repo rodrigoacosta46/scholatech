@@ -22,8 +22,10 @@ const Assignments = () => {
   const { userConfig } = userHook();
   const [acceptedData, setAcceptedData] = useState<AcceptAsiggmentPOST>();
   const [cancelData, setCancelData] = useState<CancelAssigmentPOST>();
-  const { response:acceptReqResponse, fetcher:fetchAccept, error:errorAccept } = useFetch("http://localhost:8000/updateAssigment/accept", {...acceptedData});
-  const { response:cancelReqResponse, fetcher:fetchCancel, error:errorCancel } = useFetch("http://localhost:8000/updateAssigment/cancel", {...cancelData});
+  const { response:acceptReqResponse, fetcher:fetchAccept, error:errorAccept } = useFetch(process.env.REACT_APP_API_URL
+  + "/updateAssigment/accept", {...acceptedData});
+  const { response:cancelReqResponse, fetcher:fetchCancel, error:errorCancel } = useFetch(process.env.REACT_APP_API_URL
+  + "/updateAssigment/cancel", {...cancelData});
   const [modal, setModalState] = useState(false);
   const [reload, setReload] = useState(false);
   const [deleteCard, setDeleted] = useState<any>([]);
@@ -86,13 +88,14 @@ const Assignments = () => {
 
   const minDate = dateFormat(new Date());
   const maxDate = dateFormat(new Date(Date.UTC(new Date().getFullYear()+1, new Date().getMonth(), new Date().getDate())));
-  
+
 
   const pendingModel = (registros,i) => {
     return(
     <div key={"k-"+i} className={`overflow-hidden transition-all duration-500 flex flex-col flex-shrink-0 bg-white rounded-xl shadow-[2px_2px] shadow-gray-400 ${deleteCard.includes(registros.ID) ? "opacity-0 max-w-0 p-0 m-0 h-0" : "max-w-[280px] animate-fadeIn p-4 m-2"}`}>
       <img
-        src={`http://localhost:8000/getImage/profiles/${registros.Paciente.ID}/${registros.Paciente.ID}`}
+        src={process.env.REACT_APP_API_URL
+  + `/getImage/profiles/${registros.Paciente.ID}/${registros.Paciente.ID}`}
         onError={invalidImgHandler}
         alt=""
         className="w-auto max-h-full"
@@ -155,7 +158,8 @@ const Assignments = () => {
         </button>
       </label>
       <img
-        src={`http://localhost:8000/getImage/profiles/${registros.Paciente.ID}/${registros.Paciente.ID}`}
+        src={process.env.REACT_APP_API_URL
+  + `/getImage/profiles/${registros.Paciente.ID}/${registros.Paciente.ID}`}
         onError={invalidImgHandler}
         alt=""
         className="w-auto max-h-full"
@@ -232,7 +236,8 @@ const Assignments = () => {
           scheme={userConfig.theme}
         />
         <Scroller
-          url="http://localhost:8000/getTurnos/pending"
+          url={String(process.env.REACT_APP_API_URL
+  + "/getTurnos/pending")}
           className="animate-[slideIn_2s] my-2"
           renderModel={pendingModel}
           empty="No tenes solicitudes de consulta pendientes"
@@ -244,7 +249,8 @@ const Assignments = () => {
         />
         <Scroller
           key={reload}
-          url="http://localhost:8000/getTurnos/accepted"
+          url={String(process.env.REACT_APP_API_URL
+  + "/getTurnos/accepted")}
           className="animate-[slideIn_2s] my-2"
           renderModel={acceptedModel}
           empty="No tenes consultas pendientes"

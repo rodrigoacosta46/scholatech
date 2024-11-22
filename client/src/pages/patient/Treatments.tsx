@@ -16,7 +16,8 @@ const Treatments = () => {
   const { ID, Paciente, Motivo, Fecha, CreatedAt } = state || {};
   const [formView, setFormView] = useState(state != null);
   const [formData, setFormData] = useState({});
-  const { response, fetcher, error } = useFetch("http://localhost:8000/assignmentResults", formData);
+  const { response, fetcher, error } = useFetch(process.env.REACT_APP_API_URL
+  + "/assignmentResults", formData);
   const navigate = useNavigate();
 
   const handleDrugChange = (e, index, field) => {
@@ -373,7 +374,8 @@ const Treatments = () => {
                                 <i className="fa-solid fa-chevron-up transition-all peer-checked:rotate-180 text-sm" />
                                 <ul className="overflow-auto max-h-24 top-0 start-0 bg-white hidden peer-checked:block">
                                   <VerticalScroller
-                                    url="http://localhost:8000/getDrugs"
+                                    url={String(process.env.REACT_APP_API_URL
+  + "/getDrugs")} 
                                     renderModel={(registro, i) => optionsModel(registro,i,index)}
                                     empty={<li>No hay drogas disponibles</li>}
                                   />
@@ -416,7 +418,8 @@ const Treatments = () => {
         <div>
           <Section txt="Diagnósticos Pasados" scheme={userConfig.theme} />
           <VerticalScroller
-            url="http://localhost:8000/getResults"
+            url={String(process.env.REACT_APP_API_URL
+  + "/getResults")}
             renderModel={treatModel}
             empty="No tenes diagnosticos listados"
           />

@@ -13,8 +13,10 @@ interface NotificationsProps {
 const Notifications = (props: NotificationsProps) => {
   const [visible, setVisible] = useState(true);
   const [read, setReadState] = useState(props.state);
-  const { response:successDiscard, fetcher:discard, error:errorDiscard } = useFetch("http://localhost:8000/updateNotification/delete", {ID: props.id});
-  const { response:successRead, fetcher:markAsRead, error:errorRead } = useFetch("http://localhost:8000/updateNotification/read", {ID: props.id});
+  const { response:successDiscard, fetcher:discard, error:errorDiscard } = useFetch(process.env.REACT_APP_API_URL
+  + "/updateNotification/delete", {ID: props.id});
+  const { response:successRead, fetcher:markAsRead, error:errorRead } = useFetch(process.env.REACT_APP_API_URL
+  + "/updateNotification/read", {ID: props.id});
   const states = {
     "pendiente": "leido",
     "leido": "pendiente"

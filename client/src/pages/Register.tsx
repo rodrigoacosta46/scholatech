@@ -48,7 +48,8 @@ const Register = () => {
 
     try {
       const result = await axios.post(
-        "http://localhost:8000/registerauth",
+        process.env.REACT_APP_API_URL
+  + "/registerauth",
         formData,
         { withCredentials: true }
       );

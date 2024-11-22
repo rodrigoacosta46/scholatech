@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 
+//@ts-ignore
 const Calendar = ({ scheme }) => {
   
 type DisplayItem = {

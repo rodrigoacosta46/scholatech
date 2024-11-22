@@ -1,4 +1,5 @@
 import React from 'react';
+//@ts-ignore
 const Card = ({ className = '', scheme, children, ...props }) => {
   return (
     <div

@@ -24,7 +24,6 @@ import Assignments from "./pages/patient/Assignments";
 import Treatments from "./pages/patient/Treatments";
 
 function App() {
-  console.log(import.meta.env.VITE_SVPATH);
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>

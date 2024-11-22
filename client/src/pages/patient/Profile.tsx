@@ -6,6 +6,7 @@ import Title from "../../components/Title";
 import React, { SetStateAction, useEffect, useState } from "react";
 import axios from "axios";
 
+
 const SaveUserName = ({ formData, theme, onSave }) => {
   const [username, setUserName] = useState(formData);
   const [isValid, setValidState] = useState(false);
@@ -589,7 +590,8 @@ const Profile = () => {
     const fetchNotifications = async () => {
       try {
         const result = await axios.post(
-          "http://localhost:8000/getNotifications", 
+          process.env.REACT_APP_API_URL
+  + "/getNotifications", 
           { Page: 1 },
           { withCredentials: true }
         );
@@ -613,7 +615,8 @@ const Profile = () => {
       console.log(formStorage.Picture);
       console.log(picModified.store);
       const result = await axios.post(
-        "http://localhost:8000/saveChanges",
+        process.env.REACT_APP_API_URL
+  + "/saveChanges",
         formStorage,    
         {
           headers: {"Content-Type": "application/json;charset=UTF-8"},
@@ -716,7 +719,8 @@ const Profile = () => {
       >
         <div className="bg-gray-600 size-48 rounded-full flex justify-center items-center">
           <img
-            src={`http://localhost:8000/getImage/profiles/${userInfo.ID}/${userInfo.ID}`}
+            src={process.env.REACT_APP_API_URL
+  + `/getImage/profiles/${userInfo.ID}/${userInfo.ID}`}
             alt=""
             onError={onInvalidImage}
             className="size-full rounded-full object-cover"
@@ -888,7 +892,8 @@ const Profile = () => {
                         src={
                           picModified.file
                             ? picModified.file
-                            : `http://localhost:8000/getImage/profiles/${userInfo.ID}/${userInfo.ID}`
+                            : process.env.REACT_APP_API_URL
+  + `/getImage/profiles/${userInfo.ID}/${userInfo.ID}`
                         }
                         alt=""
                         onError={onInvalidImage}

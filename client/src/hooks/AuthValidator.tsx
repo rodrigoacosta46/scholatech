@@ -8,7 +8,6 @@ interface ResponseStructure {
     fatal: boolean;
   }
   
-
 export class AuthMethodHandler {
     result: ResponseStructure;
     authenticated: boolean
@@ -20,7 +19,8 @@ export class AuthMethodHandler {
     }
     async Orchestrator() {
       try {
-        let preresult: AxiosResponse = await axios.get("http://localhost:8000/isAuthenticated", {withCredentials: true})
+        let preresult: AxiosResponse = await axios.get(process.env.REACT_APP_API_URL
+  + "/isAuthenticated", {withCredentials: true})
         this.result = preresult.data
       } catch (error) {
         console.log("It looks like its not authenticated")
@@ -37,7 +37,7 @@ export class AuthMethodHandler {
         try {
           let URLEncoded;
           if (this.PropertyGuest && !this.authenticated && (this.result.redirect_route == "/logout")) {
-            URLEncoded = new URL("/logout", "http://localhost:8000");
+            URLEncoded = new URL("/logout", process.env.REACT_APP_API_URL);
           } else {
             URLEncoded = new URL(this.result.redirect_route, window.location.origin)
           }

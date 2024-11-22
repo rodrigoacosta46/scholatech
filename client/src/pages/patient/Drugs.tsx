@@ -32,25 +32,25 @@ const Drugs = () => {
   const [drugView, setDrugView] = useState<DrugInterface>();
   const [imgSrc, setImgSrc] = useState("");
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: any) => {
     let time = setTimeout(() => {
       setSearchTerm({ Search: e.target.value });
       clearTimeout(time);
     }, 500);
   }
 
-  const modalSetState = (display) => {
+  const modalSetState = (display: any) => {
     setDrugView(display);
     setModal(!modal);
   };
 
-  const addDrug = (e) => { };
-  const deleteDrug = (e) => {
+  const addDrug = (e: any) => { };
+  const deleteDrug = (e: any) => {
     e.stopPropagation();
     confirm("Elimino medicamento");
   };
 
-  const drugModel = (registro, i) => {
+  const drugModel = (registro: any, i: any) => {
     return (
       <Card
         key={"n-" + i}
@@ -65,7 +65,8 @@ const Drugs = () => {
             className="fa-solid fa-trash absolute end-1 hover:text-red-700 transition-all"
           ></i>
         )}
-        <img src={`http://localhost:8000/getImage/drugs/${registro.ID}/0`} onError={(e: any) => e.target.src = "img/logo.png"} alt="" className="w-auto max-h-96" />
+        <img src={process.env.REACT_APP_API_URL
+ + `/getImage/drugs/${registro.ID}/0`} onError={(e: any) => e.target.src = "img/logo.png"} alt="" className="w-auto max-h-96" />
         <Title
           txt={registro.Nombre}
           className="overflow-hidden"
@@ -78,7 +79,7 @@ const Drugs = () => {
     )
   }
 
-  const viewFile = (e) => {
+  const viewFile = (e: any) => {
     const file = e.target.files[0];
     if (!file) return setImgSrc("");
     const tmp = window.URL.createObjectURL(file);
@@ -149,7 +150,8 @@ const Drugs = () => {
       )}
 
       <Modal state={modal} setter={modalSetState} scheme={userConfig.theme}>
-        <img src={`http://localhost:8000/getImage/drugs/${drugView?.ID}/0`} onError={(e: any) => e.target.src = "img/logo.png"} alt="" className="max-h-96 object-cover" />
+        <img src={process.env.REACT_APP_API_URL
+ + `/getImage/drugs/${drugView?.ID}/0`} onError={(e: any) => e.target.src = "img/logo.png"} alt="" className="max-h-96 object-cover" />
         <div className="flex flex-col w-fit overflow-hidden">
           <Title txt={drugView?.Nombre} className="" scheme={userConfig.theme} />
           <p className="m-2">{drugView?.Descripcion}
@@ -179,7 +181,8 @@ const Drugs = () => {
         )}
       </div>
         <VerticalScroller 
-          url="http://localhost:8000/getDrugs"
+          url={String(process.env.REACT_APP_API_URL
+  + "/getDrugs")} 
           params={searchTerm}
           renderModel={drugModel}
           empty="No hay drogas"

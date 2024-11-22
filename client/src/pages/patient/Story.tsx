@@ -186,7 +186,8 @@ const Story = () => {
             scheme={userConfig.theme}
           />
           <VerticalScroller
-            url="http://localhost:8000/getTurnos/pending"
+            url={String(process.env.REACT_APP_API_URL
+  + "/getTurnos/pending")}
             renderModel={pendingAssigmentsModel}
             empty="No tenes asignaciones pendientes"
           />
@@ -198,7 +199,8 @@ const Story = () => {
             scheme={userConfig.theme}
           />
           <VerticalScroller
-            url="http://localhost:8000/getTurnos/accepted"
+            url={String(process.env.REACT_APP_API_URL
+  + "/getTurnos/accepted")}
             renderModel={assignedAssigmentModel}
             empty="No tenes turnos asignados pendientes"
           />
@@ -210,7 +212,8 @@ const Story = () => {
             scheme={userConfig.theme}
           />
           <VerticalScroller
-            url="http://localhost:8000/getResults"
+            url={String(process.env.REACT_APP_API_URL
+  + "/getResults")}
             renderModel={closedAssigmentModel}
             empty="No tenes turnos pasados"
           />

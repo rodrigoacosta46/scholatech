@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+ 
 const Log = () => {
   const [visualizeInput, setInputView] = useState(false);
   const [formData, setFormData] = useState({
@@ -23,7 +23,8 @@ const Log = () => {
 
     try {
       const result = await axios.post(
-        'http://localhost:8000/loginauth', 
+        process.env.REACT_APP_API_URL
+  + '/loginauth', 
         formData,
         { withCredentials: true }
       );

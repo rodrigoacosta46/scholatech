@@ -4,6 +4,7 @@ import VerticalScroller from "../../components/VerticalScroller";
 import { userHook } from "../../hooks/userHook";
 import React from "react";
 
+
 const Reminders = () => {
   const { userConfig } = userHook();
 
@@ -58,7 +59,8 @@ const Reminders = () => {
       <div className="flex flex-col gap-28 m-8 transition-all">
         <div className="flex flex-col">
           <VerticalScroller
-            url="http://localhost:8000/getNotifications"
+            url={String(process.env.REACT_APP_API_URL
+  + "/getNotifications")}
             renderModel={notificationModel}
             empty="No tenes notificaciones en el buzón de entrada"
           />

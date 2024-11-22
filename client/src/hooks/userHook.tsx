@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { roles, config } from "../config/roles";
 import React from 'react';
+ 
 
 interface userConfig {
   theme: string,
@@ -88,7 +89,8 @@ export const UserContextProvider = ({}) => {
     let model: UserInterface | undefined = undefined;
     const xhr = new XMLHttpRequest();
   
-    xhr.open('GET', 'http://localhost:8000/sync', false);
+    xhr.open('GET', process.env.REACT_APP_API_URL
+  + '/sync', false);
     
     xhr.onload = function() {
       if (xhr.status >= 200 && xhr.status < 300) {
@@ -105,7 +107,8 @@ export const UserContextProvider = ({}) => {
         console.log(xhr.responseText);
         var e = JSON.parse(xhr.responseText);
         if (e.hasOwnProperty("redirect_route") && (e["redirect_route"] == "/logout")) {
-          window.location.href = "http://localhost:8000/logout";
+          window.location.href = process.env.REACT_APP_API_URL
+  + "/logout";
         }
       }
   

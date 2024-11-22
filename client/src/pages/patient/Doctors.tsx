@@ -9,6 +9,7 @@ import Section from "../../components/Section";
 import React from "react";
 import Scroller from "../../components/Scroller";
 
+
 interface Doctor {
   Address: string;
   Birthdate: string;
@@ -58,7 +59,8 @@ const Doctors = () => {
       scheme={userConfig!["theme"]}
     >
       <img
-        src={`http://localhost:8000/getImage/profiles/${registro.ID}/${registro.ID}`}
+        src={process.env.REACT_APP_API_URL
+  + `/getImage/profiles/${registro.ID}/${registro.ID}`}
         alt=""
         className="h-80 object-cover"
       />
@@ -101,7 +103,8 @@ const Doctors = () => {
     <>
       <Modal state={modal} setter={modalSetState} scheme={userConfig.theme}>
         <img
-          src={`http://localhost:8000/getImage/profiles/${modalData?.ID}/${modalData?.ID}`}
+          src={process.env.REACT_APP_API_URL
+  + `/getImage/profiles/${modalData?.ID}/${modalData?.ID}`}
           alt=""
           className="h-80 object-cover"
         />
@@ -134,7 +137,8 @@ const Doctors = () => {
         <div>
           <Section txt="Últimos turnos" scheme={userConfig.theme} />
           <Scroller
-            url="http://localhost:8000/lastdoctor"
+            url={String(process.env.REACT_APP_API_URL
+  + "/lastdoctor")}
             className="animate-[slideIn_2s] my-2"
             renderModel={doctorsModel}
             empty="No tuviste ningún turno"
@@ -168,7 +172,8 @@ const Doctors = () => {
             </select>
           </div>
           <Scroller
-            url="http://localhost:8000/getDoctors"
+            url={String(process.env.REACT_APP_API_URL
+  + "/getDoctors")}
             params={{...filters}}
             className="animate-[slideIn_2s] my-2"
             renderModel={doctorsModel}

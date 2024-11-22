@@ -20,7 +20,8 @@ const Sidebar = () => {
   }, [location.pathname]);
  
   const logout = () => {
-    window.location.href = 'http://localhost:8000/logout';
+    window.location.href = process.env.REACT_APP_API_URL
+  + '/logout';
   };
 
   return (
@@ -60,7 +61,8 @@ const Sidebar = () => {
               userView
             }
           >
-            <img src={`http://localhost:8000/getImage/profiles/${userInfo.ID}/${userInfo.ID}`} alt="" className="size-36 object-cover rounded-full" />
+            <img src={process.env.REACT_APP_API_URL
+  + `/getImage/profiles/${userInfo.ID}/${userInfo.ID}`} alt="" className="size-36 object-cover rounded-full" />
             <div>
               <p className="text-xl text-white line-clamp-3">{userInfo["Username"]}</p>
               <p className="text-md text-gray-500">{userInfo["Perfil"].Name}</p>

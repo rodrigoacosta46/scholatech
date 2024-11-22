@@ -3,6 +3,7 @@ package Middleware
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -42,12 +43,12 @@ Validates if the user is authenticated.
 */
 func JwtMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("JWT Middleware. Path:", r.URL.Path)
+		log.Println("JWT Middleware. Path:", r.URL.Path)
 		if !SilentuncheckJWTHandler(w, r) {
-			fmt.Println("El usuario SI esta autenticado")
+			log.Println("El usuario SI esta autenticado")
 			next.ServeHTTP(w, r)
 		} else {
-			fmt.Println("El usuario NO esta autenticado")
+			log.Println("El usuario NO esta autenticado")
 			w.WriteHeader(http.StatusFound)
 			json.NewEncoder(w).Encode(structs.Response{Message: "Usted debe autenticarse para poder continuar....", Authenticated: "false", RedirectRoute: enum.URLs["login"].Which(r)})
 		}
@@ -60,12 +61,12 @@ Validates if the user is NOT autheticated
 
 func AntiJwtMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Anti JWT Middleware. Path:", r.URL.Path)
+		log.Println("Anti JWT Middleware. Path:", r.URL.Path)
 		if SilentuncheckJWTHandler(w, r) {
-			fmt.Println("El usuario NO esta autenticado")
+			log.Println("El usuario NO esta autenticado")
 			next.ServeHTTP(w, r)
 		} else {
-			fmt.Println("El usuario SI esta autenticado")
+			log.Println("El usuario SI esta autenticado")
 			w.WriteHeader(http.StatusFound)
 			json.NewEncoder(w).Encode(structs.Response{Message: "Usted ya se encuentra autenticado en el sistema", Authenticated: "true", RedirectRoute: enum.URLs["profile"].Which(r)})
 		}
@@ -109,7 +110,6 @@ func ValidateJWTHandler(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(structs.Response{Message: "Ocurrio un error al obtener la sesion", RedirectRoute: enum.URLs["login"].Which(r), Authenticated: "false"})
 		return
 	}
-
 	tokenString, ok := session.Values["jwt"].(string)
 	if !ok {
 		w.WriteHeader(http.StatusUnauthorized)
@@ -140,9 +140,10 @@ OPTIONS Is mandatory
 */
 func EnableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+		origin := r.Header.Get("Origin")
+		w.Header().Set("Access-Control-Allow-Origin", origin)
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie")
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		if r.Method == "OPTIONS" {
 			w.WriteHeader(http.StatusOK)
@@ -159,11 +160,11 @@ func RoleValidation(roleID string) func(http.Handler) http.Handler {
 			id, _ := (jwtToken.Claims.GetSubject())
 			res := database.Db.Where("perfil_id = "+roleID).Find(&database.User{}, id)
 			if res.Error != nil {
-				fmt.Println("Error de consulta rolevaldation")
+				log.Println("Error de consulta rolevaldation")
 				w.WriteHeader(http.StatusInternalServerError)
 				json.NewEncoder(w).Encode(structs.Response{Message: "Error del servidor"})
 			} else if res.RowsAffected < 1 {
-				fmt.Println("Usuario no autorizado rolevalidation")
+				log.Println("Usuario no autorizado rolevalidation")
 				w.WriteHeader(http.StatusForbidden)
 				json.NewEncoder(w).Encode(structs.Response{Message: "No tiene los permisos requeridos"})
 			}

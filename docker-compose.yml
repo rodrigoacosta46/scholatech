@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   db:
     container_name: nico_mariadb_scholatech26
@@ -11,19 +12,35 @@ services:
       MYSQL_DATABASE: scholaTech26GORM
 #      MYSQL_PASSWORD: 123456
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
-
-#  golang:
-#    container_name: nico_golang_scholatech26
-#    build:
-#      context: .  # Usa el directorio actual como contexto
-#      dockerfile: Dockerfile  # Especifica el Dockerfile que creaste
-#    restart: always
-#    ports:
-#      - "8000:8000"  # Cambia este puerto según sea necesario
- #     - "5173:5173"
+    networks:
+      scholanet:
+          ipv4_address: 172.19.0.2
+  golang:
+    container_name: nico_golang_scholatech26
+    build:
+      context: .  
+      dockerfile: dockerfile
+    restart: always
+    ports:
+      - "8000:8000"  
+      - "5173:5173"
+    environment:
+      WhereIam: "DOCKER"
+    networks:
+      scholanet:
+        ipv4_address: 172.19.0.3
   redis:
     container_name: nico_redis_scholatech26
     image: redis:latest
     restart: always
     ports:
-      - "6379:6379"  # Puerto por defecto de Redis      
+      - "6379:6379" 
+    networks:
+      scholanet:
+          ipv4_address: 172.19.0.4
+networks:
+  scholanet:
+    driver: bridge  
+    ipam:
+      config:
+        - subnet: "172.19.0.0/16"

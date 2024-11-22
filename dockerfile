@@ -1,12 +1,18 @@
-
-# Usa la imagen de Golang 1.23
 FROM golang:1.23
 
-# Establece el directorio de trabajo dentro del contenedor
+RUN apt-get update && \
+    apt-get install -y nodejs npm
+
 WORKDIR /app
 
-# Copia todos los archivos desde el contexto actual al directorio de trabajo en el contenedor
+EXPOSE 8000
+
+EXPOSE 5173
+
 COPY . .
 
-# Ejecuta la aplicación
-CMD ["./app"]
+COPY entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

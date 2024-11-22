@@ -1,0 +1,186 @@
+# minikube addons enable registry
+# minikube service mariadb-service --url
+# docker build -t localhost:5000/scholameds-image:latest .
+# docker push localhost:5000/scholameds-image:latest
+# % docker run --rm -it --network=host alpine ash -c "apk add socat && socat TCP-LISTEN:5000,reuseaddr,fork TCP:$(minikube ip):5000"
+# socat TCP-LISTEN:5173,reuseaddr,fork TCP:127.0.0.1:57342
+# socat TCP-LISTEN:8000,reuseaddr,fork TCP:127.0.0.1:57342
+# GOOS=linux GOARCH=amd64 go build -o ScholaMedsProd
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mariadb-statefulset
+  labels:
+    app: mariadb
+spec:
+  serviceName: mariadb-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:latest
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_DATABASE
+              value: "scholaTech26GORM"
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "1"
+          volumeMounts:
+            - name: mariadb-storage
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: mariadb-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb-service
+spec:
+  type: NodePort
+  ports:
+    - port: 3306
+      targetPort: 3306
+      nodePort: 30036
+  selector:
+    app: mariadb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb-headless
+  labels:
+    app: mariadb
+spec:
+  ports:
+    - port: 3306
+      targetPort: 3306
+  clusterIP: None
+  selector:
+    app: mariadb
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:latest
+          ports:
+            - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  labels:
+    app: redis
+spec:
+  type: NodePort
+  ports:
+    - port: 6379
+      targetPort: 6379
+      nodePort: 30037
+  selector:
+    app: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-headless
+  labels:
+    app: redis
+spec:
+  ports:
+    - port: 6379
+      targetPort: 6379
+  clusterIP: None
+  selector:
+    app: redis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golang-scholatech
+  labels:
+    app: golang-scholatech
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: golang-scholatech
+  template:
+    metadata:
+      labels:
+        app: golang-scholatech
+    spec:
+      containers:
+        - name: golang-scholatech
+          image: localhost:5000/scholameds-image:latest
+          ports:
+            - containerPort: 8000
+            - containerPort: 5173
+          env:
+            - name: WhereIam
+              value: "KUBERNETES"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: golang-scholatech-service
+spec:
+  type: NodePort
+  ports:
+    - name: http-port
+      port: 8000
+      targetPort: 8000
+      nodePort: 30038
+    - name: dev-port
+      port: 5173
+      targetPort: 5173
+      nodePort: 30039
+  selector:
+    app: golang-scholatech
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: golang-scholatech-headless
+  labels:
+    app: golang-scholatech
+spec:
+  ports:
+    - name: http-port
+      port: 8000
+      targetPort: 8000
+    - name: dev-port
+      port: 5173
+      targetPort: 5173
+  clusterIP: None
+  selector:
+    app: golang-scholatech

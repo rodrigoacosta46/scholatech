@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-	fmt.Println("Starting service..")
+	log.Println("Starting service..")
 	gorillaRouter()
 }
 
@@ -62,6 +62,6 @@ func gorillaRouter() {
 	adminRoutes := protectedRoutes.NewRoute().Subrouter()
 	adminRoutes.Use(Middleware.RoleValidation("3"))
 	adminRoutes.HandleFunc("/getUsers", microservices.ServeUsers)
-	fmt.Println("Database is ready for running")
+	log.Println("Database is ready for running")
 	http.ListenAndServe("0.0.0.0:8000", r)
 }

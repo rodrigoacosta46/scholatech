@@ -2,7 +2,7 @@ package microservices
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -24,12 +24,12 @@ func ServeUsers(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	defer r.Body.Close()
 	if err := decoder.Decode(&req); err != nil {
-		fmt.Printf("Error al decodificar JSON: %v\n", err)
+		log.Printf("Error al decodificar JSON: %v\n", err)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Solicitud JSON Invalida"})
 		return
 	}
-	fmt.Println(req.Birthdate, req.Email, req.Gender, req.Name, req.Page, req.Role)
+	log.Println(req.Birthdate, req.Email, req.Gender, req.Name, req.Page, req.Role)
 	qry := database.Db.Model(&database.User{})
 
 	if req.Name != "" {
@@ -72,7 +72,7 @@ func ServeUsers(w http.ResponseWriter, r *http.Request) {
 		AllowLike:       false,
 	}, pageStruct))()
 	if !boolerr {
-		fmt.Println("Error al realizar qry en serveusers")
+		log.Println("Error al realizar qry en serveusers")
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Error al ejecutar consulta"})
 		return

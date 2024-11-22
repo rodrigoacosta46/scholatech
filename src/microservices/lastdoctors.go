@@ -2,7 +2,7 @@ package microservices
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/nicolas-k-cmd/proj-redes/src/database"
@@ -14,7 +14,7 @@ func LastDoctor(w http.ResponseWriter, r *http.Request) {
 	jwtToken, _ := Middleware.GetCookiePostMiddleware(w, r)
 	id, err := (jwtToken.Claims.GetSubject())
 	if err != nil {
-		fmt.Printf("Error al obtener el jwt del usuario: %v\n", err)
+		log.Printf("Error al obtener el jwt del usuario: %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode((structs.Response{Message: "Error al obtener el ID del sujeto"}))
 		return

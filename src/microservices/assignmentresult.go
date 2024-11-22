@@ -2,7 +2,7 @@ package microservices
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -28,7 +28,7 @@ func AssigmentResults(w http.ResponseWriter, r *http.Request) {
 	var req AssigmentResultsRequest
 
 	if err := requestDecoder(&req, r); err != nil {
-		fmt.Println("Error al decodificar en assigmentresult", err)
+		log.Println("Error al decodificar en assigmentresult", err)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Solicitud Invalida"})
 		return
@@ -44,14 +44,14 @@ func AssigmentResults(w http.ResponseWriter, r *http.Request) {
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
-			fmt.Println("Failed trasaction:", r)
+			log.Println("Failed trasaction:", r)
 		}
 	}()
 
 	updateTurno := tx.Model(&database.Turno{}).Where("id = ?", req.ID).Updates(&database.Turno{Estado: "closed"})
 	if updateTurno.Error != nil {
 		tx.Rollback()
-		fmt.Println("Error de consulta en assigmentresult: ", updateTurno.Error)
+		log.Println("Error de consulta en assigmentresult: ", updateTurno.Error)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
 		return
@@ -66,20 +66,20 @@ func AssigmentResults(w http.ResponseWriter, r *http.Request) {
 	res := tx.Model(&database.Historial{}).Where("turno_id = ?", historial.TurnoID).FirstOrCreate(&historial)
 	if res.Error != nil || res.RowsAffected == 0 {
 		tx.Rollback()
-		fmt.Println("Error de consulta en assigmentresult: ", res.Error)
-		fmt.Println("Turno id: ", historial.TurnoID)
+		log.Println("Error de consulta en assigmentresult: ", res.Error)
+		log.Println("Turno id: ", historial.TurnoID)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
 		return
 	}
 
 	for i, droga := range req.Drogas {
-		fmt.Println("datos", i, historial.ID, droga.Drug, droga.Amount)
+		log.Println("datos", i, historial.ID, droga.Drug, droga.Amount)
 
 		drugID, err := strconv.Atoi(droga.Drug)
 		if err != nil {
 			tx.Rollback()
-			fmt.Println("Error de consulta en assigmentresult: ", err)
+			log.Println("Error de consulta en assigmentresult: ", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
 			return
@@ -88,7 +88,7 @@ func AssigmentResults(w http.ResponseWriter, r *http.Request) {
 		amount, err := strconv.ParseFloat(droga.Amount, 32)
 		if err != nil {
 			tx.Rollback()
-			fmt.Println("Error de consulta en assigmentresult: ", err)
+			log.Println("Error de consulta en assigmentresult: ", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
 			return
@@ -96,7 +96,7 @@ func AssigmentResults(w http.ResponseWriter, r *http.Request) {
 
 		if err := tx.Create(&database.Receta{HistorialID: historial.ID, MedicamentoID: drugID, Cantidad: float32(amount), Tomas: droga.Time}).Error; err != nil {
 			tx.Rollback()
-			fmt.Println("Error de consulta en assigmentresult: ", err)
+			log.Println("Error de consulta en assigmentresult: ", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
 			return
@@ -112,7 +112,7 @@ func AssigmentResults(w http.ResponseWriter, r *http.Request) {
 
 	if err := tx.Create(&notificacion).Error; err != nil {
 		tx.Rollback()
-		fmt.Println("Error de consulta en assigmentresult: ", err)
+		log.Println("Error de consulta en assigmentresult: ", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
 		return
@@ -120,7 +120,7 @@ func AssigmentResults(w http.ResponseWriter, r *http.Request) {
 
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
-		fmt.Println("Error de consulta en assigmentresult: ", err)
+		log.Println("Error de consulta en assigmentresult: ", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
 		return

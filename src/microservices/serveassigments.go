@@ -2,7 +2,7 @@ package microservices
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -16,9 +16,9 @@ func ServeAssigments(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	switch vars["status"] {
 	case "accepted", "rejected", "pending":
-		fmt.Println("El valor GET es valido")
+		log.Println("El valor GET es valido")
 	default:
-		fmt.Println("La variable no es válida")
+		log.Println("La variable no es válida")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Solicitud GET Invalida"})
 		return

@@ -2,7 +2,7 @@ package microservices
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/nicolas-k-cmd/proj-redes/src/database"
@@ -21,12 +21,12 @@ func ServeDoctors(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	defer r.Body.Close()
 	if err := decoder.Decode(&req); err != nil {
-		fmt.Printf("Error al decodificar JSON: %v\n", err)
+		log.Printf("Error al decodificar JSON: %v\n", err)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Solicitud JSON Invalida"})
 		return
 	}
-	fmt.Println("acá está", req.Username, req.Gender, req.Speciality, req.Page)
+	log.Println("acá está", req.Username, req.Gender, req.Speciality, req.Page)
 	qry := database.Db.Model(&database.User{})
 
 	if req.Username != "" {
@@ -56,7 +56,7 @@ func ServeDoctors(w http.ResponseWriter, r *http.Request) {
 		AllowLike:       false,
 	}, pageStruct))()
 	if !boolerr {
-		fmt.Println("Error al realizar qry en servedoctors")
+		log.Println("Error al realizar qry en servedoctors")
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Error al ejecutar consulta"})
 		return

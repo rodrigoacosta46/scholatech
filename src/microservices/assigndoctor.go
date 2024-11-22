@@ -2,7 +2,7 @@ package microservices
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -23,7 +23,7 @@ func AssignDoctor(w http.ResponseWriter, r *http.Request) {
 	deco := json.NewDecoder(r.Body)
 	defer r.Body.Close()
 	if err := deco.Decode(&req); err != nil {
-		fmt.Printf("Error al decodificar JSON en assigndoctor: %v\n", err)
+		log.Printf("Error al decodificar JSON en assigndoctor: %v\n", err)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Solicitud JSON Invalida"})
 		return
@@ -38,7 +38,7 @@ func AssignDoctor(w http.ResponseWriter, r *http.Request) {
 	jwtToken, _ := Middleware.GetCookiePostMiddleware(w, r)
 	id, err := (jwtToken.Claims.GetSubject())
 	if err != nil {
-		fmt.Printf("Error al obtener el jwt del usuario: %v\n", err)
+		log.Printf("Error al obtener el jwt del usuario: %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode((structs.Response{Message: "Error al obtener el ID del sujeto"}))
 		return
@@ -46,7 +46,7 @@ func AssignDoctor(w http.ResponseWriter, r *http.Request) {
 
 	var usId int
 	if usId, err = strconv.Atoi(id); err != nil {
-		fmt.Printf("Error de parseo en userconfig: %v\n", err)
+		log.Printf("Error de parseo en userconfig: %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar asignacion"})
 		return
@@ -54,12 +54,12 @@ func AssignDoctor(w http.ResponseWriter, r *http.Request) {
 
 	res := database.Db.Where(&database.Turno{DoctorID: req.DoctorID, PacienteID: usId, Estado: "pending"}).Find(&database.Turno{})
 	if res.Error != nil {
-		fmt.Printf("Error en assigndoctor")
+		log.Printf("Error en assigndoctor")
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar asignacion"})
 		return
 	} else if res.RowsAffected > 0 {
-		fmt.Printf("Doctor ya consultado")
+		log.Printf("Doctor ya consultado")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Ya realizaste un pedido de consulta a este especialista"})
 		return
@@ -70,7 +70,7 @@ func AssignDoctor(w http.ResponseWriter, r *http.Request) {
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
-			fmt.Println("Failed trasaction:", r)
+			log.Println("Failed trasaction:", r)
 		}
 	}()
 
@@ -91,7 +91,7 @@ func AssignDoctor(w http.ResponseWriter, r *http.Request) {
 
 	if err := tx.Create(&turno).Error; err != nil {
 		tx.Rollback()
-		fmt.Println("Failed to create turno:", err)
+		log.Println("Failed to create turno:", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar asignacion"})
 		return
@@ -99,14 +99,14 @@ func AssignDoctor(w http.ResponseWriter, r *http.Request) {
 
 	if err := tx.Create(&notificacion).Error; err != nil {
 		tx.Rollback()
-		fmt.Println("Failed to create notification:", err)
+		log.Println("Failed to create notification:", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar asignacion"})
 		return
 	}
 
 	if err := tx.Commit().Error; err != nil {
-		fmt.Println("Failed to commit transaction:", err)
+		log.Println("Failed to commit transaction:", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar asignacion"})
 		return

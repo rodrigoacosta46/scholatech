@@ -2,7 +2,7 @@ package microservices
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -27,7 +27,7 @@ func UpdateAssigment(w http.ResponseWriter, r *http.Request) {
 	switch vars["action"] {
 	case "accept":
 		if err := acceptAssigment(r); err != nil {
-			fmt.Printf("Error al actualizar la asignación: %v\n", err)
+			log.Printf("Error al actualizar la asignación: %v\n", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(structs.Response{Message: "Error al actualizar la asignación"})
 			return
@@ -36,7 +36,7 @@ func UpdateAssigment(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(structs.Response{Message: "Asignación actualizada con éxito"})
 	case "cancel":
 		if err := cancelAssigment(r); err != nil {
-			fmt.Printf("Error al actualizar la asignación: %v\n", err)
+			log.Printf("Error al actualizar la asignación: %v\n", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(structs.Response{Message: "Error al actualizar la asignación"})
 			return
@@ -44,7 +44,7 @@ func UpdateAssigment(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Asignación actualizada con éxito"})
 	default:
-		fmt.Println("La variable no es válida")
+		log.Println("La variable no es válida")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Solicitud GET Invalida"})
 		return
@@ -66,7 +66,7 @@ func doctorTransaction(turnoID int, update database.Turno, notificacion database
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
-			fmt.Println("Failed trasaction:", r)
+			log.Println("Failed trasaction:", r)
 		}
 	}()
 

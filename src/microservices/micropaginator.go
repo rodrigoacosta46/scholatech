@@ -3,7 +3,9 @@ package microservices
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/nicolas-k-cmd/proj-redes/src/database"
@@ -44,7 +46,7 @@ func SampleClosure(input ClosureStruct, req PaginationRequest) func() (ServePagi
 		var err error
 		err = input.command.Count(&totalPages).Error
 		if err != nil {
-			fmt.Println("Error al ejecutar la closure4", err)
+			log.Println("Error al ejecutar la closure4", err)
 			return spr, false
 		}
 		if input.AllowLike && req.Search != nil {
@@ -57,7 +59,7 @@ func SampleClosure(input ClosureStruct, req PaginationRequest) func() (ServePagi
 		case "Find":
 			err = input.command.Find(&input.structParser).Error
 			//resultDebug := input.command.Debug().Find(&input.structParser)
-			//fmt.Println(resultDebug.Statement.SQL.String())
+			//log.Println(resultDebug.Statement.SQL.String())
 			//err = nil
 		case "First":
 			err = input.command.First(&input.structParser).Error
@@ -67,7 +69,7 @@ func SampleClosure(input ClosureStruct, req PaginationRequest) func() (ServePagi
 			err = input.command.Scan(&input.structParser).Error
 		}
 		if err != nil {
-			fmt.Println("Error al ejecutar la closure", err)
+			log.Println("Error al ejecutar la closure", err)
 			return spr, false
 		} else {
 			spr.Total = int(totalPages)
@@ -84,7 +86,7 @@ func MicroPagination(w http.ResponseWriter, r *http.Request, input ClosureStruct
 	decoder := json.NewDecoder(r.Body)
 	defer r.Body.Close()
 	if err := decoder.Decode(&req); err != nil {
-		fmt.Printf("Error al decodificar JSON en paginacion: %v\n", err)
+		log.Printf("Error al decodificar JSON en paginacion: %v\n", err)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Solicitud JSON Invalida"})
 		return ServePaginationResponse{}, false
@@ -96,27 +98,30 @@ func MicroPagination(w http.ResponseWriter, r *http.Request, input ClosureStruct
 		CacheKeywords = env.CACHE_NO_ISSUER
 	}
 	cacheKey := fmt.Sprintf("pagination:%s:%s:%d", input.requestedBy, CacheKeywords, req.Page)
-
+	if os.Getenv("APP_ENV") == "testing" && StoreRedis {
+		log.Printf("MicroPaginator Redis Store is enabled while the enviroment is in test mode, disabling redis pagination...")
+		StoreRedis = false
+	}
 	if StoreRedis {
 		cachedResult, err := database.Client.Get(database.Ctx, cacheKey).Result()
 		if err == nil {
 			// Si encontramos el resultado en Redis, lo parseamos y lo retornamos
 			var spr ServePaginationResponse
 			if jsonErr := json.Unmarshal([]byte(cachedResult), &spr); jsonErr == nil {
-				fmt.Println("Resultado de paginación obtenido de Redis")
+				log.Println("Resultado de paginación obtenido de Redis")
 				return spr, true
 			} else {
-				fmt.Printf("Error al parsear JSON desde Redis: %v\n", jsonErr)
+				log.Printf("Error al parsear JSON desde Redis: %v\n", jsonErr)
 			}
 		} else if err != redis.Nil {
 			// Error inesperado en Redis (diferente de "clave no encontrada")
-			fmt.Printf("Error al buscar en Redis: %v\n", err)
+			log.Printf("Error al buscar en Redis: %v\n", err)
 		}
 	}
 	spr, err := (SampleClosure(input, req))()
 
 	if !err {
-		fmt.Printf("Error al ejecutar la closure")
+		log.Printf("Error al ejecutar la closure")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Solicitud JSON Invalida"})
 		return ServePaginationResponse{}, false
@@ -125,14 +130,14 @@ func MicroPagination(w http.ResponseWriter, r *http.Request, input ClosureStruct
 		// Convierte el resultado a JSON para almacenarlo en Redis
 		resultJSON, err := json.Marshal(spr)
 		if err != nil {
-			fmt.Printf("Error al convertir resultado a JSON para Redis: %v\n", err)
+			log.Printf("Error al convertir resultado a JSON para Redis: %v\n", err)
 		} else {
 			// Guarda el resultado en Redis con una expiración de 10 minutos
 			err = database.Client.Set(database.Ctx, cacheKey, resultJSON, 10*time.Minute).Err()
 			if err != nil {
-				fmt.Printf("Error al guardar en Redis: %v\n", err)
+				log.Printf("Error al guardar en Redis: %v\n", err)
 			} else {
-				fmt.Println("Resultado de paginación almacenado en Redis")
+				log.Println("Resultado de paginación almacenado en Redis")
 			}
 		}
 	}

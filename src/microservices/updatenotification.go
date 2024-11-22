@@ -2,7 +2,7 @@ package microservices
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -20,7 +20,7 @@ func UpdateNotification(w http.ResponseWriter, r *http.Request) {
 	switch vars["action"] {
 	case "read":
 		if err := markAsRead(r); err != nil {
-			fmt.Printf("Error al actualizar la notificación: %v\n", err)
+			log.Printf("Error al actualizar la notificación: %v\n", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(structs.Response{Message: "Error al actualizar la notificación"})
 			return
@@ -29,7 +29,7 @@ func UpdateNotification(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(structs.Response{Message: "Notificacion actualizada con éxito"})
 	case "delete":
 		if err := deleteNotification(r); err != nil {
-			fmt.Printf("Error al actualizar la notificación: %v\n", err)
+			log.Printf("Error al actualizar la notificación: %v\n", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(structs.Response{Message: "Error al actualizar la notificación"})
 			return
@@ -37,7 +37,7 @@ func UpdateNotification(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Notificación borrada con éxito"})
 	default:
-		fmt.Println("La variable no es válida")
+		log.Println("La variable no es válida")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(structs.Response{Message: "Solicitud GET Invalida"})
 		return

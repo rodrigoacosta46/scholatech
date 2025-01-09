@@ -64,11 +64,23 @@ Deletes the cookie and then redirects to the login webpage
 */
 func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Se borro la cookie")
-	session, _ := env.Store.Get(r, env.CookieName)
-	session.Values["jwt"] = ""
-	session.Options.MaxAge = -1
-	log.Println("session:", session)
-	session.Save(r, w)
+	/*
+		session, _ := env.Store.Get(r, env.CookieName)
+		session.Values["jwt"] = ""
+		session.Options.Secure = false
+		session.Options.MaxAge = -1
+		log.Println("session:", session)
+		session.Save(r, w)
+	*/
+	http.SetCookie(w, &http.Cookie{
+		Name:     env.CookieName,
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1,
+		HttpOnly: true,
+		Secure:   false,
+		SameSite: http.SameSiteLaxMode,
+	})
 	http.Redirect(w, r, "http://0.0.0.0:5173/login", http.StatusFound)
 }
 

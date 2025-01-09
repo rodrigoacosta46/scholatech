@@ -63,5 +63,9 @@ func gorillaRouter() {
 	adminRoutes.Use(Middleware.RoleValidation("3"))
 	adminRoutes.HandleFunc("/getUsers", microservices.ServeUsers)
 	log.Println("Database is ready for running")
-	http.ListenAndServe("0.0.0.0:8000", r)
+	err := http.ListenAndServe("0.0.0.0:8000", r)
+	if err != nil {
+		log.Printf("FATAL ERROR OCURRED WHILE SERVING THE MUX")
+		panic(err)
+	}
 }

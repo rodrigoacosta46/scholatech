@@ -142,6 +142,7 @@ spec:
       containers:
         - name: golang-scholatech
           image: localhost:5000/scholameds-image:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
             - containerPort: 5173

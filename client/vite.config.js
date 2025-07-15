@@ -27,6 +27,13 @@ export default defineConfig(({ mode }) => {
     server: {
       host: '0.0.0.0',
       port: 5173,
+      middlewareMode: false,
+      configureMiddleware: (app) => {
+        app.use((req, res, next) => {
+          res.setHeader('X-Robots-Tag', 'noindex')
+          next()
+        })
+      }
     },
   };
 });

@@ -10,6 +10,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/gorilla/sessions"
+	"github.com/nicolas-k-cmd/proj-redes/src/enum"
 	"github.com/nicolas-k-cmd/proj-redes/src/env"
 	"github.com/nicolas-k-cmd/proj-redes/src/structs"
 )
@@ -81,7 +82,7 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 		Secure:   false,
 		SameSite: http.SameSiteLaxMode,
 	})
-	http.Redirect(w, r, "http://0.0.0.0:5173/login", http.StatusFound)
+	http.Redirect(w, r, enum.URLs["profile"].Which(r), http.StatusFound)
 }
 
 /*

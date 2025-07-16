@@ -24,6 +24,7 @@ export default defineConfig(({ mode }) => {
       'process.env.REACT_APP_API_URL': JSON.stringify(env.REACT_APP_API_URL),
     },
     plugins: [react()],
+    envPrefix: 'REACT_APP_',
     server: {
       host: '0.0.0.0',
       port: 5173,

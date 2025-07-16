@@ -1,2 +1,4 @@
 # scholatech
 repo proyecto 6to Javier Blanco
+
+Hecho por Nicolas y Rodrigo

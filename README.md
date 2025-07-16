@@ -1,4 +1,4 @@
 # scholatech
 repo proyecto 6to Javier Blanco
 
-Hecho por Nicolas y Rodrigo
+Hecho por Nicolas y Rodrigo en 2024

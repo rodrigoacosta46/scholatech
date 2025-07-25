@@ -82,7 +82,7 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 		Secure:   false,
 		SameSite: http.SameSiteLaxMode,
 	})
-	http.Redirect(w, r, enum.URLs["profile"].Which(r), http.StatusFound)
+	http.Redirect(w, r, enum.URLs["login"].Which(r), http.StatusFound)
 }
 
 /*

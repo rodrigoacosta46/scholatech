@@ -7,6 +7,7 @@ Aplicación de gestión médica
 ## Tecnologías
 
 - Go
+- Redis
 - ReactJS
 - React-Router DOM
   

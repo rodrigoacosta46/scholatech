@@ -102,7 +102,7 @@ type Display = {
         <i className="fa-solid fa-chevron-right"></i>
       </button>
       <div className="flex justify-center w-full">
-        {Object.entries(display).map(([key, val]) => (
+        {Object.entries(display).map(([_, val]) => (
           <div className={'flex flex-col ' + val.styles} key={Math.random()}>
             <p
               className={`text-2xl text-thin text-wrap text-${scheme}-900 text-center p-4`}
@@ -118,7 +118,7 @@ type Display = {
               <p>V</p>
               <p>S</p>
               {val.content.map((d) => (
-                <div className=" w-full h-full border border-dashed p-1">
+                <div className=" w-full h-full border border-dashed p-1" key={Math.random()}>
                   <p className="text-start">{d.num}</p>
                 </div>
               ))}

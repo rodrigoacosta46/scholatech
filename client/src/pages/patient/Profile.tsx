@@ -613,7 +613,6 @@ const Profile = () => {
     e.preventDefault();
     try{
       console.log(formStorage.Picture);
-      console.log(picModified.store);
       const result = await axios.post(
         process.env.REACT_APP_API_URL
   + "/saveChanges",
@@ -646,7 +645,6 @@ const Profile = () => {
     }
   };
 
-  const [isGenderDisabled, setDisableState] = useState(true);
   const [inputModal, setModal] = useState(false);
   const [currentField, setCurrentField] = useState(null);
   const [formChanged, setFormChange] = useState(false);
@@ -726,7 +724,7 @@ const Profile = () => {
             className="size-full rounded-full object-cover"
           />
         </div>
-        <div className="flex flex-col opacity-0 animate-[fadeIn_4s_ease-in-out_1_forwards]">
+        <div className="flex flex-col opacity-0 animate-[fadeIn_2s_ease-in-out_1_forwards]">
           <div className="mx-auto text-4xl text-white text-wrap">
             {userInfo["Username"]}
             <div className="h-px bg-white w-0"></div>
@@ -755,7 +753,8 @@ const Profile = () => {
               <form action="" onSubmit={submitFormData}>
                 <div className="w-full grid grid-cols-3 gap-4 items-center text-slate-600 pt-6 px-2">
                   Nombre:
-                  <div
+                  <button
+                    type="button"
                     className="col-span-2 relative"
                     onClick={() => {
                       setModalState(
@@ -775,9 +774,10 @@ const Profile = () => {
                       disabled={true}
                       className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                     />
-                  </div>
+                  </button>
                   Correo:
-                  <div
+                  <button
+                    type="button"
                     className="col-span-2 relative"
                     onClick={() => {
                       setModalState(
@@ -797,9 +797,10 @@ const Profile = () => {
                       disabled={true}
                       className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                     />
-                  </div>
+                  </button>
                   Teléfono:
-                  <div
+                  <button
+                    type="button"
                     className="col-span-2 relative"
                     onClick={() => {
                       setModalState(
@@ -819,9 +820,10 @@ const Profile = () => {
                       disabled={true}
                       className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                     />
-                  </div>
+                  </button>
                   Contraseña:
-                  <div
+                  <button
+                    type="button"
                     className="col-span-2 relative place-self-end"
                     onClick={() => {
                       setModalState(
@@ -840,16 +842,17 @@ const Profile = () => {
                       disabled={true}
                       className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                     />
-                  </div>
+                  </button>
                   Género:
-                  <div className="col-span-2 relative place-self-end">
+                  <button 
+                    type="button"
+                    className="col-span-2 relative place-self-end"                      
+                  >
                     <i
-                      onClick={() => setDisableState(!isGenderDisabled)}
                       className="fa-regular z-10 fa-pen-to-square cursor-pointer hover:text-slate-800 absolute end-1 top-2 bg-gray-300"
                     ></i>
                     <select
                       name="gender"
-                      disabled={isGenderDisabled}
                       onChange={(e) => {
                         handleFieldSave("Gender", e.target.value);
                       }}
@@ -859,9 +862,10 @@ const Profile = () => {
                       <option value="male">Masculino</option>
                       <option value="female">Femenino</option>
                     </select>
-                  </div>
+                  </button>
                   Fecha de nacimiento:
-                  <div
+                  <button
+                    type="button"
                     className="col-span-2 relative place-self-end"
                     onClick={() => {
                       setModalState(
@@ -881,7 +885,7 @@ const Profile = () => {
                       disabled={true}
                       className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                     />
-                  </div>
+                  </button>
                   Foto de perfil:
                   <div className="col-span-2 relative place-self-end">
                     <label htmlFor="profileFile">
@@ -917,7 +921,8 @@ const Profile = () => {
                   {userInfo.Perfil.Name == roles["doctor"] && (
                     <>
                       Descripción:
-                      <div
+                      <button
+                        type="button"
                         className="col-span-2 relative"
                         onClick={() => {
                           setModalState(
@@ -939,9 +944,10 @@ const Profile = () => {
                           disabled={true}
                           className="bg-gray-300 px-4 py-2 w-full rounded-2xl text-slate-700 text-ellipsis pointer-events-none"
                         />
-                      </div>
+                      </button>
                       Dirección:
-                      <div
+                      <button
+                        type="button"
                         className="col-span-2 relative"
                         onClick={() => {
                           setModalState(
@@ -961,10 +967,11 @@ const Profile = () => {
                           disabled={true}
                           className="bg-gray-300 px-4 py-2 w-full rounded-2xl outline-none text-slate-700 text-ellipsis pointer-events-none"
                         />
-                      </div>
+                      </button>
                       Especialidad:
-                      <div
-                        className="col-span-2 relative place-self-end"
+                      <button
+                        type="button"
+                        className="col-span-2 relative"
                         onClick={() => {
                           setModalState(
                             <SaveUserProfession
@@ -981,12 +988,12 @@ const Profile = () => {
                           name="department"
                           value={formStorage["Speciality"]}
                           disabled={true}
-                          className="bg-gray-300 px-4 py-2 rounded-2xl outline-none text-slate-700 text-ellipsis pointer-events-none"
+                          className="bg-gray-300 px-4 py-2 w-full rounded-2xl outline-none text-slate-700 text-ellipsis pointer-events-none"
                         />
-                      </div>
+                      </button>
                     </>
                   )}
-                  <div className="col-span-3">
+                  <button className="col-span-3">
                     <input
                       type="submit"
                       value="Guardar cambios"
@@ -997,14 +1004,14 @@ const Profile = () => {
                           : `bg-gray-300/35 text-gray-400/80 cursor-not-allowed `
                       }`}
                     />
-                  </div>
+                  </button>
                 </div>
               </form>
               <p className="flex flex-col gap-1 text-sm mt-7">
                 Registrado el: {userInfo["CreatedAt"]}
-                <p className="italic">
+                <span className="italic">
                   Última actualización el: {userInfo["UpdatedAt"]}
-                </p>
+                </span>
               </p>
             </div>
           </div>

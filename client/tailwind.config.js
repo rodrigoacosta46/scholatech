@@ -5,13 +5,13 @@ export default {
     extend: {
       keyframes: {
         fadeIn: {
-          '0%': { opacity: '0%', height: '0px' },
-          '100%': { opacity: '100%', height: '100%' },
+          '0%': { opacity: '0%', transform: 'translateY(100%)' },
+          '100%': { opacity: '100%', transform: 'translateY(0)' },
         },
 
         slideIn: {
-          '0%': { opacity: '0%', width: '0px' },
-          '100%': { opacity: '100%', width: '100%' },
+          '0%': { opacity: '0%', transform: 'translateX(-100%)' },
+          '100%': { opacity: '100%', transform: 'translateX(0)' },
         },
       },
 

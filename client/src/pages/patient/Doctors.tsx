@@ -55,7 +55,7 @@ const Doctors = () => {
     <Card
       key={"k-"+i}
       onClick={() => modalSetState(registro)}
-      className="relative opacity-0 animate-fadeIn flex flex-col flex-shrink-0 max-w-[280px] m-2 cursor-pointer overflow-hidden"
+      className="relative flex flex-col flex-shrink-0 max-w-[280px] m-2 cursor-pointer overflow-hidden"
       scheme={userConfig!["theme"]}
     >
       <img
@@ -79,7 +79,7 @@ const Doctors = () => {
           key={"n-" + i}
           id={i}
           onClick={modalSetState}
-          className="relative opacity-0 animate-fadeIn flex flex-col flex-shrink-0 max-w-[280px] cursor-pointer overflow-hidden"
+          className="relative opacity-0 flex flex-col flex-shrink-0 max-w-[280px] cursor-pointer overflow-hidden"
           scheme={userConfig!["theme"]}
         >
           <img src="img/Gaben.png" alt="" className="h-80 object-cover" />

@@ -8,7 +8,7 @@
   }
 
   .scroll::-webkit-scrollbar {
-    width: 0.3rem;
+    width: 0.4rem;
   }
 
   .scroll::-webkit-scrollbar-track {
@@ -16,7 +16,7 @@
   }
 
   .scroll::-webkit-scrollbar-thumb {
-    background-color: hsla(250, 9%, 27%, 0.26);
+    background-color: hsla(250, 9%, 27%, 0.623);
   }
 
   .scroll::-webkit-scrollbar-thumb:hover {

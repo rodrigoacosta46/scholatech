@@ -12,9 +12,9 @@ const AuthUserLayout = ({}) => {
   }, []);
   
   return (
-      <div className="min-w-fit min-h-dvh flex bg-gray-300 overflow-hidden">
+      <div className="min-w-fit h-svh flex bg-gray-300 overflow-hidden isolate">
         <Sidebar />
-        <div className="flex flex-col relative grow h-dvh overflow-y-auto">
+        <div className="flex flex-col relative grow h-full overflow-y-auto">
           <Outlet/>
         </div>
       </div>

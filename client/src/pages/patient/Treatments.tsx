@@ -6,25 +6,28 @@ import { userHook } from "../../hooks/userHook";
 import VerticalScroller from "../../components/VerticalScroller";
 import { useLocation, useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
+import InputScent from "../../components/InputScent";
 
 const Treatments = () => {
   const { userInfo, userConfig } = userHook();
   const [medications, setMedications] = useState([
-    { drug: 0, amount: 0, time: '' },
+    { drug: 0, amount: 0, time: "" },
   ]);
-  const { state } = useLocation();
-  const { ID, Paciente, Motivo, Fecha, CreatedAt } = state || {};
-  const [formView, setFormView] = useState(state != null);
+  const state = useRef(useLocation().state);
+  const { ID, Paciente, Motivo, Fecha, CreatedAt } = state.current || {};
+  const [formView, setFormView] = useState(state.current != null);
   const [formData, setFormData] = useState({});
-  const { response, fetcher, error } = useFetch(process.env.REACT_APP_API_URL
-  + "/assignmentResults", formData);
+  const { response, fetcher, error } = useFetch(
+    process.env.REACT_APP_API_URL + "/assignmentResults",
+    formData
+  );
   const navigate = useNavigate();
 
   const handleDrugChange = (e, index, field) => {
     const updatedMedications = [...medications];
     updatedMedications[index][field] = e.target.value;
     setMedications(updatedMedications);
-  }
+  };
 
   const submitNewTreatment = (e) => {
     e.preventDefault();
@@ -32,15 +35,15 @@ const Treatments = () => {
     if (state == null) {
       return alert("Asigne un turno pendiente para realizar diagnóstico");
     }
-    
+
     const fields = e.target.elements;
     const armatoste = {
       ID: ID,
       Diagnostico: fields["Diagnostico"].value,
       Notas: fields["Notas"].value,
       Drogas: [...medications],
-      PacienteID: Paciente.ID
-    }
+      PacienteID: Paciente.ID,
+    };
 
     console.log(armatoste);
     setFormData(armatoste);
@@ -53,9 +56,10 @@ const Treatments = () => {
   }, [formData]);
 
   useEffect(() => {
-    if(error != null && error.response?.data != null) return alert(error.response.data.message);
-    
-    if(response != null) {
+    if (error != null && error.response?.data != null)
+      return alert(error.response.data.message);
+
+    if (response != null) {
       console.log(response);
       navigate("/treatments", { state: null, replace: true });
       window.location.reload();
@@ -78,8 +82,9 @@ const Treatments = () => {
   };
 
   const inRows = () => {
-    if (medications.length > 9) return alert("Solo hasta 10 medicamentos por diagnostico") ;
-    setMedications([...medications, { drug: 0, amount: 0, time: '' }]);
+    if (medications.length > 9)
+      return alert("Solo hasta 10 medicamentos por diagnostico");
+    setMedications([...medications, { drug: 0, amount: 0, time: "" }]);
   };
 
   const exRows = () => {
@@ -97,7 +102,10 @@ const Treatments = () => {
         icon={<i className="fa-solid fa-clipboard-check text-green-700"></i>}
         title={
           <div className="ps-2 text-slate-700">
-            {registro.Turno.Paciente.Username} <span className="font-bold">{new Date(registro.CreatedAt).toLocaleString()}</span>
+            {registro.Turno.Paciente.Username}{" "}
+            <span className="font-bold">
+              {new Date(registro.CreatedAt).toLocaleString()}
+            </span>
           </div>
         }
         content={
@@ -105,7 +113,9 @@ const Treatments = () => {
             <div className="flex flex-wrap justify-evenly gap-3">
               <p className="font-bold">
                 Doctor asignado:
-                <span className="ms-2 font-normal">{registro.Turno.Doctor.Username}</span>
+                <span className="ms-2 font-normal">
+                  {registro.Turno.Doctor.Username}
+                </span>
               </p>
               <p className="font-bold">
                 Motivo:
@@ -115,11 +125,15 @@ const Treatments = () => {
               </p>
               <p className="font-bold">
                 Fecha asignada:
-                <span className="ms-2 font-normal">{new Date(registro.Turno.Fecha).toLocaleString()}</span>
+                <span className="ms-2 font-normal">
+                  {new Date(registro.Turno.Fecha).toLocaleString()}
+                </span>
               </p>
               <p className="font-bold">
                 Fecha de pedido de consulta:
-                <span className="ms-2 font-normal">{new Date(registro.Turno.CreatedAt).toLocaleString()}</span>
+                <span className="ms-2 font-normal">
+                  {new Date(registro.Turno.CreatedAt).toLocaleString()}
+                </span>
               </p>
             </div>
             <hr className="my-4" />
@@ -135,16 +149,20 @@ const Treatments = () => {
               </p>
               <p className="font-bold">
                 Notas:
-                <span className="ms-2 font-normal">
-                  {registro.Notas}
-                </span>
+                <span className="ms-2 font-normal">{registro.Notas}</span>
               </p>
               {registro.Recetas != null && (
                 <div className="font-bold">
                   Medicación asignada:
                   <ul className="ms-2 font-normal list-disc">
                     {registro.Recetas.map((drug, k) => (
-                      <li key={"drug-" + k} title="Para más información, puede buscar la medicación en información sobre medicamentos">{drug.Medicamento.Nombre}.....{drug.Cantidad}gr.....{drug.Tomas}</li>
+                      <li
+                        key={"drug-" + k}
+                        title="Para más información, puede buscar la medicación en información sobre medicamentos"
+                      >
+                        {drug.Medicamento.Nombre}.....{drug.Cantidad}gr.....
+                        {drug.Tomas}
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -163,7 +181,7 @@ const Treatments = () => {
         scheme={userConfig.theme}
       />
 
-      <div className="relative m-12 space-y-32">
+      <div className="relative m-4 mt-12 space-y-32">
         <div className="overflow-hidden max-h-fit">
           <Section
             txt="Nuevo diagnostico"
@@ -177,8 +195,8 @@ const Treatments = () => {
                   type="checkbox"
                   id="checkView"
                   hidden={true}
-                  defaultChecked={state != null}
-                  onChange={() => setFormView(!formView)}
+                  defaultChecked={state.current != null}
+                  onChange={() => setFormView(prev => !prev)}
                   className="peer"
                 />
                 <i className="fa-solid fa-minus transition-all duration-500 opacity-0 text-[0px] peer-checked:rotate-180 peer-checked:opacity-100 peer-checked:text-base"></i>
@@ -199,35 +217,17 @@ const Treatments = () => {
           >
             <OpenCard
               className="max-w-full m-4 text-center"
-              open={state != null}
+              open={state.current != null || formView}
               icon={<i className="fa-solid fa-clipboard text-slate-700"></i>}
               title={
-                <div className="ps-2 text-slate-700 h-6">
-                  Turno
-                  <label
-                    className="underline underline-offset-4 ms-2"
-                    htmlFor="checkN"
-                  >
-                    <input
-                      type="checkbox"
-                      id="checkN"
-                      defaultChecked={state != null}
-                      hidden={true}
-                      className="peer"
-                    />
-                    <span className="transition-all text-base peer-checked:text-[0px]">
-                      Paciente
-                    </span>
-                    <input
-                      value={Paciente?.Username}
-                      readOnly={true}
-                      type="text"
-                      className="transition-all text-[0px] peer-checked:text-base outline-none border-b-[1px] border-blue-600 bg-transparent"
-                      placeholder="Nombre del paciente"
-                      required
-                    />
-                  </label>
-                </div>
+                <InputScent
+                  title="Turno"
+                  value={Paciente?.Username}
+                  readOnly={true}
+                  type="text"
+                  placeholder="Nombre del paciente"
+                  required={true}
+                />
               }
               content={
                 <div className="relative pt-4 p-8">
@@ -235,103 +235,42 @@ const Treatments = () => {
                     <p className="font-bold">
                       Doctor asignado:
                       <span className="ms-2 font-normal">
-                        {userInfo.Username}
+                        {userInfo.Username + " (Tú)"}
                       </span>
                     </p>
-                    <label
-                      className="underline underline-offset-4 ms-2"
-                      htmlFor="checkMotive"
-                    >
-                      <input
-                        type="checkbox"
-                        id="checkMotive"
-                        defaultChecked={state != null}
-                        hidden={true}
-                        className="peer"
-                      />
-                      <span className="transition-all text-base peer-checked:text-[0px]">
-                        Motivo
-                      </span>
-                      <input
-                        value={Motivo}
-                        readOnly={true}
-                        type="text"
-                        className="transition-all text-[0px] peer-checked:text-base  outline-none border-b-[1px] border-blue-600 bg-transparent"
-                        placeholder="Motivo de consulta"
-                        required
-                      />
-                    </label>
-                    <label
-                      className="underline underline-offset-4 ms-2"
-                      htmlFor="checkAss"
-                    >
-                      <input
-                        type="checkbox"
-                        id="checkAss"
-                        defaultChecked={state != null}
-                        hidden={true}
-                        className="peer"
-                      />
-                      <span className="transition-all text-base peer-checked:text-[0px]">
-                        Fecha asignada
-                      </span>
-                      <input
-                        value={Fecha && new Date(Fecha).toLocaleString()}
-                        readOnly={true}
-                        type="text"
-                        className="transition-all text-[0px] peer-checked:text-base  outline-none border-b-[1px] border-blue-600 bg-transparent"
-                        placeholder="Fecha de consulta"
-                        required
-                      />
-                    </label>
-                    <label
-                      className="underline underline-offset-4 ms-2"
-                      htmlFor="checkSol"
-                    >
-                      <input
-                        type="checkbox"
-                        id="checkSol"
-                        defaultChecked={state != null}
-                        hidden={true}
-                        className="peer"
-                      />
-                      <span className="transition-all text-base peer-checked:text-[0px]">
-                        Fecha de solicitud
-                      </span>
-                      <input
-                        value={CreatedAt && new Date(CreatedAt).toLocaleString()}
-                        readOnly={true}
-                        type="text"
-                        className="transition-all text-[0px] peer-checked:text-base  outline-none border-b-[1px] border-blue-600 bg-transparent"
-                        placeholder="Solicitud de consulta"
-                        required
-                      />
-                    </label>
+                    <InputScent
+                      value={Motivo}
+                      readOnly={true}
+                      type="text"
+                      placeholder="Motivo de consulta"
+                      required={true}
+                    />
+                   <InputScent
+                      value={Fecha && new Date(Fecha).toLocaleString()}
+                      readOnly={true}
+                      type="text"
+                      placeholder="Fecha de consulta"
+                      required={true}
+                    />
+                    <InputScent
+                      value={
+                        CreatedAt && new Date(CreatedAt).toLocaleString()
+                      }                      
+                      readOnly={true}
+                      type="text"
+                      placeholder="Fecha de solicitud"
+                      required={true}
+                    />
                   </div>
                   <hr className="my-4" />
                   <p className="text-2xl text-center">- Resultados -</p>
                   <div className="relative bg-gray-200 flex flex-wrap justify-evenly text-center gap-3 p-12 my-2 space-y-2">
-                    <label
-                      className="underline underline-offset-4 ms-2"
-                      htmlFor="checkDi"
-                    >
-                      <input
-                        type="checkbox"
-                        id="checkDi"
-                        hidden={true}
-                        className="peer"
-                      />
-                      <span className="transition-all text-base peer-checked:text-[0px]">
-                        Diagnostico
-                      </span>
-                      <input
-                        type="text"
+                      <InputScent
                         name="Diagnostico"
-                        className="transition-all text-[0px] peer-checked:text-base outline-none border-b-[1px] border-blue-600 bg-transparent"
+                        type="text"
                         placeholder="Diagnostico final"
-                        required
+                        required={true}
                       />
-                    </label>
                     <textarea
                       name="Notas"
                       placeholder="Notas adicionales"
@@ -358,54 +297,62 @@ const Treatments = () => {
                           </button>
                         </div>
                         <div className="grid grid-cols-1 divide-y divide-gray-400">
-                        {medications.map((med, index) => (
-
-                          <div
-                            className="flex flex-wrap justify-center items-center gap-2 py-2"
-                            key={"ke-"+index}
-                          >
-                            <div className="relative bg-white w-fit">
-                              Seleccionar medicación
-                              <label className="">
-                                <input
-                                  type="checkbox"
-                                  className="hidden peer"
-                                />
-                                <i className="fa-solid fa-chevron-up transition-all peer-checked:rotate-180 text-sm" />
-                                <ul className="overflow-auto max-h-24 top-0 start-0 bg-white hidden peer-checked:block">
-                                  <VerticalScroller
-                                    url={String(process.env.REACT_APP_API_URL
-  + "/getDrugs")} 
-                                    renderModel={(registro, i) => optionsModel(registro,i,index)}
-                                    empty={<li>No hay drogas disponibles</li>}
+                          {medications.map((med, index) => (
+                            <div
+                              className="flex flex-wrap justify-center items-center gap-2 py-2"
+                              key={"ke-" + index}
+                            >
+                              <div className="relative bg-white w-fit">
+                                Seleccionar medicación
+                                <label className="">
+                                  <input
+                                    type="checkbox"
+                                    className="hidden peer"
                                   />
-                                </ul>
-                              </label>
+                                  <i className="fa-solid fa-chevron-up transition-all peer-checked:rotate-180 text-sm" />
+                                  <ul className="overflow-auto max-h-24 top-0 start-0 bg-white hidden peer-checked:block">
+                                    <VerticalScroller
+                                      url={String(
+                                        process.env.REACT_APP_API_URL +
+                                          "/getDrugs"
+                                      )}
+                                      renderModel={(registro, i) =>
+                                        optionsModel(registro, i, index)
+                                      }
+                                      empty={<li>No hay drogas disponibles</li>}
+                                    />
+                                  </ul>
+                                </label>
+                              </div>
+                              <input
+                                type="number"
+                                step={0.01}
+                                name={"amount"}
+                                onChange={(e) =>
+                                  handleDrugChange(e, index, "amount")
+                                }
+                                placeholder="Cantidad (gramos)"
+                                className="transition-all outline-blue-600 focus:outline-offset-2"
+                                required
+                              />
+                              <input
+                                type="text"
+                                name={"time"}
+                                onChange={(e) =>
+                                  handleDrugChange(e, index, "time")
+                                }
+                                placeholder="Cada cuanto"
+                                className="transition-all outline-blue-600 focus:outline-offset-2"
+                                required
+                              />
                             </div>
-                            <input
-                              type="number"
-                              step={0.01}
-                              name={"amount"}
-                              onChange={(e) => handleDrugChange(e, index, "amount")}
-                              placeholder="Cantidad (gramos)"
-                              className="transition-all outline-blue-600 focus:outline-offset-2"
-                              required
-                            />
-                            <input
-                              type="text"
-                              name={"time"}
-                              onChange={(e) => handleDrugChange(e, index, "time")}
-                              placeholder="Cada cuanto"
-                              className="transition-all outline-blue-600 focus:outline-offset-2"
-                              required
-                            />
-                          </div>
-                                ))}
+                          ))}
                         </div>
                       </div>
                     </div>
                   </div>
                   <input
+                    title="Debe seleccionar consulta en el Historial de Consultas"
                     type="submit"
                     value="...Registrar diagnostico"
                     className="cursor-pointer absolute end-0 bottom-0 italic underline underline-offset-4 text-blue-600"
@@ -418,8 +365,7 @@ const Treatments = () => {
         <div>
           <Section txt="Diagnósticos Pasados" scheme={userConfig.theme} />
           <VerticalScroller
-            url={String(process.env.REACT_APP_API_URL
-  + "/getResults")}
+            url={String(process.env.REACT_APP_API_URL + "/getResults")}
             renderModel={treatModel}
             empty="No tenes diagnosticos listados"
           />

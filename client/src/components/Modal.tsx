@@ -4,7 +4,7 @@ import React from 'react';
 const Modal = ({
   state = false,
   setter,
-  allowAnimations = true,
+  allowAnimations = false,
   scheme,
   children,
 }) => {

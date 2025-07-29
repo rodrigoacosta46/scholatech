@@ -6,19 +6,21 @@ import { userHook } from '../hooks/userHook';
 const Sidebar = () => {
   const { userInfo, userConfig } = userHook();
   const location = useLocation();
-  const [userView, setUserView] = useState("");
   const [modal, setModal] = useState(false);
+  const [sideView, toggleSideView] = useState(false);
 
-  const setModalState = () => {
-    setModal(!modal);
-  }
 
   useEffect(() => {
-    setUserView(
-      String((window.location.pathname === '/profile') ? 'translate-x-full opacity-0' : '')
-    );
-  }, [location.pathname]);
- 
+    window.addEventListener('keyup', (e) => {
+      e.key == "Escape" && toggleSideView(prev => 
+        prev && !prev
+      );
+    });
+    return () => {
+      window.removeEventListener('keyup', undefined);
+    }
+  }, [])
+
   const logout = () => {
     window.location.href = process.env.REACT_APP_API_URL
   + '/logout';
@@ -28,7 +30,7 @@ const Sidebar = () => {
     <>
       <Modal
         state={modal}
-        setter={setModalState}
+        setter={() => setModal(prev => !prev)}
         allowAnimations={false}
         scheme={userConfig.theme}
       >
@@ -44,12 +46,22 @@ const Sidebar = () => {
           </span>
         </div>
       </Modal>
+      
+      <button onClick={() => toggleSideView(prev => !prev)} className='md:hidden z-30 fixed top-5 end-10'>
+        <i className="fa-solid fa-bars text-lg text-white"></i>
+      </button>
 
-      <div
-        className={`w-64 min-h-full flex flex-col bg-${userConfig.theme}-950 text-lg`}
+      <div 
+        role='presentation'
+        className={`z-30 transition-[width] fixed top-0 start-0 h-full bg-slate-500 opacity-30 ${sideView ? 'w-svw' : 'w-0'}`} 
+        onClick={() => toggleSideView(prev => !prev)}
+      />
+
+      <aside
+        className={`z-30 transition-transform fixed md:static start-0 top-0 w-64 min-h-full flex flex-col bg-${userConfig.theme}-950 text-lg md:translate-x-0 ${sideView ? 'translate-x-0' : '-translate-x-full'} `}
       >
         <button
-          onClick={setModalState}
+          onClick={() => setModal(prev => !prev)}
           className="cursor-pointer w-fit after:content-['Log_Out'] after:underline after:absolute after:translate-x-0 lg:after:-translate-x-full after:opacity-0 hover:after:translate-x-0 hover:after:opacity-100 after:transition-all text-gray-400 hover:text-red-400"
         >
           <i className="fa-solid fa-arrow-right-from-bracket rotate-180 "></i>
@@ -57,9 +69,9 @@ const Sidebar = () => {
         <div className="h-full flex flex-col justify-between gap-4">
           <div
             className={
-              'grid grid-flow-col grid-cols-2 gap-1 m-2 transition-all duration-1000 ' +
-              userView
-            }
+              `grid grid-flow-col grid-cols-2 gap-1 m-2 transition-all duration-1000 ${
+                location.pathname === '/profile' ? 'translate-x-full opacity-0 pointer-events-none' : ''
+              }`}
           >
             <img src={process.env.REACT_APP_API_URL
   + `/getImage/profiles/${userInfo.ID}/${userInfo.ID}`} alt="" className="size-36 object-cover rounded-full" />
@@ -68,7 +80,7 @@ const Sidebar = () => {
               <p className="text-md text-gray-500">{userInfo["Perfil"].Name}</p>
             </div>
           </div>
-          <div className="scroll w-72 overflow-y-auto h-0 grow z-30">
+          <div className="scroll w-72 max-h-80 overflow-y-auto grow">
             <div className="h-full flex flex-col" style={{ direction: 'ltr' }}>
               {Object.keys(userConfig.nav).map((key, i) => (
                 <Link
@@ -89,7 +101,7 @@ const Sidebar = () => {
             className="w-24 mx-auto mb-1"
           />
         </div>
-      </div>
+      </aside>
     </>
   );
 };

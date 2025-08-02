@@ -47,18 +47,18 @@ const Sidebar = () => {
         </div>
       </Modal>
       
-      <button onClick={() => toggleSideView(prev => !prev)} className='md:hidden z-30 fixed top-5 end-10'>
+      <button onClick={() => toggleSideView(prev => !prev)} className='md:hidden z-50 fixed top-5 end-10'>
         <i className="fa-solid fa-bars text-lg text-white"></i>
       </button>
 
       <div 
         role='presentation'
-        className={`z-30 transition-[width] fixed top-0 start-0 h-full bg-slate-500 opacity-30 ${sideView ? 'w-svw' : 'w-0'}`} 
+        className={`z-50 transition-[width] duration-500 fixed top-0 start-0 h-full bg-slate-500 opacity-30 ${sideView ? 'w-svw' : 'w-0'}`} 
         onClick={() => toggleSideView(prev => !prev)}
       />
 
       <aside
-        className={`z-30 transition-transform fixed md:static start-0 top-0 w-64 min-h-full flex flex-col bg-${userConfig.theme}-950 text-lg md:translate-x-0 ${sideView ? 'translate-x-0' : '-translate-x-full'} `}
+        className={`z-50 transition-transform duration-500 fixed md:static start-0 top-0 w-64 min-h-full flex flex-col bg-${userConfig.theme}-950 text-lg md:translate-x-0 ${sideView ? 'translate-x-0' : '-translate-x-full'} `}
       >
         <button
           onClick={() => setModal(prev => !prev)}

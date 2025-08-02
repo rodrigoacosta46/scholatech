@@ -119,21 +119,22 @@ type Perfil struct {
 }
 
 func (u *User) BeforeSave(tx *gorm.DB) (err error) {
+	log.Println(u.Gender)
 	if u.Gender != "male" && u.Gender != "female" && u.Gender != "other" {
-		return fmt.Errorf("invalid gender value")
+		return fmt.Errorf("invalid nicodolobu value")
 	}
 	return nil
 }
 func (u *Turno) BeforeSave(tx *gorm.DB) (err error) {
 	if u.Estado != "accepted" && u.Estado != "closed" && u.Estado != "pending" {
-		return fmt.Errorf("invalid gender value")
+		return fmt.Errorf("invalid nicogaga value")
 	}
 	return nil
 }
 
 func (u *Notificacion) BeforeSave(tx *gorm.DB) (err error) {
 	if u.Estado != "pendiente" && u.Estado != "leido" && u.Estado != "enviado" {
-		return fmt.Errorf("invalid gender value")
+		return fmt.Errorf("invalid nicoempanada value")
 	}
 	return nil
 }

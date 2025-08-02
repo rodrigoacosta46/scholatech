@@ -118,22 +118,25 @@ type Perfil struct {
 	DeletedAt   *time.Time `gorm:"type:datetime"`
 }
 
-func (u *User) BeforeSave(tx *gorm.DB) (err error) {
-	if u.Gender != "male" && u.Gender != "female" && u.Gender != "other" {
-		return fmt.Errorf("invalid gender value")
+func (u *User) BeforeSave(tx *gorm.DB) error {
+	switch u.Gender {
+	case "male", "female", "other":
+		log.Printf("Genero valido para el cambio %s", u.Gender)
+		return nil
+	default:
+		return fmt.Errorf("invalid gender value: %s", u.Gender)
 	}
-	return nil
 }
 func (u *Turno) BeforeSave(tx *gorm.DB) (err error) {
 	if u.Estado != "accepted" && u.Estado != "closed" && u.Estado != "pending" {
-		return fmt.Errorf("invalid gender value")
+		return fmt.Errorf("invalid turno value %s", u.Estado)
 	}
 	return nil
 }
 
 func (u *Notificacion) BeforeSave(tx *gorm.DB) (err error) {
 	if u.Estado != "pendiente" && u.Estado != "leido" && u.Estado != "enviado" {
-		return fmt.Errorf("invalid gender value")
+		return fmt.Errorf("invalid notificacion estado value %s", u.Estado)
 	}
 	return nil
 }

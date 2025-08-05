@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../../components/Card";
 import Title from "../../components/Title";
 import { userHook } from "../../hooks/userHook";
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useFetch from "../../hooks/useFetch";
 
 
@@ -23,7 +23,7 @@ const Select = () => {
     Detalles: "",
   });
   const { fetcher, response, error } = useFetch(process.env.REACT_APP_API_URL
-  + "/assignDoctor", { ...formData });
+  + "/assignDoctor");
 
   const customValiditySettings = {
     Motivo: "El texto no debe superar los 30 caracteres",
@@ -39,7 +39,7 @@ const Select = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    fetcher();
+    fetcher({...formData});
   }
 
   useEffect(() => {

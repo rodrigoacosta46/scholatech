@@ -1,5 +1,5 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import Modal from './Modal';
 import { userHook } from '../hooks/userHook';
 
@@ -31,7 +31,6 @@ const Sidebar = () => {
       <Modal
         state={modal}
         setter={() => setModal(prev => !prev)}
-        allowAnimations={false}
         scheme={userConfig.theme}
       >
         <div className="col-span-2 text-center">
@@ -53,12 +52,12 @@ const Sidebar = () => {
 
       <div 
         role='presentation'
-        className={`z-50 transition-[width] duration-500 fixed top-0 start-0 h-full bg-slate-500 opacity-30 ${sideView ? 'w-svw' : 'w-0'}`} 
+        className={`z-30 transition-[width] duration-500 fixed top-0 start-0 h-full bg-slate-500 opacity-30 ${sideView ? 'w-svw' : 'w-0'}`} 
         onClick={() => toggleSideView(prev => !prev)}
       />
 
       <aside
-        className={`z-50 transition-transform duration-500 fixed md:static start-0 top-0 w-64 min-h-full flex flex-col bg-${userConfig.theme}-950 text-lg md:translate-x-0 ${sideView ? 'translate-x-0' : '-translate-x-full'} `}
+        className={`z-30 transition-transform duration-500 fixed md:static start-0 top-0 w-64 min-h-full flex flex-col bg-${userConfig.theme}-950 text-lg md:translate-x-0 ${sideView ? 'translate-x-0' : '-translate-x-full'} `}
       >
         <button
           onClick={() => setModal(prev => !prev)}

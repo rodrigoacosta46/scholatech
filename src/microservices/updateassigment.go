@@ -70,7 +70,7 @@ func doctorTransaction(turnoID int, update database.Turno, notificacion database
 		}
 	}()
 
-	updateTurno := tx.Model(&database.Turno{}).Where("id = ?", turnoID).Updates(update)
+	updateTurno := tx.Model(&update).Where("id = ?", turnoID).Updates(update)
 	if updateTurno.Error != nil {
 		tx.Rollback()
 		return updateTurno.Error
@@ -123,7 +123,7 @@ func cancelAssigment(r *http.Request) error {
 	}
 
 	dateformat := time.Now().UTC()
-	params := database.Turno{DeletedAt: &dateformat}
+	params := database.Turno{DeletedAt: &dateformat, Estado: "closed"}
 
 	notificacion := database.Notificacion{
 		UsuarioID: req.PacienteID,

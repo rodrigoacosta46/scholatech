@@ -3,7 +3,6 @@ import VerticalScroller from "../../components/VerticalScroller";
 import Title from "../../components/Title";
 import Section from "../../components/Section";
 import { userHook } from "../../hooks/userHook";
-import React from "react";
 
 const Story = () => {
   const { userConfig } = userHook();

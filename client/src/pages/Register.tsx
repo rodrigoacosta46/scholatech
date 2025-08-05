@@ -44,6 +44,7 @@ const Register = () => {
       [name]: value,
     });
   };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -210,7 +211,6 @@ const Register = () => {
                 name="gender"
                 onChange={handleChange}
                 value={formData.gender}
-                className="outline-none"
               >
                 <option value="male">Hombre</option>
                 <option value="female">Mujer</option>
@@ -233,7 +233,6 @@ const Register = () => {
                   "-" +
                   new Date().toLocaleDateString("default", { day: "2-digit" })
                 }
-                className="outline-none"
                 required
               />
             </label>
@@ -244,7 +243,6 @@ const Register = () => {
                 name="role"
                 onChange={handleChange}
                 value={formData.role}
-                className="outline-none"
               >
                 <option value="1">Paciente</option>
                 <option value="2">Doctor</option>

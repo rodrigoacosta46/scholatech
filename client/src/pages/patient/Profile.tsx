@@ -706,7 +706,6 @@ const Profile = () => {
         setter={() => {
           setModal(false);
         }}
-        allowAnimations={false}
         scheme={userConfig.theme}
       >
         <div className="col-span-2">{currentField != null && currentField}</div>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import Title from "../../components/Title";
 import Section from "../../components/Section";
 import OpenCard from "../../components/OpenCard";
@@ -10,22 +10,18 @@ import InputScent from "../../components/InputScent";
 
 const Treatments = () => {
   const { userInfo, userConfig } = userHook();
-  const [medications, setMedications] = useState([
-    { drug: 0, amount: 0, time: "" },
-  ]);
+  const [medications, setMedications] = useState([]);
   const state = useRef(useLocation().state);
   const { ID, Paciente, Motivo, Fecha, CreatedAt } = state.current || {};
   const [formView, setFormView] = useState(state.current != null);
   const [formData, setFormData] = useState({});
   const { response, fetcher, error } = useFetch(
-    process.env.REACT_APP_API_URL + "/assignmentResults",
-    formData
-  );
+    process.env.REACT_APP_API_URL + "/assignmentResults");
   const navigate = useNavigate();
 
   const handleDrugChange = (e, index, field) => {
     const updatedMedications = [...medications];
-    updatedMedications[index][field] = e.target.value;
+    updatedMedications[index][field] = String(e.target.value);
     setMedications(updatedMedications);
   };
 
@@ -45,13 +41,20 @@ const Treatments = () => {
       PacienteID: Paciente.ID,
     };
 
-    console.log(armatoste);
+    if (armatoste.Drogas.some((e) => {
+      e.drug == null ||
+      e.amount == null ||
+      e.time == null
+    })) {
+      alert("Debe especificar el medicamento, cantidad y tiempo");
+    }
+
     setFormData(armatoste);
   };
 
   useEffect(() => {
     if (formData && formData.hasOwnProperty("ID")) {
-      fetcher();
+      fetcher({...formData});
     }
   }, [formData]);
 
@@ -72,19 +75,18 @@ const Treatments = () => {
         <input
           type="radio"
           name={`drug-${rowIndex}`}
-          value={parseInt(registro.ID)}
+          value={registro.ID}
           onChange={(e) => handleDrugChange(e, rowIndex, "drug")}
-          required
         />
         {registro.Nombre}
       </li>
-    );
+    ); 
   };
 
   const inRows = () => {
     if (medications.length > 9)
       return alert("Solo hasta 10 medicamentos por diagnostico");
-    setMedications([...medications, { drug: 0, amount: 0, time: "" }]);
+    setMedications([...medications, { drug: "0", amount: "0", time: "" }]);
   };
 
   const exRows = () => {
@@ -92,7 +94,7 @@ const Treatments = () => {
     setMedications((prev) => prev.slice(0, last));
   };
 
-  const treatModel = (registro, i) => {
+  const treatModel = useMemo(() => (registro, i) => {
     console.log(registro);
     return (
       <OpenCard
@@ -172,7 +174,8 @@ const Treatments = () => {
         }
       />
     );
-  };
+  },[]);
+  
   return (
     <>
       <Title
@@ -277,7 +280,7 @@ const Treatments = () => {
                       rows={5}
                       className="w-full outline-none p-2"
                     ></textarea>
-                    <div className="font-bold">
+                    <div className="font-bold w-full">
                       Medicación asignada: *opcional*
                       <div className="relative space-y-2 border-2 border-dashed border-slate-400 p-2 mt-3">
                         <div className="absolute end-0 -top-7">
@@ -297,7 +300,7 @@ const Treatments = () => {
                           </button>
                         </div>
                         <div className="grid grid-cols-1 divide-y divide-gray-400">
-                          {medications.map((med, index) => (
+                          {medications.length == 0 ? <p className="text-slate-500">Haga clic en el "+" para asignar receta</p> : medications.map((_, index) => (
                             <div
                               className="flex flex-wrap justify-center items-center gap-2 py-2"
                               key={"ke-" + index}
@@ -333,7 +336,6 @@ const Treatments = () => {
                                 }
                                 placeholder="Cantidad (gramos)"
                                 className="transition-all outline-blue-600 focus:outline-offset-2"
-                                required
                               />
                               <input
                                 type="text"
@@ -343,7 +345,6 @@ const Treatments = () => {
                                 }
                                 placeholder="Cada cuanto"
                                 className="transition-all outline-blue-600 focus:outline-offset-2"
-                                required
                               />
                             </div>
                           ))}

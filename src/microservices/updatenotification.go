@@ -49,8 +49,8 @@ func markAsRead(r *http.Request) error {
 	if err := requestDecoder(&req, r); err != nil {
 		return err
 	}
-
-	if err := database.Db.Model(&database.Notificacion{}).Where("id = ?", req.ID).Updates(&database.Notificacion{Estado: "leido"}).Error; err != nil {
+	log.Println(req.ID)
+	if err := database.Db.Model(&database.Notificacion{Estado: "leido"}).Where("id = ?", req.ID).Updates(nil).Error; err != nil {
 		return err
 	}
 
@@ -64,7 +64,7 @@ func deleteNotification(r *http.Request) error {
 	}
 
 	now := time.Now().UTC()
-	if err := database.Db.Model(&database.Notificacion{}).Where("id = ?", req.ID).Updates(&database.Notificacion{DeletedAt: &now}).Error; err != nil {
+	if err := database.Db.Model(&database.Notificacion{Estado: "eliminado", DeletedAt: &now}).Where("id = ?", req.ID).Updates(nil).Error; err != nil {
 		return err
 	}
 

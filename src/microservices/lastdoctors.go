@@ -13,6 +13,7 @@ import (
 func LastDoctor(w http.ResponseWriter, r *http.Request) {
 	jwtToken, _ := Middleware.GetCookiePostMiddleware(w, r)
 	id, err := (jwtToken.Claims.GetSubject())
+	log.Println("QUE", id)
 	if err != nil {
 		log.Printf("Error al obtener el jwt del usuario: %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)

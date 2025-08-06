@@ -34,6 +34,7 @@ interface FilterInterface {
 const Doctors = () => {
   const { userConfig } = userHook();
   const [filters, setFilters] = useState<FilterInterface>();
+  const [filtersChanged, setFiltersChanged] = useState(false);
   const [modal, setModal] = useState(false);
   const [modalData, setModalData] = useState<Doctor>();
 
@@ -41,6 +42,7 @@ const Doctors = () => {
     const {name, value} = e.target;
     let time = setTimeout(() => {
       setFilters((prev) => ({...prev!, [name]: value}));
+      setFiltersChanged(prev => !prev);
       clearTimeout(time);
     }, 500);
   }
@@ -68,35 +70,6 @@ const Doctors = () => {
         {registro.Username}
       </p>
     </Card>);
-  };
-  const getItems = () => {
-    //Reemplazar por fetch api
-    let items: React.JSX.Element[] = [];
-
-    for (let i = 0; i < 4; i++) {
-      items.push(
-        <Card
-          key={"n-" + i}
-          id={i}
-          onClick={modalSetState}
-          className="relative opacity-0 flex flex-col flex-shrink-0 max-w-[280px] cursor-pointer overflow-hidden"
-          scheme={userConfig!["theme"]}
-        >
-          <img src="img/Gaben.png" alt="" className="h-80 object-cover" />
-          <p className="underline underline-offset-4 decoration-green-900 mt-4 text-center">
-            Dr. Octavio Pizarro
-          </p>
-          {i == 0 && (
-            <div className="bg-gray-600/40 text-gray-400 absolute top-0 start-0 h-full w-full flex flex-col items-center justify-center">
-              <i className="fa-solid fa-clock text-6xl"></i>
-              Turno pendiente
-            </div>
-          )}
-        </Card>
-      );
-    }
-
-    return items;
   };
 
   return (
@@ -144,7 +117,7 @@ const Doctors = () => {
             empty="No tuviste ningún turno"
           />
         </div>
-        <div>
+        <div className="min-h-[610px]">
           <Section txt="Especialistas" scheme={userConfig.theme} />
           <div className="flex flex-wrap gap-2 justify-evenly items-center bg-green-950 text-white text-xl p-4 mt-3">
             Filtrar por:
@@ -178,6 +151,7 @@ const Doctors = () => {
             className="animate-[slideIn_2s] my-2"
             renderModel={doctorsModel}
             empty="No se encontraron resultados"
+            key={filtersChanged}
           />
         </div>
       </div>

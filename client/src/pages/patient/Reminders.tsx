@@ -2,7 +2,6 @@ import Notifications from "../../components/Notifications";
 import Title from "../../components/Title";
 import VerticalScroller from "../../components/VerticalScroller";
 import { userHook } from "../../hooks/userHook";
-import React from "react";
 
 
 const Reminders = () => {

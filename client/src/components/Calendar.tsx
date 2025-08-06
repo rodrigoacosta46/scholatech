@@ -72,7 +72,7 @@ type Display = {
         ...display.current,
         title: months[1] + ' de ' + years[1],
         content: days[1],
-        styles: 'bg-white animate-slideIn opacity-100 static z-30',
+        styles: 'bg-white animate-slideIn opacity-100 static z-10',
       },
       after: {
         ...display.after,
@@ -86,7 +86,7 @@ type Display = {
   return (
     <div className="flex items-center justify-between h-96">
       <button
-        className="absolute start-0 z-30 text-2xl h-full"
+        className="absolute start-0 z-10 text-2xl h-full"
         onClick={() => {
           setNav(nav - 1);
         }}
@@ -94,7 +94,7 @@ type Display = {
         <i className="fa-solid fa-chevron-left"></i>
       </button>
       <button
-        className="absolute end-0 z-30 text-2xl h-full"
+        className="absolute end-0 z-10 text-2xl h-full"
         onClick={() => {
           setNav(nav + 1);
         }}

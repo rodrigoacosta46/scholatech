@@ -23,9 +23,9 @@ const Assignments = () => {
   const [acceptedData, setAcceptedData] = useState<AcceptAsiggmentPOST>();
   const [cancelData, setCancelData] = useState<CancelAssigmentPOST>();
   const { response:acceptReqResponse, fetcher:fetchAccept, error:errorAccept } = useFetch(process.env.REACT_APP_API_URL
-  + "/updateAssigment/accept", {...acceptedData});
+  + "/updateAssigment/accept");
   const { response:cancelReqResponse, fetcher:fetchCancel, error:errorCancel } = useFetch(process.env.REACT_APP_API_URL
-  + "/updateAssigment/cancel", {...cancelData});
+  + "/updateAssigment/cancel");
   const [modal, setModalState] = useState(false);
   const [reload, setReload] = useState(false);
   const [deleteCard, setDeleted] = useState<any>([]);
@@ -49,13 +49,13 @@ const Assignments = () => {
 
   useEffect(() => {
     if (acceptedData != null) {
-      fetchAccept();
+      fetchAccept({...acceptedData});
     } 
   }, [acceptedData]);
 
   useEffect(() => {
     if (cancelData != null) {
-      fetchCancel();
+      fetchCancel({...cancelData});
     } 
   }, [cancelData]);
 

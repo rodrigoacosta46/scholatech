@@ -4,7 +4,6 @@ import React from 'react';
 const Modal = ({
   state = false,
   setter,
-  allowAnimations = false,
   scheme,
   children,
 }) => {
@@ -19,17 +18,10 @@ const Modal = ({
             onClick={(e) => {
               e.stopPropagation();
             }}
-            className="relative"
+            className="relative grid grid-cols-2 gap-3 overflow-hidden max-w-xl"
             scheme={scheme}
           >
-            <div
-              className={
-                (allowAnimations ? 'animate-fadeIn ' : '') +
-                  ' relative grid grid-cols-2 gap-3 overflow-hidden max-w-xl'
-              }
-            >
-              {children}
-            </div>
+            {children}
           </Card>
         </div>
       )}

@@ -1,23 +1,15 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 
-const useFetch = (url: string, request?: Record<string, any>) => {
+const useFetch = (url: string) => {
   const [response, setResponse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
-  const cancelTokenSource = useRef<any>(null);
 
-  const fetcher = async () => {
-    if (cancelTokenSource.current) {
-      cancelTokenSource.current.cancel("Request cancelada");
-    }
-    cancelTokenSource.current = axios.CancelToken.source();
-
+  const fetcher = useCallback(async (request: Record<string, any>) => {
+    setLoading(true);
     try {
-      const result = await axios.post(url, request, {
-        withCredentials: true,
-        cancelToken: cancelTokenSource.current.token,
-      });
+      const result = await axios.post(url, request, { withCredentials: true });
       let parsed;
       try {
         parsed = JSON.parse(result.data.message);
@@ -28,39 +20,19 @@ const useFetch = (url: string, request?: Record<string, any>) => {
       setResponse(parsed);
       setError(null);
     } catch (error: any) {
-      if (axios.isCancel(error)) {
-        console.log("Petición cancelada");
-      } else {
-        console.log("Error:", error);
-        setError(error);
-      }
+      console.log("Error:", error);
+      setError(error);
       const response = error?.response?.data;
-      if (response) {
-        if (response.hasOwnProperty("redirect_route")) {
-          console.log("REDIRECT ROUTE");
-          window.location.href = response.redirect_route;
-        } else {
-          console.log("NO REDIRECT ROUTE");
-        }
-
-        if (response.hasOwnProperty("message")) {
-          console.log("Mensaje en la respuesta");
-        }
+      if (response?.redirect_route) {
+        window.location.href = response.redirect_route;
       }
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    return () => {
-      if (cancelTokenSource.current) {
-        cancelTokenSource.current.cancel("Component unmounted");
-      }
-    };
-  }, [url, request]);
+  }, [url]);
 
   return { response, fetcher, loading, error };
 };
+
 
 export default useFetch;

@@ -1,34 +1,19 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import useFetch from "./useFetch";
 
-const usePagination = (url: string, pageNum: number, setPageNum: any, params: Record<string, any> = {}) => {
+const usePagination = (url: string, params: Record<string, any> = {}) => {
+  const [page, setPage] = useState(1);
   const [dataPagination, setDataPagination] = useState<any>([]);
   const [theresMore, setNo] = useState(true);
-  const { response, fetcher, error, loading } = useFetch(url, {
-    ...params,
-    Page: pageNum,
-  });
+  const { response, fetcher, error, loading } = useFetch(url);
   
-  const prevParams = useRef(params);
-
-  useEffect(() => {
-    if (JSON.stringify(prevParams.current) !== JSON.stringify(params)) {
-      console.log('Params han cambiado, reseteando paginador');
-      setPageNum(0);
-      setDataPagination([]);
-      setNo(true);
-      fetcher();
-      prevParams.current = params;
-    }
-  }, [params]);
-
-  useEffect(() => {
-    console.log(theresMore, loading, error);
-    if (theresMore) {
-      console.log("Cargando página: ", pageNum);
-      fetcher();
-    }
-  }, [pageNum, theresMore]);
+  const fetchNextPage = () => {
+    fetcher( {
+      ...params,
+      Page: page,
+    });
+    setPage(prev => prev + 1);
+  }
 
   useEffect(() => {
     if (response) {
@@ -41,7 +26,11 @@ const usePagination = (url: string, pageNum: number, setPageNum: any, params: Re
     }
   }, [response]);
 
-  return { dataPagination, error, loading, theresMore };
+  useEffect(() => {
+    fetchNextPage();
+  },[]);
+
+  return { dataPagination, error, loading, theresMore, fetchNextPage, currentPage: page};
 };
 
 export default usePagination;

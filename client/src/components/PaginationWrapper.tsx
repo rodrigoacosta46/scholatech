@@ -1,26 +1,38 @@
-import React from 'react';
-import LoadSpinner from './LoadSpinner';
+import LoadSpinner from "./LoadSpinner";
 
-const PaginationWrapper = ({ error, loading, data, renderModel, emptyMessage }) => {
-  
+const PaginationWrapper = ({
+  error,
+  loading,
+  data,
+  renderModel,
+  emptyMessage,
+  className = "",
+}) => {
   if (error) {
-    return <div className='text-center my-4'>Hubo un error de consulta, comprobar conexión</div>;
-  }
-
-  if (loading) {
     return (
-      <div className="flex flex-col items-center">
-        <LoadSpinner />
-        Cargando...
+      <div className={`text-center my-4 ${className}`}>
+        Hubo un error de consulta, comprobar conexión
       </div>
     );
   }
 
   if (data && data.length > 0) {
-    return data.map((item, index) => renderModel(item, index));
+    return (
+      <>
+        {data.map((item, index) => renderModel(item, index))}
+        <div className={`flex flex-col items-center ${className}`}>
+          {loading && (
+            <>
+              <LoadSpinner /> 
+              Cargando...
+            </>
+          )}
+        </div>
+      </>
+    );
   }
 
-  return <div className='text-center my-4'>{emptyMessage}</div>;
+  return <div className={`text-center my-4 ${className}`}>{emptyMessage}</div>;
 };
 
 export default PaginationWrapper;

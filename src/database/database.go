@@ -135,7 +135,7 @@ func (u *Turno) BeforeSave(tx *gorm.DB) (err error) {
 }
 
 func (u *Notificacion) BeforeSave(tx *gorm.DB) (err error) {
-	if u.Estado != "pendiente" && u.Estado != "leido" && u.Estado != "enviado" {
+	if u.Estado != "pendiente" && u.Estado != "leido" && u.Estado != "enviado" && u.Estado != "eliminado" {
 		return fmt.Errorf("invalid notificacion estado value %s", u.Estado)
 	}
 	return nil

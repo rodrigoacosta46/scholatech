@@ -3,11 +3,8 @@ import Searchbar from "../../components/Searchbar";
 import Card from "../../components/Card";
 import Modal from "../../components/Modal";
 import { userHook } from "../../hooks/userHook";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { roles } from "../../config/roles";
-import useFetch from "../../hooks/useFetch";
-import LoadSpinner from "../../components/LoadSpinner";
 import VerticalScroller from "../../components/VerticalScroller";
 
 interface DrugInterface {
@@ -151,7 +148,7 @@ const Drugs = () => {
 
       <Modal state={modal} setter={modalSetState} scheme={userConfig.theme}>
         <img src={process.env.REACT_APP_API_URL
- + `/getImage/drugs/${drugView?.ID}/0`} onError={(e: any) => e.target.src = "img/logo.png"} alt="" className="max-h-96 object-cover" />
+ + `/getImage/drugs/${drugView?.ID}/0`} onError={(e: any) => e.target.src = "img/logo.png"} alt="" className="max-h-96 object-cover animate-slideIn" />
         <div className="flex flex-col w-fit overflow-hidden">
           <Title txt={drugView?.Nombre} className="" scheme={userConfig.theme} />
           <p className="m-2">{drugView?.Descripcion}
@@ -186,7 +183,8 @@ const Drugs = () => {
           params={searchTerm}
           renderModel={drugModel}
           empty="No hay drogas"
-          className="grid place-content-center grid-cols-[repeat(auto-fit,250px)] gap-4 p-4"
+          className="grid justify-center grid-cols-[repeat(auto-fit,250px)] gap-4 p-4 overflow-clip flex-1"
+          key={searchTerm.Search}
         />
     </>
   );

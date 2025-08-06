@@ -14,7 +14,7 @@ type AssigmentResultsRequest struct {
 	ID          int
 	Diagnostico string
 	Notas       string
-	Drogas      []AssigmentDrogas
+	Drogas      []AssigmentDrogas `json:"Drogas,omitempty"`
 	PacienteID  int
 }
 
@@ -48,7 +48,7 @@ func AssigmentResults(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	updateTurno := tx.Model(&database.Turno{}).Where("id = ?", req.ID).Updates(&database.Turno{Estado: "closed"})
+	updateTurno := tx.Model(&database.Turno{Estado: "closed"}).Where("id = ?", req.ID).Updates(nil)
 	if updateTurno.Error != nil {
 		tx.Rollback()
 		log.Println("Error de consulta en assigmentresult: ", updateTurno.Error)
@@ -73,33 +73,35 @@ func AssigmentResults(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for i, droga := range req.Drogas {
-		log.Println("datos", i, historial.ID, droga.Drug, droga.Amount)
+	if len(req.Drogas) > 0 {
+		for i, droga := range req.Drogas {
+			log.Println("datos", i, historial.ID, droga.Drug, droga.Amount)
 
-		drugID, err := strconv.Atoi(droga.Drug)
-		if err != nil {
-			tx.Rollback()
-			log.Println("Error de consulta en assigmentresult: ", err)
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
-			return
-		}
+			drugID, err := strconv.Atoi(droga.Drug)
+			if err != nil {
+				tx.Rollback()
+				log.Println("Error de consulta en assigmentresult: ", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
+				return
+			}
 
-		amount, err := strconv.ParseFloat(droga.Amount, 32)
-		if err != nil {
-			tx.Rollback()
-			log.Println("Error de consulta en assigmentresult: ", err)
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
-			return
-		}
+			amount, err := strconv.ParseFloat(droga.Amount, 32)
+			if err != nil {
+				tx.Rollback()
+				log.Println("Error de consulta en assigmentresult: ", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
+				return
+			}
 
-		if err := tx.Create(&database.Receta{HistorialID: historial.ID, MedicamentoID: drugID, Cantidad: float32(amount), Tomas: droga.Time}).Error; err != nil {
-			tx.Rollback()
-			log.Println("Error de consulta en assigmentresult: ", err)
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
-			return
+			if err := tx.Create(&database.Receta{HistorialID: historial.ID, MedicamentoID: drugID, Cantidad: float32(amount), Tomas: droga.Time}).Error; err != nil {
+				tx.Rollback()
+				log.Println("Error de consulta en assigmentresult: ", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(structs.Response{Message: "Error al subir diagnóstico"})
+				return
+			}
 		}
 	}
 

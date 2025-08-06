@@ -1,10 +1,6 @@
 import { Outlet } from 'react-router-dom';
-import axios from 'axios';
 import { useEffect } from 'react';
-import { parseAuthenticatedHelper } from '../hooks/orderprocessor';
 import { AuthMethodHandler } from '../hooks/AuthValidator';
-import React from 'react';
-
 
 const GuestLayout = ({}) => {
   useEffect(() => {

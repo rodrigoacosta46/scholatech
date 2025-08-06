@@ -115,7 +115,7 @@ const Log = () => {
                 className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer hover:text-white hover:bg-green-800 transition-all duration-75"
               />
             </div>
-            {response && <div className='w-full mx-auto bg-yellow-400 text-white text-center animate-fadeIn p-4 mt-8'>{response}</div>}
+            {response && <div className='w-full mx-auto bg-yellow-400 text-white text-center animate-fadeIn p-4 mt-8'>{response["message"] || response}</div>}
             <Link to="/register" className='text-sm text-start text-green-700 underline mt-8'>
               <p className="mt-8">¿No tienes cuenta?¡Registrate!</p>
             </Link>

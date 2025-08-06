@@ -219,22 +219,28 @@ func SaveUserConfig(w http.ResponseWriter, r *http.Request) {
 		req.Speciality = ""
 	}
 
-	modifiedFields := database.User{
-		Username:    req.Username,
-		Email:       req.Email,
-		Password:    req.Password.NewPassword,
-		Birthdate:   parsedDate,
-		Gender:      gender,
-		Telephone:   req.Telephone,
-		Address:     req.Address,
-		Description: req.Description,
-		Speciality:  req.Speciality,
+	var user database.User
+	if err := database.Db.First(&user, usId).Error; err != nil {
+		log.Println("Error al obtener usuario:", err)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(structs.Response{Message: "Usuario no encontrado", Fatal: "true"})
+		return
 	}
 
-	if err = database.Db.Model(&database.User{}).Where("id = ?", usId).Updates(modifiedFields).Error; err != nil {
-		log.Println("Error al guardar configuración de usuario", err)
+	user.Username = req.Username
+	user.Email = req.Email
+	user.Password = req.Password.NewPassword
+	user.Birthdate = parsedDate
+	user.Gender = gender
+	user.Telephone = req.Telephone
+	user.Address = req.Address
+	user.Description = req.Description
+	user.Speciality = req.Speciality
+
+	if err := database.Db.Save(&user).Error; err != nil {
+		log.Println("Error al guardar configuración de usuario:", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar imagen", Fatal: "true"})
+		json.NewEncoder(w).Encode(structs.Response{Message: "Error al guardar cambios", Fatal: "true"})
 		return
 	}
 

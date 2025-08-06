@@ -148,7 +148,7 @@ const Drugs = () => {
 
       <Modal state={modal} setter={modalSetState} scheme={userConfig.theme}>
         <img src={process.env.REACT_APP_API_URL
- + `/getImage/drugs/${drugView?.ID}/0`} onError={(e: any) => e.target.src = "img/logo.png"} alt="" className="max-h-96 object-cover animate-slideIn" />
+ + `/getImage/drugs/${drugView?.ID}/0`} onError={(e: any) => e.target.src = "img/logo.png"} alt="" className="self-center max-h-96 object-cover animate-slideIn" />
         <div className="flex flex-col w-fit overflow-hidden">
           <Title txt={drugView?.Nombre} className="" scheme={userConfig.theme} />
           <p className="m-2">{drugView?.Descripcion}

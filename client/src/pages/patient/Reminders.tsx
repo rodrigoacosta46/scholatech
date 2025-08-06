@@ -55,7 +55,7 @@ const Reminders = () => {
         scheme={userConfig.theme}
       />
 
-      <div className="flex flex-col gap-28 m-8 transition-all">
+      <div className="flex flex-col gap-28 m-4 md:m-8 transition-all">
         <div className="flex flex-col">
           <VerticalScroller
             url={String(process.env.REACT_APP_API_URL

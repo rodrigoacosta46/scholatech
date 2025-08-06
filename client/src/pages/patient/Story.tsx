@@ -42,7 +42,7 @@ const Story = () => {
             </p>
             <p className="font-bold">
               Fecha de pedido de consulta:
-              <span className="ms-2 font-normal">{createdAt}</span>
+              <span className="ms-2 font-normal text-nowrap">{createdAt}</span>
             </p>
           </div>
         }
@@ -78,13 +78,13 @@ const Story = () => {
             </p>
             <p className="font-bold">
               Fecha asignada:
-              <span className="ms-2 font-normal">
+              <span className="ms-2 font-normal text-nowrap">
                 {new Date(registro.Fecha).toLocaleString()}
               </span>
             </p>
             <p className="font-bold">
               Fecha de pedido de consulta:
-              <span className="ms-2 font-normal">
+              <span className="ms-2 font-normal text-nowrap">
                 {new Date(registro.CreatedAt).toLocaleString()}
               </span>
             </p>
@@ -127,13 +127,13 @@ const Story = () => {
               </p>
               <p className="font-bold">
                 Fecha asignada:
-                <span className="ms-2 font-normal">
+                <span className="ms-2 font-normal text-nowrap">
                   {new Date(registro.Turno.Fecha).toLocaleString()}
                 </span>
               </p>
               <p className="font-bold">
                 Fecha de pedido de consulta:
-                <span className="ms-2 font-normal">
+                <span className="ms-2 font-normal text-nowrap">
                   {new Date(registro.Turno.CreatedAt).toLocaleString()}
                 </span>
               </p>
@@ -177,7 +177,7 @@ const Story = () => {
         scheme={userConfig.theme}
       />
 
-      <div className="flex flex-col gap-12 m-12">
+      <div className="flex flex-col gap-12 m-4 my-8 md:m-12">
         <div>
           <Section
             txt="Turnos Pendientes"

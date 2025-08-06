@@ -732,9 +732,9 @@ const Profile = () => {
         </div>
       </div>
 
-      <div className="p-8">
-        <div className="grid grid-flow-col grid-cols-3 gap-4">
-          <div className="col-span-2">
+      <div className="p-4 md:p-8">
+        <div className="flex flex-wrap gap-6">
+          <div className="flex-grow basis-96">
             <div className="relative p-5 rounded-3xl bg-slate-200 text-slate-400 font-thin shadow-[5px_5px]">
               <i className="fa-solid fa-gear absolute -inset-1 text-3xl size-fit"></i>
               <p className="underline underline-offset-8 decoration-1 decoration-gray-400/80 text-2xl">
@@ -823,7 +823,7 @@ const Profile = () => {
                   Contraseña:
                   <button
                     type="button"
-                    className="col-span-2 relative place-self-end"
+                    className="col-span-2 relative"
                     onClick={() => {
                       setModalState(
                         <SaveUserPassword
@@ -845,7 +845,7 @@ const Profile = () => {
                   Género:
                   <button 
                     type="button"
-                    className="col-span-2 relative place-self-end"                      
+                    className="col-span-2 relative"                      
                   >
                     <i
                       className="fa-regular z-10 fa-pen-to-square cursor-pointer hover:text-slate-800 absolute end-1 top-2 bg-gray-300"
@@ -865,7 +865,7 @@ const Profile = () => {
                   Fecha de nacimiento:
                   <button
                     type="button"
-                    className="col-span-2 relative place-self-end"
+                    className="col-span-2 relative"
                     onClick={() => {
                       setModalState(
                         <SaveUserBirthDate
@@ -1014,7 +1014,7 @@ const Profile = () => {
               </p>
             </div>
           </div>
-          <div>
+          <div className="flex-grow basis-64">
             <div
               className={`relative p-5 rounded-3xl bg-slate-200 text-slate-400 font-thin shadow-[5px_5px] shadow-${userConfig.theme}-900`}
             >

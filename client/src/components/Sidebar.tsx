@@ -32,12 +32,13 @@ const Sidebar = () => {
         state={modal}
         setter={() => setModal(prev => !prev)}
         scheme={userConfig.theme}
+        cardStyles={`${modal ? 'animate-[fadeIn_.5s]' : ''}`}
       >
         <div className="col-span-2 text-center">
           <p className={`text-${userConfig.theme}-800 text-xl font-semibold`}>
             Estás seguro de salir de tu sesión?
           </p>
-          <span className="text-lg text-bold text-red-600 w-full ">
+          <span className="text-lg text-bold text-red-600 w-full">
             <i className="fa-solid fa-arrow-right-from-bracket rotate-180 "></i>
             <button onClick={logout} className="cursor-pointer">
               Salir
@@ -46,26 +47,25 @@ const Sidebar = () => {
         </div>
       </Modal>
       
-      <button onClick={() => toggleSideView(prev => !prev)} className='md:hidden z-50 fixed top-5 end-10'>
+      <button onClick={() => toggleSideView(prev => !prev)} className='md:hidden z-50 fixed top-3 end-5'>
         <i className="fa-solid fa-bars text-lg text-white"></i>
       </button>
 
       <div 
         role='presentation'
-        className={`z-30 transition-[width] duration-500 fixed top-0 start-0 h-full bg-slate-500 opacity-30 ${sideView ? 'w-svw' : 'w-0'}`} 
+        className={`z-30 transition-[width] duration-500 fixed top-0 start-0 h-svh bg-slate-500 opacity-30 ${sideView ? 'w-svw' : 'w-0'}`} 
         onClick={() => toggleSideView(prev => !prev)}
       />
 
       <aside
-        className={`z-30 transition-transform duration-500 fixed md:static start-0 top-0 w-64 min-h-full flex flex-col bg-${userConfig.theme}-950 text-lg md:translate-x-0 ${sideView ? 'translate-x-0' : '-translate-x-full'} `}
+        className={`z-30 transition-transform duration-500 fixed md:relative start-0 top-0 w-60 md:w-64 h-svh flex flex-col gap-8 bg-${userConfig.theme}-950 text-lg md:translate-x-0 ${sideView ? 'translate-x-0' : '-translate-x-full'} `}
       >
         <button
           onClick={() => setModal(prev => !prev)}
-          className="cursor-pointer w-fit after:content-['Log_Out'] after:underline after:absolute after:translate-x-0 lg:after:-translate-x-full after:opacity-0 hover:after:translate-x-0 hover:after:opacity-100 after:transition-all text-gray-400 hover:text-red-400"
+          className="cursor-pointer w-fit after:w-max after:content-['Cerrar_Sesion'] after:underline after:absolute after:opacity-0 hover:after:translate-x-0 hover:after:opacity-100 after:transition-all text-gray-400 hover:text-red-400"
         >
-          <i className="fa-solid fa-arrow-right-from-bracket rotate-180 "></i>
+          <i className="fa-solid fa-arrow-right-from-bracket rotate-180"></i>
         </button>
-        <div className="h-full flex flex-col justify-between gap-4">
           <div
             className={
               `grid grid-flow-col grid-cols-2 gap-1 m-2 transition-all duration-1000 ${
@@ -79,13 +79,14 @@ const Sidebar = () => {
               <p className="text-md text-gray-500">{userInfo["Perfil"].Name}</p>
             </div>
           </div>
-          <div className="scroll w-72 max-h-80 overflow-y-auto grow">
+          <div className="scroll w-full md:w-72 max-h-max overflow-y-auto grow">
             <div className="h-full flex flex-col" style={{ direction: 'ltr' }}>
               {Object.keys(userConfig.nav).map((key, i) => (
                 <Link
                   key={i}
                   to={userConfig.nav[key].route}
-                  className={`group w-64 p-3 transition-all hover:w-full hover:bg-${userConfig.theme}-700 text-white text-lg text-thin text-end`}
+                  onClick={() => toggleSideView(false)}
+                  className={`group md:w-64 p-3 transition-all hover:w-full hover:bg-${userConfig.theme}-700 text-white text-lg text-thin text-end`}
                 >
                   <i className={userConfig.nav[key].icon}></i>
                   {key}
@@ -97,9 +98,8 @@ const Sidebar = () => {
           <img
             src="img/logo.png"
             alt="Page LOGO"
-            className="w-24 mx-auto mb-1"
+            className="w-24 mx-auto mb-1 mt-auto"
           />
-        </div>
       </aside>
     </>
   );

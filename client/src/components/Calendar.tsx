@@ -66,19 +66,19 @@ type Display = {
         ...display.before,
         title: months[0] + ' de ' + years[0],
         content: days[0],
-        styles: 'opacity-15',
+        styles: 'opacity-15 shrink',
       },
       current: {
         ...display.current,
         title: months[1] + ' de ' + years[1],
         content: days[1],
-        styles: 'bg-white animate-slideIn opacity-100 static z-10',
+        styles: 'min-w-max grow self-center bg-white animate-slideIn opacity-100 static z-10',
       },
       after: {
         ...display.after,
         title: months[2] + ' de ' + years[2],
         content: days[2],
-        styles: 'opacity-15 ',
+        styles: 'opacity-15 shrink',
       },
     });
   }, [nav]);

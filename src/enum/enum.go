@@ -5,8 +5,6 @@ import (
 	"strconv"
 
 	"github.com/nicolas-k-cmd/proj-redes/src/env"
-
-	"github.com/ua-parser/uap-go/uaparser"
 )
 
 type StatusMap map[string]string
@@ -25,11 +23,12 @@ func (sm StatusMap) Contains(status string) bool {
 }
 
 func (sm StatusMap) Which(r *http.Request) string {
-	RequestUserAgent := r.UserAgent()
-	parsedResults := uaparser.NewFromSaved().Parse(RequestUserAgent)
-	if parsedResults.Os.Family == "Android" {
-		return sm["view"]
-	} else if env.WebFullURL {
+	//RequestUserAgent := r.UserAgent()
+	//parsedResults := uaparser.NewFromSaved().Parse(RequestUserAgent)
+	//if parsedResults.Os.Family == "Android" {
+	//	return sm["view"]
+	//} else if env.WebFullURL {
+	if env.WebFullURL {
 		return sm["FullURL"]
 	} else {
 		return sm["ShortURL"]

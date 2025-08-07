@@ -23,7 +23,7 @@ const Drugs = () => {
   const { userInfo, userConfig } = userHook();
   const [modal, setModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState({
-    Search: ""
+    Search: "",
   }); // Estado para el término de búsqueda
   const [adminModal, setAdminModal] = useState(false);
   const [drugView, setDrugView] = useState<DrugInterface>();
@@ -34,14 +34,14 @@ const Drugs = () => {
       setSearchTerm({ Search: e.target.value });
       clearTimeout(time);
     }, 500);
-  }
+  };
 
   const modalSetState = (display: any) => {
     setDrugView(display);
     setModal(!modal);
   };
 
-  const addDrug = (e: any) => { };
+  const addDrug = (e: any) => {};
   const deleteDrug = (e: any) => {
     e.stopPropagation();
     confirm("Elimino medicamento");
@@ -52,8 +52,8 @@ const Drugs = () => {
       <Card
         key={"n-" + i}
         onClick={() => modalSetState(registro)}
-        style={{ animationDelay: i%10 * 0.05 + "s" }}
-        className="opacity-0 animate-fadeIn cursor-pointer relative overflow-hidden"
+        style={{ animationDelay: (i % 10) * 0.05 + "s" }}
+        className="h-max md:h-full opacity-0 animate-fadeIn cursor-pointer relative overflow-hidden"
         scheme={userConfig.theme}
       >
         {userInfo.Perfil.Name == "Admin" && (
@@ -62,10 +62,29 @@ const Drugs = () => {
             className="fa-solid fa-trash absolute end-1 hover:text-red-700 transition-all"
           ></i>
         )}
-        <img src={process.env.REACT_APP_API_URL
- + `/getImage/drugs/${registro.ID}/0`} onError={(e: any) => e.target.src = "img/logo.png"} alt="" className="w-auto max-h-96" />
+        <img
+          src={
+            process.env.REACT_APP_API_URL + `/getImage/drugs/${registro.ID}/0`
+          }
+          onError={(e: any) => (e.target.src = "img/logo.png")}
+          alt=""
+          className="hidden md:block w-auto max-h-96"
+        />
         <Title
-          txt={registro.Nombre}
+          txt={
+            <>
+              {registro.Nombre}
+              <img
+                src={
+                  process.env.REACT_APP_API_URL +
+                  `/getImage/drugs/${registro.ID}/0`
+                }
+                onError={(e: any) => (e.target.src = "img/logo.png")}
+                alt=""
+                className="inline md:hidden w-8 float-end mb-1"
+              />
+            </>
+          }
           className="overflow-hidden"
           scheme={userConfig.theme}
         />
@@ -73,8 +92,8 @@ const Drugs = () => {
           {registro.Descripcion}
         </p>
       </Card>
-    )
-  }
+    );
+  };
 
   const viewFile = (e: any) => {
     const file = e.target.files[0];
@@ -82,7 +101,7 @@ const Drugs = () => {
     const tmp = window.URL.createObjectURL(file);
     console.log(file, tmp, e.target);
     setImgSrc(tmp);
-  }
+  };
 
   /*
 
@@ -147,12 +166,21 @@ const Drugs = () => {
       )}
 
       <Modal state={modal} setter={modalSetState} scheme={userConfig.theme}>
-        <img src={process.env.REACT_APP_API_URL
- + `/getImage/drugs/${drugView?.ID}/0`} onError={(e: any) => e.target.src = "img/logo.png"} alt="" className="self-center max-h-96 object-cover animate-slideIn" />
+        <img
+          src={
+            process.env.REACT_APP_API_URL + `/getImage/drugs/${drugView?.ID}/0`
+          }
+          onError={(e: any) => (e.target.src = "img/logo.png")}
+          alt=""
+          className="self-center max-h-96 object-cover animate-slideIn"
+        />
         <div className="flex flex-col w-fit overflow-hidden">
-          <Title txt={drugView?.Nombre} className="" scheme={userConfig.theme} />
-          <p className="m-2">{drugView?.Descripcion}
-          </p>
+          <Title
+            txt={drugView?.Nombre}
+            className=""
+            scheme={userConfig.theme}
+          />
+          <p className="m-2">{drugView?.Descripcion}</p>
         </div>
       </Modal>
 
@@ -177,15 +205,14 @@ const Drugs = () => {
           </button>
         )}
       </div>
-        <VerticalScroller 
-          url={String(process.env.REACT_APP_API_URL
-  + "/getDrugs")} 
-          params={searchTerm}
-          renderModel={drugModel}
-          empty="No hay drogas"
-          className="grid justify-center grid-cols-[repeat(auto-fit,250px)] gap-4 p-4 overflow-clip flex-1"
-          key={searchTerm.Search}
-        />
+      <VerticalScroller
+        url={String(process.env.REACT_APP_API_URL + "/getDrugs")}
+        params={searchTerm}
+        renderModel={drugModel}
+        empty="No hay drogas"
+        className="grid justify-center grid-cols-[repeat(auto-fit,250px)] gap-4 p-4 overflow-clip flex-1"
+        key={searchTerm.Search}
+      />
     </>
   );
 };

@@ -87,10 +87,10 @@ const Register = () => {
   };
 
   return (
-    <Card className={`max-w-96  my-4 rounded-sm animate-slideIn`}>
+    <Card className={`max-w-96 my-4 rounded-sm animate-slideIn`}>
       <form onSubmit={handleSubmit} method="POST">
           <p className="text-4xl text-green-800 text-center py-12">Registrarse</p>
-          <div className="flex flex-col gap-4 relative px-8">
+          <div className="flex flex-col gap-4 relative px-2">
             <label
               htmlFor="email"
               className="text-green-950 mb-2 select-none relative"
@@ -233,6 +233,7 @@ const Register = () => {
                   "-" +
                   new Date().toLocaleDateString("default", { day: "2-digit" })
                 }
+                className="ms-1"
                 required
               />
             </label>
@@ -249,7 +250,7 @@ const Register = () => {
               </select>
             </label>
             {response && (
-              <div className="w-80 mx-auto bg-yellow-400 text-white font-medium text-center p-4">
+              <div className="max-w-80 mx-auto bg-yellow-400 text-white font-medium text-center p-4">
                 {response["message"]}
               </div>
             )}

@@ -65,7 +65,7 @@ const Log = () => {
   };        
    
   return (
-      <Card className={`max-w-96 p-8 my-4 rounded-sm animate-slideIn transition-all ${response ? 'shadow-yellow-400' : ''}`}>
+      <Card className={`max-w-96 p-4 my-4 rounded-sm animate-slideIn transition-all ${response ? 'shadow-yellow-400' : ''}`}>
         <form onSubmit={handleSubmit} method="POST">
             <p className="text-4xl text-green-800 text-center whitespace-nowrap py-12">Inicio de sesión</p>
             <div className="flex flex-col gap-2 relative">
@@ -115,7 +115,7 @@ const Log = () => {
                 className="block w-full p-2 border border-gray-300 rounded-md cursor-pointer hover:text-white hover:bg-green-800 transition-all duration-75"
               />
             </div>
-            {response && <div className='w-full mx-auto bg-yellow-400 text-white text-center animate-fadeIn p-4 mt-8'>{response["message"] || response}</div>}
+            {response && <p className='max-w-80 mx-auto bg-yellow-400 text-white text-center animate-fadeIn p-4 mt-8'>{response["message"] || response}</p>}
             <Link to="/register" className='text-sm text-start text-green-700 underline mt-8'>
               <p className="mt-8">¿No tienes cuenta?¡Registrate!</p>
             </Link>

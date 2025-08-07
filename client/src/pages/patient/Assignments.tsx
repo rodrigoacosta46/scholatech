@@ -229,7 +229,7 @@ const Assignments = () => {
         allowAnimations={true}
       />
 
-      <div className="p-12 space-y-8">
+      <div className="p-4 md:p-12 space-y-8">
         <Section
           txt="Pedidos de Consulta"
           icon={<i className="fa-solid fa-clipboard-question"></i>}

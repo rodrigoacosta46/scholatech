@@ -1,33 +1,31 @@
-import React, { useEffect, useState } from 'react';
-
+import React, { useEffect, useState } from "react";
 
 //@ts-ignore
 const Calendar = ({ scheme }) => {
-  
-type DisplayItem = {
-  title: string;
-  content: any[];
-  styles: string;
-};
+  type DisplayItem = {
+    title: string;
+    content: any[];
+    styles: string;
+  };
 
-type Display = {
-  before: DisplayItem;
-  current: DisplayItem;
-  after: DisplayItem;
-};
+  type Display = {
+    before: DisplayItem;
+    current: DisplayItem;
+    after: DisplayItem;
+  };
 
   const [nav, setNav] = useState(1);
   const [display, setDisplay] = useState<Display>({
-    before: { title: '', content: [], styles: '' },
-    current: { title: '', content: [], styles: '' },
-    after: { title: '', content: [], styles: '' },
+    before: { title: "", content: [], styles: "" },
+    current: { title: "", content: [], styles: "" },
+    after: { title: "", content: [], styles: "" },
   });
   const date = new Date();
   const day = date.getDay();
   const month = date.getMonth();
   const year = date.getFullYear();
 
-  useEffect(()  => {
+  useEffect(() => {
     let years: number[] = [];
     let months: string[] = [];
     let days: { num: number | string }[][] = [];
@@ -45,7 +43,7 @@ type Display = {
       let displayedDays = firstMonthDay + monthDays; // Cantidad total de celdas
 
       years[i] = selectedDate.getFullYear();
-      months[i] = selectedDate.toLocaleString('es', { month: 'long' }); //  Guarda mes del loop
+      months[i] = selectedDate.toLocaleString("es", { month: "long" }); //  Guarda mes del loop
       days[i] = []; // Guarda los días del mes del loop
 
       for (let j = 1; j <= displayedDays; j++) {
@@ -56,7 +54,7 @@ type Display = {
           continue;
         }
         days[i][j] = {
-          num: '',
+          num: "",
         };
       }
     }
@@ -64,27 +62,27 @@ type Display = {
       ...display,
       before: {
         ...display.before,
-        title: months[0] + ' de ' + years[0],
+        title: months[0] + " de " + years[0],
         content: days[0],
-        styles: 'opacity-15 shrink',
+        styles: "-translate-x-full opacity-15",
       },
       current: {
         ...display.current,
-        title: months[1] + ' de ' + years[1],
+        title: months[1] + " de " + years[1],
         content: days[1],
-        styles: 'min-w-max grow self-center bg-white animate-slideIn opacity-100 static z-10',
+        styles: "bg-white animate-slideIn opacity-100 z-10",
       },
       after: {
         ...display.after,
-        title: months[2] + ' de ' + years[2],
+        title: months[2] + " de " + years[2],
         content: days[2],
-        styles: 'opacity-15 shrink',
+        styles: "translate-x-full opacity-15",
       },
     });
   }, [nav]);
 
   return (
-    <div className="flex items-center justify-between h-96">
+    <div className="relative flex justify-center w-full min-h-96 overflow-hidden">
       <button
         className="absolute start-0 z-10 text-2xl h-full"
         onClick={() => {
@@ -101,31 +99,35 @@ type Display = {
       >
         <i className="fa-solid fa-chevron-right"></i>
       </button>
-      <div className="flex justify-center w-full">
-        {Object.entries(display).map(([_, val]) => (
-          <div className={'flex flex-col ' + val.styles} key={Math.random()}>
-            <p
-              className={`text-2xl text-thin text-wrap text-${scheme}-900 text-center p-4`}
-            >
-              {val.title}
-            </p>
-            <div className="grid grid-cols-7 place-items-center h-full">
-              <p>D</p>
-              <p>L</p>
-              <p>M</p>
-              <p>M</p>
-              <p>J</p>
-              <p>V</p>
-              <p>S</p>
-              {val.content.map((d) => (
-                <div className=" w-full h-full border border-dashed p-1" key={Math.random()}>
-                  <p className="text-start">{d.num}</p>
-                </div>
-              ))}
-            </div>
+      {Object.entries(display).map(([_, val]) => (
+        <div
+          className={"absolute flex flex-col h-full p-4 " + val.styles}
+          key={Math.random()}
+        >
+          <p
+            className={`text-2xl text-thin text-wrap text-${scheme}-900 text-center`}
+          >
+            {val.title}
+          </p>
+          <div className="grid grid-cols-7 place-items-center h-full">
+            <p>D</p>
+            <p>L</p>
+            <p>M</p>
+            <p>M</p>
+            <p>J</p>
+            <p>V</p>
+            <p>S</p>
+            {val.content.map((d) => (
+              <div
+                className=" w-full h-full border border-dashed p-1"
+                key={Math.random()}
+              >
+                <p className="text-start">{d.num}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };

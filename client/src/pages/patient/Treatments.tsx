@@ -111,7 +111,7 @@ const Treatments = () => {
           </div>
         }
         content={
-          <div className="relative pt-4 p-8">
+          <div className="relative pt-4">
             <div className="flex flex-wrap justify-evenly gap-3">
               <p className="font-bold">
                 Doctor asignado:
@@ -185,7 +185,7 @@ const Treatments = () => {
       />
 
       <div className="relative m-4 mt-12 space-y-32">
-        <div className="overflow-hidden max-h-fit">
+        <div className="max-h-fit">
           <Section
             txt="Nuevo diagnostico"
             scheme={userConfig.theme}
@@ -198,15 +198,12 @@ const Treatments = () => {
                   type="checkbox"
                   id="checkView"
                   hidden={true}
-                  defaultChecked={state.current != null}
-                  onChange={() => setFormView(prev => !prev)}
+                  checked={formView}
+                  onChange={() => state.current != null ? setFormView(prev => !prev) : alert("Para realizar un nuevo diagnóstico, debe seleccionar un turno en el Historial de Consultas")}
                   className="peer"
                 />
                 <i className="fa-solid fa-minus transition-all duration-500 opacity-0 text-[0px] peer-checked:rotate-180 peer-checked:opacity-100 peer-checked:text-base"></i>
                 <i className="fa-solid fa-plus transition-all duration-500 peer-checked:rotate-180 peer-checked:opacity-0 peer-checked:text-[0px]"></i>
-                <span className="transition-all delay-200 text-[0px] peer-checked:text-lg">
-                  Nuevo resultado
-                </span>
               </label>
             }
           />
@@ -219,8 +216,8 @@ const Treatments = () => {
             }`}
           >
             <OpenCard
-              className="max-w-full m-4 text-center"
-              open={state.current != null || formView}
+              className="max-w-full mt-2 md:m-4 text-center"
+              open={state.current != null}
               icon={<i className="fa-solid fa-clipboard text-slate-700"></i>}
               title={
                 <InputScent
@@ -229,12 +226,13 @@ const Treatments = () => {
                   readOnly={true}
                   type="text"
                   placeholder="Nombre del paciente"
+                  className="[field-sizing:content]"
                   required={true}
                 />
               }
               content={
-                <div className="relative pt-4 p-8">
-                  <div className="flex flex-wrap justify-evenly gap-3">
+                <div className="relative pt-4 md:p-8">
+                  <div className="flex flex-wrap justify-evenly gap-4">
                     <p className="font-bold">
                       Doctor asignado:
                       <span className="ms-2 font-normal">
@@ -265,13 +263,14 @@ const Treatments = () => {
                       required={true}
                     />
                   </div>
-                  <hr className="my-4" />
+                  <hr className="my-8" />
                   <p className="text-2xl text-center">- Resultados -</p>
-                  <div className="relative bg-gray-200 flex flex-wrap justify-evenly text-center gap-3 p-12 my-2 space-y-2">
+                  <div className="relative overflow-visible bg-gray-200 flex flex-wrap justify-evenly text-center gap-3 p-4 py-8 md:p-12 space-y-2">
                       <InputScent
                         name="Diagnostico"
                         type="text"
                         placeholder="Diagnostico final"
+                        className="w-full placeholder:text-center"
                         required={true}
                       />
                     <textarea
@@ -282,8 +281,8 @@ const Treatments = () => {
                     ></textarea>
                     <div className="font-bold w-full">
                       Medicación asignada: *opcional*
-                      <div className="relative space-y-2 border-2 border-dashed border-slate-400 p-2 mt-3">
-                        <div className="absolute end-0 -top-7">
+                      <div className="relative space-y-2 border-2 border-dashed border-slate-400 p-3 mt-3">
+                        <div className="flex flex-col absolute top-0 -end-4">
                           <button
                             type="button"
                             onClick={inRows}
